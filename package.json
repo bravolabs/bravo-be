@@ -1,0 +1,43 @@
+{
+  "name": "bravo-be",
+  "version": "1.0.0",
+  "description": "Healthy office cultures often acknowledge good work from their coworkers and peers. Award your peers with acknowledgements that act like coins/points in Slack when they do awesome things - and never let the acknowledgement of their good work get lost in the shuffle again.",
+  "main": "index.js",
+  "scripts": {
+    "server": "nodemon index.js",
+    "start": "node index.js",
+    "dev": "NODE_ENV=development npm-run-all server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bravolabs/bravo-be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bravolabs/bravo-be/issues"
+  },
+  "homepage": "https://github.com/bravolabs/bravo-be#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.0.0",
+    "express": "^4.17.1",
+    "helmet": "^3.20.0",
+    "knex": "^0.19.1",
+    "npm-run-all": "^4.1.5",
+    "pg": "^7.12.0"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.5",
+    "cross-env": "^5.2.0",
+    "eslint": "^6.2.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "istanbul": "^0.4.5",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1",
+    "supertest": "^4.0.2"
+  }
+}

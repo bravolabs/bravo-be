@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "server": "nodemon index.js",
-    "start": "node index.js",
-    "dev": "NODE_ENV=development npm-run-all server"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -32,8 +31,9 @@
     "coveralls": "^3.0.5",
     "cross-env": "^5.2.0",
     "eslint": "^6.2.0",
-    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
     "istanbul": "^0.4.5",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",

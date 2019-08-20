@@ -1,8 +1,9 @@
 const express = require('express');
-const commandsController = require('./controllers/commands');
 
 const router = express.Router();
 
-router.use(commandsController);
+router.all('/commands', async (req, res) => {
+  res.send('boyoyo');
+});
 
 module.exports = router;

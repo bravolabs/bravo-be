@@ -20,4 +20,6 @@ Type `/bravo @user` to choose between sending and viewing all acknowledgements
 
 - Locate and tick the checkbox under `Prettier: Eslint Integration` section... You good to go! :sunglasses:
 
+[![Build Status](https://travis-ci.org/bravolabs/bravo-be.svg?branch=develop)](https://travis-ci.org/bravolabs/bravo-be)
+
 [![Test Coverage](https://api.codeclimate.com/v1/badges/b7883f2f1a9e9a0b7e99/test_coverage)](https://codeclimate.com/github/bravolabs/bravo-be/test_coverage)

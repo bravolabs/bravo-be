@@ -1,10 +1,9 @@
-import 'babel-polyfill';
-import express from 'express';
-import bodyParser from 'body-parser';
-import { config } from 'dotenv';
-config();
+require('dotenv').config();
+require('babel-polyfill');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-import bot from './bot';
+const bot = require('./bot');
 
 const port = process.env.PORT || 3000;
 const app = express();

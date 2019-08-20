@@ -12,8 +12,6 @@ cache:
 before_script:
   - psql -c 'create database bravo_test;' -U postgres
   - psql -c "CREATE USER root WITH PASSWORD 'password';" -U postgres
-  - npx knex migrate:down --env=test
-  - npx knex migrate:latest --env=test
   - yarn global add nyc
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter

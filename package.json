@@ -19,17 +19,24 @@
   },
   "homepage": "https://github.com/bravolabs/bravo-be#readme",
   "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "dotenv": "^8.0.0",
     "express": "^4.17.1",
     "helmet": "^3.20.0",
     "knex": "^0.19.1",
     "npm-run-all": "^4.1.5",
-    "pg": "^7.12.0"
+    "pg": "^7.12.0",
+    "slack": "^11.0.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
     "coveralls": "^3.0.5",
     "cross-env": "^5.2.0",
+    "dotenv": "^8.1.0",
     "eslint": "^6.2.0",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
@@ -38,6 +45,7 @@
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "nyc": "^14.1.1",
+    "rimraf": "^3.0.0",
     "supertest": "^4.0.2"
   }
 }

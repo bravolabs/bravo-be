@@ -28,5 +28,12 @@ module.exports = {
     return db('organizations')
       .update(changes, '*')
       .where({ id });
+  },
+
+  delete: function(id) {
+    return db('organizations')
+      .delete()
+      .where({ id })
+      .returning('*');
   }
 }

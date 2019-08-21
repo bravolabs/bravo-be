@@ -22,5 +22,11 @@ module.exports = {
         .first();
     }
     return db('organizations');
+  },
+
+  update: function(id, changes) {
+    return db('organizations')
+      .update(changes, '*')
+      .where({ id });
   }
 }

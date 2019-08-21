@@ -1,8 +1,8 @@
 const express = require('express');
-const commandsController = require('./controllers/commands');
+const routeController = require('./routes');
 
 const router = express.Router();
 
-router.use(commandsController);
+router.use(routeController);
 
 module.exports = router;

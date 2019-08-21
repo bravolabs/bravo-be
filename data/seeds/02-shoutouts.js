@@ -1,7 +1,7 @@
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('shoutouts').truncate()
+  return knex.raw('truncate shoutouts cascade;')
     .then(function () {
       // Inserts seed entries
       return knex('shoutouts').insert([

@@ -13,5 +13,14 @@ module.exports = {
           ]);
       })
       .returning('*');
+  },
+
+  read: function(slack_org_id = null) {
+    if(slack_org_id) {
+      return db('organizations')
+        .where({ slack_org_id })
+        .first();
+    }
+    return db('organizations');
   }
 }

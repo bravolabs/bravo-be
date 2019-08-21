@@ -17,7 +17,7 @@ module.exports = {
   },
   test: {
     client: 'postgresql',
-    connection: 'postgres://postgres:root@127.0.0.1:7777/bravo_test',
+    connection: process.env.DATABASE_URL || 'postgres://postgres:root@127.0.0.1:5432/bravo_test',
     pool: {
       min: 2,
       max: 10

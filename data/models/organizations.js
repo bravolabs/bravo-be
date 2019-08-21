@@ -2,17 +2,11 @@ const db = require('../dbConfig');
 
 module.exports = {
   create: function(organization) {
-    return db('organizations')
-      .insert(organization)
-      .whereNotExists(function() {
-        this.select('*')
-          .from('organizations')
-          .whereRaw('slack_org_id = ? OR name = ?', [ 
-            organization.slack_org_id,
-            organization.name
-          ]);
-      })
-      .returning('*');
+    return db.raw('INSERT INTO organizations (slack_org_id, name) VALUES (?, ?) ON CONFLICT (slack_org_id) DO UPDATE SET name = EXCLUDED.name RETURNING *', [ 
+      organization.slack_org_id,
+      organization.name
+    ])
+    .then(data => data.rows);
   },
 
   read: function(slack_org_id = null) {

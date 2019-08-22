@@ -27,8 +27,18 @@ const interactions = async (req, res) => {
     }
   } else if (type === 'dialog_submission') {
     res.send('');
-    const message = data.formSubmissionMessage(channel.id, submission.Recipient);
-    slack.postMessage(message);
+    const message = data.formSubmissionMessage(
+      channel.id,
+      submission.Recipient,
+      submission.ShoutOut
+    );
+    const channelAlert = data.channelAlertMessage(
+      user.id,
+      submission.Recipient,
+      submission.ShoutOut
+    );
+    await slack.postMessage(message);
+    await slack.postMessage(channelAlert);
   }
 };
 

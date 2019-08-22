@@ -60,20 +60,35 @@ const shoutIntro = channel_id => {
   };
 };
 
-const formSubmissionMessage = (channel_id, user_name) => {
+const formSubmissionMessage = (channel_id, user_name, content) => {
   return {
     channel: channel_id,
-    channel_name: 'directmessage',
+    text: `You have sent a shoutout to <@${user_name}> 🙌🙌`,
     token: process.env.slack_app_token,
-    text: 'Successful Form Submission',
     attachments: JSON.stringify([
       {
-        fallback: 'You are unable to choose',
-        callback_id: 'successful_submission',
+        callback_id: 'alert message',
         attachment_type: 'default',
-        text: `Shoutout sent successfully to <@${user_name}>`,
+        title: 'Shoutout:',
+        text: `${content}`,
         color: '#7ed692',
-        divider: true,
+      },
+    ]),
+  };
+};
+
+const channelAlertMessage = (sender_id, recipient_id, content) => {
+  return {
+    channel: 'bot-test',
+    text: `<@${sender_id}> gave a shoutout to <@${recipient_id}>! 🙌🙌`,
+    token: process.env.slack_app_token,
+    attachments: JSON.stringify([
+      {
+        callback_id: 'alert message',
+        attachment_type: 'default',
+        title: 'Shoutout:',
+        text: `${content}`,
+        color: '#7ed692',
       },
     ]),
   };
@@ -83,4 +98,5 @@ module.exports = {
   dialog,
   shoutIntro,
   formSubmissionMessage,
+  channelAlertMessage,
 };

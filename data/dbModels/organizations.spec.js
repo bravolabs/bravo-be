@@ -5,6 +5,10 @@ beforeEach(async () => {
   await db.raw('truncate organizations cascade;');
 });
 
+afterAll(async () => {
+  await new Promise(resolve => setTimeout(() => resolve(), 500));
+}); 
+
 describe('Create organizations', () => {
   it('can create organizations', async () => {
     expect.assertions(2);

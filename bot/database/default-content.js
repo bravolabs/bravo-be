@@ -71,7 +71,7 @@ const formSubmissionMessage = (channel_id, user_name) => {
         fallback: 'You are unable to choose',
         callback_id: 'successful_submission',
         attachment_type: 'default',
-        text: `Shoutout sent successfully to @${user_name}`,
+        text: `Shoutout sent successfully to <@${user_name}>`,
         color: '#7ed692',
         divider: true,
       },

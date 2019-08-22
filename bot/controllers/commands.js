@@ -10,6 +10,7 @@ const commands = async (req, res) => {
   const { channel_id } = req.body;
   // slack gives 3seconds to respond to a command, before it thinks you failed, and so we are getting operation_timed out error
   if (keyword === 'shoutout') {
+    res.status(200).send('');
     const message = data.shoutIntro(channel_id);
     await slack.postMessage(message);
   } else if (keyword === 'feedback') {

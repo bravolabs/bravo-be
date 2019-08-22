@@ -28,6 +28,7 @@ const dialog = trigger_id => {
 const shoutIntro = channel_id => {
   return {
     channel: channel_id,
+    channel_name: 'directmessage',
     token: process.env.slack_app_token,
     attachments: JSON.stringify([
       {
@@ -62,6 +63,7 @@ const shoutIntro = channel_id => {
 const formSubmissionMessage = (channel_id, user_name) => {
   return {
     channel: channel_id,
+    channel_name: 'directmessage',
     token: process.env.slack_app_token,
     text: 'Successful Form Submission',
     attachments: JSON.stringify([

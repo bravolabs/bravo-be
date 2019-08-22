@@ -7,6 +7,7 @@ beforeEach(async () => {
 
 describe('Create organizations', () => {
   it('can create organizations', async () => {
+    expect.assertions(2);
     
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
@@ -24,6 +25,7 @@ describe('Create organizations', () => {
   });
 
   it('can create organizations correctly', async () => {
+    expect.assertions(3);
     
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
@@ -42,6 +44,8 @@ describe('Create organizations', () => {
   });
 
   it('returns the newly created organization', async () => {
+    expect.assertions(1);
+
     const organization = await orgs.create({
       slack_org_id: 'SWYEUJGHDR',
       name: 'Bravo-Labs' 
@@ -50,6 +54,8 @@ describe('Create organizations', () => {
   });
 
   it('cannot duplicate an organization', async () => {
+    expect.assertions(1);
+
     await orgs.create({
       slack_org_id: 'SWYEUJGHDR',
       name: 'Bravo-Labs' 

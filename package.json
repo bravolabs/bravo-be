@@ -9,6 +9,9 @@
     "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
     "coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls"
   },
+  "jest": {
+    "testEnvironment": "node"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bravolabs/bravo-be.git"

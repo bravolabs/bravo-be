@@ -126,3 +126,20 @@ describe('Update organizations', () => {
     done();
   });
 });
+
+describe('Delete organizations', () => {
+  it('can delete an organization by ID', async (done) => {
+    expect.assertions(2);
+    
+    let organizations = await orgs.read();
+    expect(organizations).toHaveLength(0);
+
+    let result = await orgs.create({
+      slack_org_id: 'AQYENEKWQS',
+      name: 'Bravo-Labs' 
+    });
+    result = await orgs.delete(result[0].id);
+    expect(result[0].name).toBe('Bravo-Labs');
+    done();
+  });
+});

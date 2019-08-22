@@ -6,13 +6,22 @@ const data = require('../database/default-content');
 const slack = require('../database/slack');
 
 const interactions = async (req, res) => {
-  const { type, token, user, actions, callback_id, trigger_id, channel, submission } = JSON.parse(
-    req.body.payload
-  );
+  const {
+    type,
+    token,
+    user,
+    actions,
+    callback_id,
+    trigger_id,
+    channel,
+    submission,
+    response_url,
+  } = JSON.parse(req.body.payload);
+
   if (type === 'interactive_message') {
     if (actions[0].value === 'give') {
       const dialog = data.dialog(trigger_id);
-      slack.dialog(dialog);
+      await slack.dialog(dialog);
     } else if (actions[0].value === 'retrieve') {
       res.send('retrieve');
     }

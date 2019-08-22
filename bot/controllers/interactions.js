@@ -6,7 +6,7 @@ const data = require('../database/default-content');
 const slack = require('../database/slack');
 
 const interactions = async (req, res) => {
-  const { type, token, user, actions, callback_id, trigger_id, channel } = JSON.parse(
+  const { type, token, user, actions, callback_id, trigger_id, channel, submission } = JSON.parse(
     req.body.payload
   );
   if (type === 'interactive_message') {
@@ -18,7 +18,7 @@ const interactions = async (req, res) => {
     }
   } else if (type === 'dialog_submission') {
     res.send('');
-    const message = data.formSubmissionMessage(channel.id, user.name);
+    const message = data.formSubmissionMessage(channel.id, submission.Recipient);
     slack.postMessage(message);
   }
 };

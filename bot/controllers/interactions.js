@@ -28,7 +28,7 @@ const interactions = async (req, res) => {
   } else if (type === 'dialog_submission') {
     res.send('');
     const message = data.formSubmissionMessage(channel.id, submission.Recipient);
-    slack.postMessage(message);
+    await slack.postMessage(message);
   }
 };
 

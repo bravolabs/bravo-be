@@ -16,3 +16,5 @@ app.use('/api/shoutouts', shoutouts)
 app.listen(port, () => {
   console.log(`running on ${port}`);
 });
+
+module.exports = app;

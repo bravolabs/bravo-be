@@ -107,3 +107,22 @@ describe('Read organizations', () => {
     done();
   });
 });
+
+describe('Update organizations', () => {
+  it('can update an organization by ID', async (done) => {
+    expect.assertions(2);
+    
+    let organizations = await orgs.read();
+    expect(organizations).toHaveLength(0);
+
+    let result = await orgs.create({
+      slack_org_id: 'AQYENEKWQS',
+      name: 'Lambda-School' 
+    });
+    result = await orgs.update(result[0].id, {
+      name: 'Bravo-Labs'
+    });
+    expect(result[0].name).toBe('Bravo-Labs');
+    done();
+  });
+});

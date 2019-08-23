@@ -5,5 +5,10 @@ module.exports = {
     return db('shoutouts')
       .insert(shoutout)
       .returning('*');
+  },
+
+  read: function(receive_id) {
+    return db('shoutouts')
+      .where({ receive_id });
   }
 }

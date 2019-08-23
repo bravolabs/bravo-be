@@ -8,14 +8,14 @@ const dialog = trigger_id => {
       submit_label: 'Submit',
       elements: [
         {
-          label: 'Recipient',
+          label: 'Who do you want to send a shoutout to',
           type: 'select',
           name: 'Recipient',
           optional: false,
           data_source: 'users',
         },
         {
-          label: 'ShoutOut',
+          label: 'Shoutout message',
           type: 'textarea',
           name: 'ShoutOut',
           optional: false,
@@ -25,10 +25,10 @@ const dialog = trigger_id => {
   };
 };
 
-const shoutIntro = channel_id => {
+const shoutIntro = (channel_id, user) => {
   return {
     channel: channel_id,
-    channel_name: 'directmessage',
+    user: user,
     token: process.env.slack_app_token,
     attachments: JSON.stringify([
       {
@@ -60,9 +60,10 @@ const shoutIntro = channel_id => {
   };
 };
 
-const formSubmissionMessage = (channel_id, user_name, content) => {
+const formSubmissionMessage = (channel_id, user_name, content, user_id) => {
   return {
     channel: channel_id,
+    user: user_id,
     text: `You have sent a shoutout to <@${user_name}> 🙌🙌`,
     token: process.env.slack_app_token,
     attachments: JSON.stringify([

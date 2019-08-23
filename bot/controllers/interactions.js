@@ -30,7 +30,8 @@ const interactions = async (req, res) => {
     const message = data.formSubmissionMessage(
       channel.id,
       submission.Recipient,
-      submission.ShoutOut
+      submission.ShoutOut,
+      user.id
     );
     const channelAlert = data.channelAlertMessage(
       user.id,
@@ -38,7 +39,7 @@ const interactions = async (req, res) => {
       submission.ShoutOut
     );
     await slack.postMessage(message);
-    await slack.postMessage(channelAlert);
+    await slack.postChannel(channelAlert);
   }
 };
 

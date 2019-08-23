@@ -8,14 +8,44 @@ Type `/bravo @user` to choose between sending and viewing all acknowledgements
 
 ## Project Files Structure
 
-- bot
-  - [x] sdk
-- data directory
-  - [x] migrations directory
-  - [x] models directory
-  - [x] seeds directory
-  - [x] dbConfig.js file
-- helpers directory
+:rocket: data directory
+
+- [x] migrations directory
+- [x] models directory
+- [x] seeds directory
+- [x] dbConfig.js file
+
+:rocket: routes directory
+
+- [x] shoutouts.js
+
+:rocket: services directory
+
+- [x] bot
+- [x] shoutouts.js
+- [x] shoutouts.spec.js
+
+## Coding styles and conventions
+
+:heavy_check_mark: Folders, files and variables naming
+
+- Camel Case `eg: bot, slackBot`
+
+:heavy_check_mark: Constants and env variables naming
+
+- Snake Case (All Caps) `eg: SECRET, DATABASE_URL`
+
+:heavy_check_mark: Asynchronous Operations method
+
+- async await method
+
+## NPM Commands and Descriptions
+
+| Command          | Description                                                       |
+| ---------------- | ----------------------------------------------------------------- |
+| `npm run server` | Starts the server in hot-reload mode for development              |
+| `npm test`       | Runs the project test suite                                       |
+| `npm start`      | Starts the app server in dev, staging and production environments |
 
 ### Prettier Setup for VS Code
 

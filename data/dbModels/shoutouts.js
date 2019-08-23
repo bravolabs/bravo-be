@@ -7,8 +7,8 @@ module.exports = {
       .returning('*');
   },
 
-  read: function(receive_id) {
+  read: function(receiver_id) {
     return db('shoutouts')
-      .where({ receive_id });
+      .where({ receiver_id });
   }
 }

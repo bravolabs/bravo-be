@@ -39,6 +39,14 @@ Type `/bravo @user` to choose between sending and viewing all acknowledgements
 
 - async await method
 
+## NPM Commands and Descriptions
+
+| Command          | Description                                                       |
+| ---------------- | ----------------------------------------------------------------- |
+| `npm run server` | Starts the server in hot-reload mode for development              |
+| `npm test`       | Runs the project test suite                                       |
+| `npm start`      | Starts the app server in dev, staging and production environments |
+
 ### Prettier Setup for VS Code
 
 - Install the VS-Code extension below;

@@ -7,7 +7,7 @@ module.exports = {
         const user = await users.readBySlackId(userId);
         if(!user || !user.slack_mem_id) {
           return res.status(404)
-            .josn({
+            .json({
               message: 'User not found'
             });
         }
@@ -15,7 +15,7 @@ module.exports = {
         const result = await shoutouts.read(userId);
         if(result.length < 1) {
           return res.status(404)
-            .josn({
+            .json({
               message: 'No shoutouts found for the user'
             });
         }
@@ -24,6 +24,7 @@ module.exports = {
             data: result
           });
     } catch(error) {
+      console.log(error);
       res.status(500)
         .json({
           error: 'server error'

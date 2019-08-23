@@ -1,15 +1,18 @@
 const db = require('../dbConfig');
 
-module.exports = {
-  create: function(user) {
-    return db('users')
-      .insert(user)
-      .returning('*');
-  },
+function create(user) {
+  return db('users')
+    .insert(user)
+    .returning('*');
+}
 
-  readBySlackId: function(slack_mem_id) {
-    return db('users')
-      .where({ slack_mem_id })
-      .first();
-  }
+function readBySlackId(slack_mem_id) {
+  return db('users')
+    .where({ slack_mem_id })
+    .first();
+}
+
+module.exports = {
+  create,
+  readBySlackId
 }

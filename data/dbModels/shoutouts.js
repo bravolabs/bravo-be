@@ -1,14 +1,17 @@
 const db = require('../dbConfig');
 
-module.exports = {
-  create: function(shoutout) {
-    return db('shoutouts')
-      .insert(shoutout)
-      .returning('*');
-  },
+function create(shoutout) {
+  return db('shoutouts')
+    .insert(shoutout)
+    .returning('*');
+}
 
-  read: function(receiver_id) {
-    return db('shoutouts')
-      .where({ receiver_id });
-  }
+function read(receiver_id) {
+  return db('shoutouts')
+    .where({ receiver_id });
+}
+
+module.exports = {
+  create,
+  read
 }

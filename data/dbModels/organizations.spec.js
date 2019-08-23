@@ -127,8 +127,8 @@ describe('Update organizations', () => {
   });
 });
 
-describe('Delete organizations', () => {
-  it('can delete an organization by ID', async (done) => {
+describe('Remove organizations', () => {
+  it('can remove an organization by ID', async (done) => {
     expect.assertions(2);
     
     let organizations = await orgs.read();
@@ -138,7 +138,7 @@ describe('Delete organizations', () => {
       slack_org_id: 'AQYENEKWQS',
       name: 'Bravo-Labs' 
     });
-    result = await orgs.delete(result[0].id);
+    result = await orgs.remove(result[0].id);
     expect(result[0].name).toBe('Bravo-Labs');
     done();
   });

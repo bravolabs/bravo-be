@@ -1,5 +1,7 @@
 const shoutouts = require('./shoutouts');
 
-module.exports = function(app) {
+function routes(app) {
   app.use('/api/shoutouts', shoutouts)
 }
+
+module.exports = routes;

@@ -80,7 +80,7 @@ const formSubmissionMessage = (channel_id, user_name, content, user_id) => {
 
 const channelAlertMessage = (sender_id, recipient_id, content) => {
   return {
-    channel: 'bot-test',
+    channel: process.env.DESIGNATED_CHANNEL,
     text: `<@${sender_id}> gave a shoutout to <@${recipient_id}>! 🙌🙌`,
     token: process.env.slack_app_token,
     attachments: JSON.stringify([

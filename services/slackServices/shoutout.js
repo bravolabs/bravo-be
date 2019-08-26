@@ -22,11 +22,36 @@ exports.sendShoutOut = async message => {
   }
 };
 
-exports.respondToInteractiveMessage = async (actions, dialog) => {
+exports.respondToInteractiveMessage = async reqInfo => {
   try {
-    if (actions[0].value === 'give') {
+    if (reqInfo.actions[0].value === 'give') {
+      const dialog = {
+        token: slack.slackToken,
+        trigger_id: reqInfo.triggerId,
+        dialog: JSON.stringify({
+          title: 'Send Shoutout',
+          callback_id: 'shoutout',
+          submit_label: 'Submit',
+          elements: [
+            {
+              label: 'Who do you want to send a shoutout to',
+              type: 'select',
+              name: 'Recipient',
+              optional: false,
+              data_source: 'users',
+            },
+            {
+              label: 'Shoutout message',
+              type: 'textarea',
+              name: 'ShoutOut',
+              optional: false,
+            },
+          ],
+        }),
+      };
+
       await slackModel.createDialog(dialog);
-    } else if (actions[0].value === 'retrieve') {
+    } else if (reqInfo.actions[0].value === 'retrieve') {
       console.log('retrieve');
     }
   } catch (err) {
@@ -37,9 +62,9 @@ exports.respondToInteractiveMessage = async (actions, dialog) => {
 exports.submitDialog = async reqInfo => {
   try {
     const message = {
-      channel: reqInfo.channel_id,
-      user: reqInfo.user_id,
-      text: `You have sent a shoutout to <@${reqInfo.user_name}> 🙌🙌`,
+      channel: reqInfo.channelId,
+      user: reqInfo.userId,
+      text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌🙌`,
       token: slack.slackToken,
       attachments: JSON.stringify([
         {
@@ -54,14 +79,31 @@ exports.submitDialog = async reqInfo => {
 
     await slackModel.postMessage(message);
 
-    // Add an event emitter to emit an event once their is a successful shoutout, so the
-    // listeners can take over and send the necessary notifications
+    const channelAlert = {
+      channel: slack.designatedChannel,
+      text: `<@${reqInfo.userId}> gave a shoutout to <@${reqInfo.recipient}>! 🙌🙌`,
+      token: slack.slackToken,
+      attachments: JSON.stringify([
+        {
+          callback_id: 'alert message',
+          attachment_type: 'default',
+          title: 'Shoutout:',
+          text: `${reqInfo.content}`,
+          color: '#7ed692',
+        },
+      ]),
+    };
 
-    eventEmitter.emit('successful_shoutout', {
-      user: reqInfo.user_id,
-      recipient: reqInfo.user_name,
-      message: reqInfo.content,
-    });
+    await slackModel.postOpenMessage(channelAlert);
+
+    const recipientAlert = {
+      channel: reqInfo.recipient,
+      token: slack.slackToken,
+      title: 'Hurray, You are the newest shoutout Recipient',
+      text: `You just received a shoutout from <@${reqInfo.userId}>`,
+    };
+
+    await slackModel.postOpenMessage(recipientAlert);
   } catch (err) {
     console.log(err);
   }

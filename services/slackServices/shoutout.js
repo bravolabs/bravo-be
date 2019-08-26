@@ -19,3 +19,15 @@ exports.sendShoutOut = async message => {
     console.log(err);
   }
 };
+
+exports.respondToInteractiveMessage = async (actions, dialog) => {
+  try {
+    if (actions[0].value === 'give') {
+      await slackModel.createDialog(dialog);
+    } else if (actions[0].value === 'retrieve') {
+      console.log('retrieve');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};

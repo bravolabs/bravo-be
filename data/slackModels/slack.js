@@ -37,9 +37,7 @@ exports.slackModel = {
 
   async getAllChannels() {
     try {
-      const res = await axios.get(
-        `${slack.baseUrl}/channels.list?token=${process.env.slack_app_token}`
-      );
+      const res = await axios.get(`${slack.baseUrl}/channels.list?token=${slack.slackToken}`);
       return res.data;
     } catch (err) {
       console.log(err);

@@ -11,5 +11,6 @@ module.exports = {
     clientId: process.env.SLACK_CLIENT_ID,
     clientSecret: process.env.SLACK_CLIENT_SECRET,
     baseUrl: process.env.SLACK_BASE_URL,
+    designatedChannel: process.env.DESIGNATED_CHANNEL,
   },
 };

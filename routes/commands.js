@@ -11,6 +11,9 @@ router.post('/', async (req, res) => {
     const { channel_id } = req.body;
     const { user_id } = req.body;
 
+    // the callback here is what differentiates a shoutout
+    // message from the feedback interactive message, please don't delete
+
     if (keyword === 'shoutout') {
       const message = {
         channel: channel_id,
@@ -18,8 +21,8 @@ router.post('/', async (req, res) => {
         token: slack.slackToken,
         attachments: JSON.stringify([
           {
-            fallback: 'Please try againg',
-            callback_id: 'shoutout_key',
+            fallback: 'Message from BOT',
+            callback_id: 'shoutout',
             attachment_type: 'default',
             title: 'Shoutout Options',
             text: 'kindly select an option for your bot task',

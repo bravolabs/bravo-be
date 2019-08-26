@@ -52,7 +52,7 @@ exports.slackModel = {
     }
   },
 
-  async dialog(dialog) {
+  async createDialog(dialog) {
     try {
       await axios.post(`${slack.baseUrl}/dialog.open`, qs.stringify(dialog));
     } catch (err) {

@@ -44,9 +44,9 @@ exports.slackModel = {
     }
   },
 
-  async postToChannel(message) {
+  async postOpenMessage(message) {
     try {
-      await axios.post(`${slack.baseUrl}/dialog.open`, qs.stringify(dialog));
+      await axios.post(`${slack.baseUrl}/chat.postMessage`, qs.stringify(message));
     } catch (err) {
       console.log(err);
     }

@@ -6,16 +6,19 @@ const eventEmitter = new events.EventEmitter();
 exports.sendShoutOut = async message => {
   try {
     // respond to user commmand with interactive message
-    await slackModel.postMessage(message);
+    await slackModel.message.postMessage(message);
 
     // find and create channel
-    const channels = await slackModel.getAllChannels();
-    const channel = await slackModel.findChannel(slack.designatedChannel, channels.channels);
+    const channels = await slackModel.channel.getAllChannels();
+    const channel = await slackModel.channel.findChannel(
+      slack.designatedChannel,
+      channels.channels
+    );
 
     if (channel.length !== 0) {
       console.log('channel exists');
     } else {
-      await slackModel.createChannel(slack.designatedChannel);
+      await slackModel.channel.createChannel(slack.designatedChannel);
     }
   } catch (err) {
     console.log(err);
@@ -50,7 +53,7 @@ exports.respondToInteractiveMessage = async reqInfo => {
         }),
       };
 
-      await slackModel.createDialog(dialog);
+      await slackModel.message.createDialog(dialog);
     } else if (reqInfo.actions[0].value === 'retrieve') {
       console.log('retrieve');
     }
@@ -77,7 +80,7 @@ exports.submitDialog = async reqInfo => {
       ]),
     };
 
-    await slackModel.postMessage(message);
+    await slackModel.message.postMessage(message);
 
     const channelAlert = {
       channel: slack.designatedChannel,
@@ -94,7 +97,7 @@ exports.submitDialog = async reqInfo => {
       ]),
     };
 
-    await slackModel.postOpenMessage(channelAlert);
+    await slackModel.message.postOpenMessage(channelAlert);
 
     const recipientAlert = {
       channel: reqInfo.recipient,
@@ -103,7 +106,7 @@ exports.submitDialog = async reqInfo => {
       text: `You just received a shoutout from <@${reqInfo.userId}>`,
     };
 
-    await slackModel.postOpenMessage(recipientAlert);
+    await slackModel.message.postOpenMessage(recipientAlert);
   } catch (err) {
     console.log(err);
   }

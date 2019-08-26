@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
         token: slack.slackToken,
         attachments: JSON.stringify([
           {
-            fallback: 'Message from BOT',
+            fallback: 'Message from BRAVO',
             callback_id: 'shoutout',
             attachment_type: 'default',
             title: 'Shoutout Options',

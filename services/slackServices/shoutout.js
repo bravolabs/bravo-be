@@ -6,11 +6,12 @@ const eventEmitter = new events.EventEmitter();
 
 exports.sendShoutOut = async reqInfo => {
   try {
+    const org = await Organization.read(reqInfo.team_id);
     // respond to user commmand with interactive message
     const message = {
       channel: reqInfo.channel_id,
       user: reqInfo.user_id,
-      token: slack.slackToken,
+      token: org.access_token,
       attachments: JSON.stringify([
         {
           fallback: 'Message from BRAVO',
@@ -33,6 +34,8 @@ exports.sendShoutOut = async reqInfo => {
       ]),
     };
 
+    message.channel.toString();
+
     await slackModel.message.postMessage(message);
   } catch (err) {
     console.log(err);
@@ -41,9 +44,10 @@ exports.sendShoutOut = async reqInfo => {
 
 exports.respondToInteractiveMessage = async reqInfo => {
   try {
+    const org = await Organization.read(reqInfo.team);
     if (reqInfo.actions[0].value === 'give') {
       const dialog = {
-        token: slack.slackToken,
+        token: org.access_token,
         trigger_id: reqInfo.triggerId,
         dialog: JSON.stringify({
           title: 'Send Shoutout',
@@ -80,11 +84,12 @@ exports.respondToInteractiveMessage = async reqInfo => {
 
 exports.submitDialog = async reqInfo => {
   try {
+    const org = await Organization.read(reqInfo.team);
     const message = {
       channel: reqInfo.channelId,
       user: reqInfo.userId,
       text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌🙌`,
-      token: slack.slackToken,
+      token: org.access_token,
       attachments: JSON.stringify([
         {
           callback_id: 'submitDialog',
@@ -98,12 +103,10 @@ exports.submitDialog = async reqInfo => {
 
     await slackModel.message.postMessage(message);
 
-    const org = await Organization.read(reqInfo.team);
-
     const channelAlert = {
       channel: org.channel_id,
       text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}>! 🎉🎉`,
-      token: slack.slackToken,
+      token: org.access_token,
       attachments: JSON.stringify([
         {
           callback_id: 'alert message',
@@ -119,7 +122,7 @@ exports.submitDialog = async reqInfo => {
 
     const recipientAlert = {
       channel: reqInfo.recipient,
-      token: slack.slackToken,
+      token: org.access_token,
       title: 'Hurray, You are the newest shoutout Recipient',
       text: `You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
     };

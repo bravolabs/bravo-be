@@ -11,6 +11,7 @@ router.post('/', async (req, res) => {
     const data = JSON.parse(req.body.payload);
     if (data.type === 'interactive_message' && data.callback_id === 'shoutout') {
       const reqInfo = {
+        team: data.team.id,
         actions: data.actions,
         triggerId: data.trigger_id,
       };

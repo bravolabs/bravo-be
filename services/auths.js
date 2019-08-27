@@ -2,7 +2,7 @@ const users = require('../data/dbModels/users');
 const organizations = require('../data/dbModels/organizations');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
-const { slack, } = require('../config');
+const { secret, slack, } = require('../config');
 
 async function loginUser(accessToken, userId) {
   let user = await users.readBySlackId(userId);
@@ -21,9 +21,17 @@ async function loginUser(accessToken, userId) {
         name: res.user.name,
         email: res.user.profile.email,
       });
+      user = user[0];
     }
+    const token = jwt.sign(user, secret, { expiresIn: '1d' });
 
-    const token = jwt.sign(user, 'HSUHHHW*uhjshh&&@&*&*#y', { expiresIn: '1d' });
+    return {
+      statusCode: 200,
+      data: {
+        ...user,
+        token,
+      }
+    };
   }
   
   return {

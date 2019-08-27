@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-  port: process.env.PORT,
+  port: process.env.PORT || 3000,
   slack: {
     slackToken: process.env.SLACK_APP_TOKEN,
     bravoChannel: process.env.BRAVO_CHANNEL,

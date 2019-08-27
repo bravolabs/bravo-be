@@ -1,8 +1,8 @@
-const server = require('../index');
+const server = require('../express-server');
 const request = require('supertest');
 
 describe('/auths', () => {
-  it('[POST] /api/auths', () => {
+  it('[POST] /api/auths (accesToken required)', () => {
     return request(server)
       .post('/api/auths')
       .send({})

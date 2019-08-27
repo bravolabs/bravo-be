@@ -26,7 +26,7 @@ router.post('/', async (req, res) => {
             attachment_type: 'default',
             title: 'Shoutout Options',
             text: 'kindly select an option for your bot task',
-            color: '#7ed692',
+            color: '#4265ED',
             divider: true,
             actions: [
               {

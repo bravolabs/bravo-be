@@ -1,8 +1,0 @@
-const app = require('../index.js');
-const { port } = require('../config');
-
-const connectionPort = port;
-
-app.listen(connectionPort, () => {
-  console.log(`running on ${connectionPort}`);
-});

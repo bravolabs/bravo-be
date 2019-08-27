@@ -1,4 +1,5 @@
 const { slackModel } = require('../../data/slackModels/slack');
+const Organization = require('../../data/dbModels/organizations');
 const { slack } = require('../../config');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
@@ -33,19 +34,6 @@ exports.sendShoutOut = async reqInfo => {
     };
 
     await slackModel.message.postMessage(message);
-
-    // find and create channel
-    const channels = await slackModel.channel.getAllChannels();
-    const channel = await slackModel.channel.findChannel(
-      slack.designatedChannel,
-      channels.channels
-    );
-
-    if (channel.length !== 0) {
-      console.log('channel exists');
-    } else {
-      await slackModel.channel.createChannel(slack.designatedChannel);
-    }
   } catch (err) {
     console.log(err);
   }
@@ -110,8 +98,10 @@ exports.submitDialog = async reqInfo => {
 
     await slackModel.message.postMessage(message);
 
+    const org = await Organization.read(reqInfo.team);
+
     const channelAlert = {
-      channel: slack.designatedChannel,
+      channel: org.channel_id,
       text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}>! 🎉🎉`,
       token: slack.slackToken,
       attachments: JSON.stringify([
@@ -131,7 +121,7 @@ exports.submitDialog = async reqInfo => {
       channel: reqInfo.recipient,
       token: slack.slackToken,
       title: 'Hurray, You are the newest shoutout Recipient',
-      text: `You just received a shoutout from <@${reqInfo.userId}>`,
+      text: `You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
     };
 
     await slackModel.message.postOpenMessage(recipientAlert);

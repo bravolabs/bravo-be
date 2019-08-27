@@ -9,7 +9,6 @@ router.post('/', async (req, res) => {
   try {
     await res.status(200).send('');
     const data = JSON.parse(req.body.payload);
-    // console.log(data);
     if (data.type === 'interactive_message' && data.callback_id === 'shoutout') {
       const reqInfo = {
         actions: data.actions,
@@ -23,6 +22,7 @@ router.post('/', async (req, res) => {
         userId: data.user.id,
         recipient: data.submission.Recipient,
         content: data.submission.ShoutOut,
+        team: data.team.id,
       };
 
       await shoutOutService.submitDialog(reqInfo);

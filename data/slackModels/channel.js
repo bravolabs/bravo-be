@@ -2,12 +2,12 @@ const axios = require('axios');
 const qs = require('qs');
 const { slack } = require('../../config');
 
-async function createChannel(name) {
+async function createChannel(name, token) {
   try {
     await axios.post(
       `${slack.baseUrl}/channels.create`,
       qs.stringify({
-        token: process.env.slack_app_token,
+        token: token,
         name,
         validate: true,
       })
@@ -36,6 +36,7 @@ async function getAllChannels() {
 }
 
 module.exports = {
+  createChannel,
   getAllChannels,
   findChannel,
 };

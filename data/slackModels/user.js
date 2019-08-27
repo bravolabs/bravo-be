@@ -13,6 +13,16 @@ async function getUser(userId) {
   }
 }
 
+async function getWorkspaceUser(token) {
+  try {
+    const response = await axios.get(`${slack.baseUrl}/users.list?token=${token}`);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   getUser,
+  getWorkspaceUser,
 };

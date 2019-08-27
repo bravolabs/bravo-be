@@ -15,32 +15,11 @@ router.post('/', async (req, res) => {
     // message from the feedback interactive message, please don't delete
 
     if (keyword === 'shoutout') {
-      const message = {
-        channel: channel_id,
-        user: user_id,
-        token: slack.slackToken,
-        attachments: JSON.stringify([
-          {
-            fallback: 'Message from BRAVO',
-            callback_id: 'shoutout',
-            attachment_type: 'default',
-            title: 'Shoutout Options',
-            text: 'kindly select an option for your bot task',
-            color: '#4265ED',
-            divider: true,
-            actions: [
-              {
-                name: 'Give Shoutout',
-                text: 'Give Shoutout',
-                type: 'button',
-                value: 'give',
-                style: 'default',
-              },
-            ],
-          },
-        ]),
+      const reqInfo = {
+        channel_id: channel_id,
+        user_id: user_id,
       };
-      await shoutOutService.sendShoutOut(message);
+      await shoutOutService.sendShoutOut(reqInfo);
     }
   } catch (err) {
     console.log(err);

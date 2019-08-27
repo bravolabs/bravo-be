@@ -3,9 +3,35 @@ const { slack } = require('../../config');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
 
-exports.sendShoutOut = async message => {
+exports.sendShoutOut = async reqInfo => {
   try {
     // respond to user commmand with interactive message
+    const message = {
+      channel: reqInfo.channel_id,
+      user: reqInfo.user_id,
+      token: slack.slackToken,
+      attachments: JSON.stringify([
+        {
+          fallback: 'Message from BRAVO',
+          callback_id: 'shoutout',
+          attachment_type: 'default',
+          title: 'Shoutout Options',
+          text: 'kindly select an option for your bot task',
+          color: '#4265ED',
+          divider: true,
+          actions: [
+            {
+              name: 'Give Shoutout',
+              text: 'Give Shoutout',
+              type: 'button',
+              value: 'give',
+              style: 'default',
+            },
+          ],
+        },
+      ]),
+    };
+
     await slackModel.message.postMessage(message);
 
     // find and create channel

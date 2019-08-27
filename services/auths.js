@@ -1,10 +1,11 @@
 const users = require('../data/dbModels/users');
 const organizations = require('../data/dbModels/organizations');
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
 const { slack, } = require('../config');
 
 async function loginUser(accessToken, userId) {
-  const user = await users.readBySlackId(userId);
+  let user = await users.readBySlackId(userId);
 
   const res = await axios.get(`${slack.baseUrl}/users.info?token=${accessToken}&user=${userId}`);
   if(res.user && res.user.id) {
@@ -14,13 +15,15 @@ async function loginUser(accessToken, userId) {
         name: '...',
       });
 
-      await users.create({
+      user = await users.create({
         org_id: organization.id,
         slack_mem_id: res.user.id,
         name: res.user.name,
         email: res.user.profile.email,
       });
     }
+
+    const token = jwt.sign(user, 'HSUHHHW*uhjshh&&@&*&*#y', { expiresIn: '1d' });
   }
   
   return {

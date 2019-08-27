@@ -1,6 +1,6 @@
 const axios = require('axios');
 const qs = require('qs');
-const { slack, } = require('../../config');
+const { slack } = require('../../config');
 
 async function postMessage(message) {
   try {

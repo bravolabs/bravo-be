@@ -1,5 +1,5 @@
-const { slackModel, } = require('../../data/slackModels/slack');
-const { slack, } = require('../../config');
+const { slackModel } = require('../../data/slackModels/slack');
+const { slack } = require('../../config');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
 

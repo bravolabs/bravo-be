@@ -1,6 +1,6 @@
 // if callback is shoiutout and type is whatever then do whatever
 const express = require('express');
-const { slack, } = require('../config');
+const { slack } = require('../config');
 const shoutOutService = require('../services/slackServices/shoutout');
 
 const router = express.Router();

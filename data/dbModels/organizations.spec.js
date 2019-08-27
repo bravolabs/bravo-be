@@ -5,66 +5,84 @@ beforeEach(async () => {
   await db.raw('truncate organizations cascade;');
 });
 
-afterAll(async (done) => {
+afterAll(async done => {
   await new Promise(resolve => setTimeout(() => resolve(), 500));
   done();
-}); 
+});
 
 describe('Create organizations', () => {
-  it('can create organizations', async (done) => {
+  it('can create organizations', async done => {
     expect.assertions(2);
-    
+
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
 
     await orgs.create({
-      slack_org_id: 'AQYENEKWQS',
-      name: 'Lambda-School' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     await orgs.create({
-      slack_org_id: 'SWYEUJGHDR',
-      name: 'Bravo-Labs' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     organizations = await orgs.read();
     expect(organizations).toHaveLength(2);
     done();
   });
 
-  it('can create organizations correctly', async (done) => {
+  it('can create organizations correctly', async done => {
     expect.assertions(2);
-    
+
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
 
     const result = await orgs.create({
-      slack_org_id: 'AQYENEKWQS',
-      name: 'Lambda-School' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     expect(result[0].name).toBe('Lambda-School');
     done();
   });
 
-  it('returns the newly created organization', async (done) => {
+  it('returns the newly created organization', async done => {
     expect.assertions(1);
 
     const organization = await orgs.create({
-      slack_org_id: 'SWYEUJGHDR',
-      name: 'Bravo-Labs' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     expect(organization[0].name).toBe('Bravo-Labs');
     done();
   });
 
-  it('cannot duplicate an organization', async (done) => {
+  it('cannot duplicate an organization', async done => {
     expect.assertions(1);
 
     await orgs.create({
-      slack_org_id: 'SWYEUJGHDR',
-      name: 'Bravo-Labs' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     const organization = await orgs.create({
-      slack_org_id: 'SWYEUJGHDR',
-      name: 'Bravo-Labs' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     expect(organization[0].name).toBe('Bravo-Labs');
     done();
@@ -72,19 +90,25 @@ describe('Create organizations', () => {
 });
 
 describe('Read organizations', () => {
-  it('can read organizations from the db!', async (done) => {
+  it('can read organizations from the db!', async done => {
     expect.assertions(3);
-    
+
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
 
     await orgs.create({
-      slack_org_id: 'AQYENEKWQS',
-      name: 'Lambda-School' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     await orgs.create({
-      slack_org_id: 'SWYEUJGHDR',
-      name: 'Bravo-Labs' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     organizations = await orgs.read();
     expect(organizations[0].name).toBe('Lambda-School');
@@ -92,15 +116,18 @@ describe('Read organizations', () => {
     done();
   });
 
-  it('can read an organization by its slack ID', async (done) => {
+  it('can read an organization by its slack ID', async done => {
     expect.assertions(2);
-    
+
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
 
     let result = await orgs.create({
-      slack_org_id: 'AQYENEKWQS',
-      name: 'Lambda-School' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     result = await orgs.read(result[0].slack_org_id);
     expect(result.name).toBe('Lambda-School');
@@ -109,18 +136,21 @@ describe('Read organizations', () => {
 });
 
 describe('Update organizations', () => {
-  it('can update an organization by ID', async (done) => {
+  it('can update an organization by ID', async done => {
     expect.assertions(2);
-    
+
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
 
     let result = await orgs.create({
-      slack_org_id: 'AQYENEKWQS',
-      name: 'Lambda-School' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     result = await orgs.update(result[0].id, {
-      name: 'Bravo-Labs'
+      name: 'Bravo-Labs',
     });
     expect(result[0].name).toBe('Bravo-Labs');
     done();
@@ -128,15 +158,18 @@ describe('Update organizations', () => {
 });
 
 describe('Remove organizations', () => {
-  it('can remove an organization by ID', async (done) => {
+  it('can remove an organization by ID', async done => {
     expect.assertions(2);
-    
+
     let organizations = await orgs.read();
     expect(organizations).toHaveLength(0);
 
     let result = await orgs.create({
-      slack_org_id: 'AQYENEKWQS',
-      name: 'Bravo-Labs' 
+      slack_org_id: 'TLXU2P76W',
+      name: 'Banana',
+      channel_name: '#bots',
+      channel_id: 'CMQ777QG6',
+      access_token: 'xoxp-711954789234-723391175072-729713007969-5b4e04f9eeeea3580322d7660837d692',
     });
     result = await orgs.remove(result[0].id);
     expect(result[0].name).toBe('Bravo-Labs');

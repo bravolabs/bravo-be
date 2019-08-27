@@ -34,10 +34,11 @@ exports.respondToInteractiveMessage = async reqInfo => {
         dialog: JSON.stringify({
           title: 'Send Shoutout',
           callback_id: 'shoutout',
-          submit_label: 'Submit',
+          submit_label: 'Send',
           elements: [
             {
-              label: 'Who do you want to send a shoutout to',
+              label: 'Who do you want to send a shoutout to?',
+              placeholder: 'Choose a person',
               type: 'select',
               name: 'Recipient',
               optional: false,
@@ -48,6 +49,7 @@ exports.respondToInteractiveMessage = async reqInfo => {
               type: 'textarea',
               name: 'ShoutOut',
               optional: false,
+              placeholder: 'Write your shoutout message',
             },
           ],
         }),
@@ -75,7 +77,7 @@ exports.submitDialog = async reqInfo => {
           attachment_type: 'default',
           title: 'Shoutout:',
           text: `${reqInfo.content}`,
-          color: '#7ed692',
+          color: '#4265ED',
         },
       ]),
     };
@@ -84,7 +86,7 @@ exports.submitDialog = async reqInfo => {
 
     const channelAlert = {
       channel: slack.designatedChannel,
-      text: `<@${reqInfo.userId}> gave a shoutout to <@${reqInfo.recipient}>! 🙌🙌`,
+      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}>! 🎉🎉`,
       token: slack.slackToken,
       attachments: JSON.stringify([
         {
@@ -92,7 +94,7 @@ exports.submitDialog = async reqInfo => {
           attachment_type: 'default',
           title: 'Shoutout:',
           text: `${reqInfo.content}`,
-          color: '#7ed692',
+          color: '#4265ED',
         },
       ]),
     };

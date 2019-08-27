@@ -31,4 +31,21 @@ describe('/auths', () => {
         });
       });
   });
+
+  it('[POST] /api/auths (authentication failed)', () => {
+    return request(server)
+      .post('/api/auths')
+      .send({
+        accessToken: 'xxxuser.YHHASY.ANAH72c.77HSY.HSH',
+        userId: 'TWNUNDAQMS',
+      })
+      .expect(401)
+      .expect('Content-Type', /json/)
+      .then(res => {
+        expect(res.body).toBeInstanceOf(Object);
+        expect(res.body).toEqual({
+          message: 'Authentication failed.',
+        });
+      });
+  });
 });

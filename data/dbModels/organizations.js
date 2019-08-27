@@ -5,7 +5,7 @@ function create(organization) {
     organization.slack_org_id,
     organization.name
   ])
-  .then(data => data.rows);
+  .then(data => data.rows[0]);
 }
 
 function read(slack_org_id = null) {

@@ -40,7 +40,7 @@ describe('Create organizations', () => {
       slack_org_id: 'AQYENEKWQS',
       name: 'Lambda-School' 
     });
-    expect(result[0].name).toBe('Lambda-School');
+    expect(result.name).toBe('Lambda-School');
     done();
   });
 
@@ -51,7 +51,7 @@ describe('Create organizations', () => {
       slack_org_id: 'SWYEUJGHDR',
       name: 'Bravo-Labs' 
     });
-    expect(organization[0].name).toBe('Bravo-Labs');
+    expect(organization.name).toBe('Bravo-Labs');
     done();
   });
 
@@ -66,7 +66,7 @@ describe('Create organizations', () => {
       slack_org_id: 'SWYEUJGHDR',
       name: 'Bravo-Labs' 
     });
-    expect(organization[0].name).toBe('Bravo-Labs');
+    expect(organization.name).toBe('Bravo-Labs');
     done();
   });
 });
@@ -102,7 +102,7 @@ describe('Read organizations', () => {
       slack_org_id: 'AQYENEKWQS',
       name: 'Lambda-School' 
     });
-    result = await orgs.read(result[0].slack_org_id);
+    result = await orgs.read(result.slack_org_id);
     expect(result.name).toBe('Lambda-School');
     done();
   });
@@ -119,7 +119,7 @@ describe('Update organizations', () => {
       slack_org_id: 'AQYENEKWQS',
       name: 'Lambda-School' 
     });
-    result = await orgs.update(result[0].id, {
+    result = await orgs.update(result.id, {
       name: 'Bravo-Labs'
     });
     expect(result[0].name).toBe('Bravo-Labs');
@@ -138,7 +138,7 @@ describe('Remove organizations', () => {
       slack_org_id: 'AQYENEKWQS',
       name: 'Bravo-Labs' 
     });
-    result = await orgs.remove(result[0].id);
+    result = await orgs.remove(result.id);
     expect(result[0].name).toBe('Bravo-Labs');
     done();
   });

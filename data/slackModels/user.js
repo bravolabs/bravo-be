@@ -2,12 +2,12 @@ const axios = require('axios');
 const qs = require('qs');
 const { slack } = require('../../config');
 
-async function getUser(userId) {
+async function getUser(userId, accessToken) {
   try {
     const response = await axios.get(
-      `${slack.baseUrl}/users.info?token=${slack.slackToken}&user=${userId}`
+      `${slack.baseUrl}/users.info?token=${accessToken}&user=${userId}`
     );
-    return response.data.user;
+    return response.data;
   } catch (err) {
     console.log(err);
   }

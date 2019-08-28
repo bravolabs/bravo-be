@@ -1,6 +1,7 @@
 const express = require('express');
 const { slack } = require('../config');
 const shoutOutService = require('../services/slackServices/shoutout');
+const installService = require('../services/slackServices/install');
 
 const router = express.Router();
 
@@ -24,6 +25,12 @@ router.post('/', async (req, res) => {
       };
 
       await shoutOutService.sendShoutOut(reqInfo);
+    } else if (keyword === '' || keyword === 'help') {
+      const reqInfo = {
+        user_id: user_id,
+        team_id,
+      };
+      await installService.sendUserOnboardingMessage(reqInfo);
     }
   } catch (err) {
     console.log(err);

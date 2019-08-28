@@ -2,21 +2,29 @@ const db = require('../dbConfig');
 const util = require('util');
 
 async function create(organization) {
-  const insert = db('organizations')
-    .insert(organization)
-    .toString();
+  try {
+    const insert = db('organizations')
+      .insert(organization)
+      .toString();
 
-  const update = db('organizations')
-    .update(organization, '*')
-    .whereRaw('organizations.slack_org_id = ?', [organization.slack_org_id]);
+    const update = db('organizations')
+      .update(organization, '*')
+      .whereRaw('organizations.slack_org_id = ?', [organization.slack_org_id]);
 
-  const query = util.format(
-    '%s ON CONFLICT (slack_org_id) DO UPDATE SET %s',
-    insert.toString(),
-    update.toString().replace(/^update\s.*\sset\s/i, '')
-  );
+    const query = util.format(
+      '%s ON CONFLICT (slack_org_id) DO UPDATE SET %s',
+      insert.toString(),
+      update.toString().replace(/^update\s.*\sset\s/i, '')
+    );
 
-  await db.raw(query);
+    let savedOrg;
+    await db.raw(query).then(res => {
+      savedOrg = res.rows[0];
+    });
+    return savedOrg;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function read(slack_org_id = null) {

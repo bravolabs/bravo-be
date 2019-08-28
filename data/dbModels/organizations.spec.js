@@ -5,6 +5,8 @@ const shoutouts = require('./shoutouts');
 
 beforeEach(async () => {
   await db.raw('truncate organizations cascade;');
+  await db.raw('truncate users cascade;');
+  await db.raw('truncate shoutouts cascade;');
 });
 
 afterAll(async done => {

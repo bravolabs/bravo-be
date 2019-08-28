@@ -35,6 +35,7 @@ exports.sendUserOnboardingMessage = async reqInfo => {
     const { access_token } = await dbModel.read(reqInfo.team_id);
     const message = {
       channel: reqInfo.channel_id,
+      user: reqInfo.user_id,
       text: `Hi, <@${reqInfo.user_id}>! Seems you need help using bravo, lets get you onboarded 🙌`,
       token: access_token,
       attachments: JSON.stringify([
@@ -49,7 +50,7 @@ exports.sendUserOnboardingMessage = async reqInfo => {
       ]),
     };
 
-    await slackModel.message.postOpenMessage(message);
+    await slackModel.message.postMessage(message);
   } catch (err) {
     console.log(err);
   }

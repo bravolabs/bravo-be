@@ -1,9 +1,11 @@
 const db = require('../dbConfig');
 
-function create(user) {
-  return db('users')
+async function create(user) {
+  const result = await db('users')
     .insert(user)
     .returning('*');
+
+  return result[0];
 }
 
 function readBySlackId(slack_mem_id) {
@@ -14,5 +16,5 @@ function readBySlackId(slack_mem_id) {
 
 module.exports = {
   create,
-  readBySlackId
-}
+  readBySlackId,
+};

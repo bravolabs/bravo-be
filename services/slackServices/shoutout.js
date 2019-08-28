@@ -23,10 +23,17 @@ exports.sendShoutOut = async reqInfo => {
           divider: true,
           actions: [
             {
-              name: 'Give Shoutout',
-              text: 'Give Shoutout',
+              name: 'Send a Shoutout',
+              text: 'Send a Shoutout',
               type: 'button',
               value: 'give',
+              style: 'default',
+            },
+            {
+              name: 'View shoutouts',
+              text: 'View shoutouts',
+              type: 'button',
+              value: 'retrieve',
               style: 'default',
             },
           ],

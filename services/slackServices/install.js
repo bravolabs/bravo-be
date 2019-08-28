@@ -18,7 +18,7 @@ function sendOnboardingMessages(userList, token) {
         attachment_type: 'default',
         title: 'Our mission:',
         text:
-          'Award your peers with acknowledgments that act like coins/points in Slack when they do awesome things - and never let the acknowledgment of their good work get lost in the shuffle again. \n \n With bravo you will be able to give shoutouts to your team and collegues really easily. Also you will be able to see all the feedback and shoutouts that you get in your dashboard. \n \n *How it works?* \n Just type `/bravo` shoutout and I will guide you through the process',
+          '*How it works?* \n Just type `/bravo` shoutout and I will guide you through the process \n \n  *Our mission:* \n Award your peers with acknowledgments that act like coins/points in Slack when they do awesome things - and never let the acknowledgment of their good work get lost in the shuffle again. \n \n With bravo you will be able to give shoutouts to your team and collegues really easily. Also you will be able to see all the feedback and shoutouts that you get in your dashboard.',
         color: '#4265ED',
       },
     ]),

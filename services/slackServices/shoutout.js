@@ -86,7 +86,7 @@ exports.submitDialog = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
     const message = {
-      channel: reqInfo.channelId,
+      channel: reqInfo.userId,
       user: reqInfo.userId,
       text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌`,
       token: org.access_token,
@@ -101,7 +101,7 @@ exports.submitDialog = async reqInfo => {
       ]),
     };
 
-    await slackModel.message.postMessage(message);
+    await slackModel.message.postOpenMessage(message);
 
     const channelAlert = {
       channel: org.channel_id,

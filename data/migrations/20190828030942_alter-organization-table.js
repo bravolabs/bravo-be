@@ -8,5 +8,10 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('organizations');
+  return knex.schema.table('organizations', tbl => {
+    tbl.dropColumns('channel_name');
+    tbl.dropColumns('channel_id');
+    tbl.dropColumns('access_token');
+    tbl.dropColumns('installation_date');
+  });
 };

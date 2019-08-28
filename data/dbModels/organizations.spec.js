@@ -217,7 +217,7 @@ describe('Get shoutouts by organization ID', () => {
     expect(result).toHaveLength(1);
     expect(result[0].giverSlackId).toBe('HUJAQNVCDGH');
     expect(result[0].receiverSlackId).toBe('HUJWQOYHDGH');
-    expect(result[0].receiverSlackId).toBe('Well done Job!');
+    expect(result[0].message).toBe('Well done Job!');
     done();
   });
 });

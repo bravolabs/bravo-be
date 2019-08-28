@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev-migration": "npx knex migrate:latest --env=development",
-    "server": "npm run dev-migration nodemon index.js",
+    "server": "npm run dev-migration && nodemon index.js",
     "migration": "npx knex migrate:latest --env=production",
-    "start": "npm run migration node index.js",
+    "start": "npm run migration && node index.js",
     "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
     "coverage": "jest --coverage --forceExit && cat ./tests/coverage/lcov.info | coveralls"
   },

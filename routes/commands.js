@@ -28,7 +28,8 @@ router.post('/', async (req, res) => {
     } else if (keyword === '' || keyword === 'help') {
       await res.status(200).send('');
       const reqInfo = {
-        user_id: user_id,
+        channel_id: channel_id,
+        user_id,
         team_id,
       };
       await installService.sendUserOnboardingMessage(reqInfo);

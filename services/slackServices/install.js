@@ -34,7 +34,7 @@ exports.sendUserOnboardingMessage = async reqInfo => {
   try {
     const { access_token } = await dbModel.read(reqInfo.team_id);
     const message = {
-      channel: reqInfo.user_id,
+      channel: reqInfo.channel_id,
       text: `Hi, <@${reqInfo.user_id}>! Seems you need help using bravo, lets get you onboarded 🙌`,
       token: access_token,
       attachments: JSON.stringify([
@@ -43,7 +43,7 @@ exports.sendUserOnboardingMessage = async reqInfo => {
           callback: 'installation onboarding',
           attachment_type: 'default',
           text:
-            '*How it works?* \n Just type `/bravo shoutout` and I will guide you through the process \n \n  *Our mission:* \n Award your peers with acknowledgments that act like coins/points in Slack when they do awesome things - and never let the acknowledgment of their good work get lost in the shuffle again. \n \n With bravo you will be able to give shoutouts to your team and collegues really easily. Also you will be able to see all the feedback and shoutouts that you get in your dashboard.',
+            '*How it works?* \n Just type `/bravo shoutout` and I will guide you through the process.',
           color: '#4265ED',
         },
       ]),

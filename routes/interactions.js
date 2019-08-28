@@ -14,6 +14,8 @@ router.post('/', async (req, res) => {
         team: data.team.id,
         actions: data.actions,
         triggerId: data.trigger_id,
+        message_ts: data.message_ts,
+        channel_id: data.channel.id,
       };
 
       await shoutOutService.respondToInteractiveMessage(reqInfo);

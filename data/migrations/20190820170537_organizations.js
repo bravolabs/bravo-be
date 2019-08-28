@@ -1,17 +1,17 @@
 exports.up = function(knex) {
   return knex.schema.createTable('organizations', tbl => {
-    tbl.increments()
+    tbl.increments();
     tbl
       .text('slack_org_id')
       .unique()
-      .notNullable()
+      .notNullable();
     tbl
       .text('name')
       .unique()
-      .notNullable()
-  })
-}
+      .notNullable();
+  });
+};
 
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('organizations')
-}
+  return knex.schema.dropTableIfExists('organizations');
+};

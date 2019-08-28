@@ -1,15 +1,17 @@
 const { slackModel } = require('../../data/slackModels/slack');
+const Organization = require('../../data/dbModels/organizations');
 const { slack } = require('../../config');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
 
 exports.sendShoutOut = async reqInfo => {
   try {
+    const org = await Organization.read(reqInfo.team_id);
     // respond to user commmand with interactive message
     const message = {
       channel: reqInfo.channel_id,
       user: reqInfo.user_id,
-      token: slack.slackToken,
+      token: org.access_token,
       attachments: JSON.stringify([
         {
           fallback: 'Message from BRAVO',
@@ -32,20 +34,9 @@ exports.sendShoutOut = async reqInfo => {
       ]),
     };
 
+    message.channel.toString();
+
     await slackModel.message.postMessage(message);
-
-    // find and create channel
-    const channels = await slackModel.channel.getAllChannels();
-    const channel = await slackModel.channel.findChannel(
-      slack.designatedChannel,
-      channels.channels
-    );
-
-    if (channel.length !== 0) {
-      console.log('channel exists');
-    } else {
-      await slackModel.channel.createChannel(slack.designatedChannel);
-    }
   } catch (err) {
     console.log(err);
   }
@@ -53,9 +44,10 @@ exports.sendShoutOut = async reqInfo => {
 
 exports.respondToInteractiveMessage = async reqInfo => {
   try {
+    const org = await Organization.read(reqInfo.team);
     if (reqInfo.actions[0].value === 'give') {
       const dialog = {
-        token: slack.slackToken,
+        token: org.access_token,
         trigger_id: reqInfo.triggerId,
         dialog: JSON.stringify({
           title: 'Send Shoutout',
@@ -92,11 +84,12 @@ exports.respondToInteractiveMessage = async reqInfo => {
 
 exports.submitDialog = async reqInfo => {
   try {
+    const org = await Organization.read(reqInfo.team);
     const message = {
       channel: reqInfo.channelId,
       user: reqInfo.userId,
-      text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌🙌`,
-      token: slack.slackToken,
+      text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌`,
+      token: org.access_token,
       attachments: JSON.stringify([
         {
           callback_id: 'submitDialog',
@@ -111,9 +104,9 @@ exports.submitDialog = async reqInfo => {
     await slackModel.message.postMessage(message);
 
     const channelAlert = {
-      channel: slack.designatedChannel,
+      channel: org.channel_id,
       text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}>! 🎉🎉`,
-      token: slack.slackToken,
+      token: org.access_token,
       attachments: JSON.stringify([
         {
           callback_id: 'alert message',
@@ -129,9 +122,9 @@ exports.submitDialog = async reqInfo => {
 
     const recipientAlert = {
       channel: reqInfo.recipient,
-      token: slack.slackToken,
+      token: org.access_token,
       title: 'Hurray, You are the newest shoutout Recipient',
-      text: `You just received a shoutout from <@${reqInfo.userId}>`,
+      text: `You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
     };
 
     await slackModel.message.postOpenMessage(recipientAlert);

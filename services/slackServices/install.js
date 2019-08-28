@@ -26,7 +26,7 @@ function sendOnboardingMessages(userList, token) {
 
   userList.map(user => {
     message.channel = user.id;
-    message.text = `Hi, <@${user.id}>! You have been invited to Bravo, lets get you onboarded 🙌 🙌`;
+    message.text = `Hi, <@${user.id}>! You have been invited to Bravo, lets get you onboarded 🙌`;
     slackModel.message.postOpenMessage(message);
   });
 }

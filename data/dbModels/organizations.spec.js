@@ -1,5 +1,7 @@
 const db = require('../dbConfig');
 const orgs = require('./organizations');
+const users = require('./users');
+const shoutouts = require('./shoutouts');
 
 beforeEach(async () => {
   await db.raw('truncate organizations cascade;');

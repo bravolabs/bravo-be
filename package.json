@@ -4,8 +4,10 @@
   "description": "Healthy office cultures often acknowledge good work from their coworkers and peers. Award your peers with acknowledgements that act like coins/points in Slack when they do awesome things - and never let the acknowledgement of their good work get lost in the shuffle again.",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js",
-    "start": "node index.js",
+    "dev-migration": "npx knex migrate:latest --env=development",
+    "server": "npm run dev-migration nodemon index.js",
+    "migration": "npx knex migrate:latest --env=production",
+    "start": "npm run migration node index.js",
     "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
     "coverage": "jest --coverage --forceExit && cat ./tests/coverage/lcov.info | coveralls"
   },

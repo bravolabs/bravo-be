@@ -14,6 +14,8 @@ router.post('/', async (req, res) => {
         team: data.team.id,
         actions: data.actions,
         triggerId: data.trigger_id,
+        message_ts: data.message_ts,
+        channel_id: data.channel.id,
       };
 
       await shoutOutService.respondToInteractiveMessage(reqInfo);
@@ -29,7 +31,7 @@ router.post('/', async (req, res) => {
       await shoutOutService.submitDialog(reqInfo);
     }
   } catch (err) {
-    console.log(err);
+    res.status(500).send(err);
   }
 });
 

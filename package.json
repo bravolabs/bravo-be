@@ -1,0 +1,56 @@
+{
+  "name": "bravo-be",
+  "version": "1.0.0",
+  "description": "Healthy office cultures often acknowledge good work from their coworkers and peers. Award your peers with acknowledgements that act like coins/points in Slack when they do awesome things - and never let the acknowledgement of their good work get lost in the shuffle again.",
+  "main": "index.js",
+  "scripts": {
+    "dev-migration": "npx knex migrate:latest --env=development",
+    "server": "npm run dev-migration && nodemon index.js",
+    "migration": "npx knex migrate:latest --env=production",
+    "start": "npm run migration && node index.js",
+    "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
+    "coverage": "jest --coverage --forceExit && cat ./tests/coverage/lcov.info | coveralls"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bravolabs/bravo-be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bravolabs/bravo-be/issues"
+  },
+  "homepage": "https://github.com/bravolabs/bravo-be#readme",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.1.0",
+    "express": "^4.17.1",
+    "helmet": "^3.20.0",
+    "knex": "^0.19.1",
+    "npm-run-all": "^4.1.5",
+    "pg": "^7.12.0",
+    "qs": "^6.8.0",
+    "slack": "^11.0.2"
+  },
+  "devDependencies": {
+    "coveralls": "^3.0.5",
+    "cross-env": "^5.2.0",
+    "eslint": "^6.2.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-prettier": "^3.1.0",
+    "istanbul": "^0.4.5",
+    "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "nyc": "^14.1.1",
+    "rimraf": "^3.0.0",
+    "supertest": "^4.0.2",
+    "prettier": "^1.18.2"
+  }
+}

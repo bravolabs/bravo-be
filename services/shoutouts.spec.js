@@ -1,4 +1,4 @@
-const server = require('../index');
+const server = require('../express-server');
 const request = require('supertest');
 
 describe('/shoutouts', () => {

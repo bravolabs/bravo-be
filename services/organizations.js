@@ -10,7 +10,7 @@ async function getShoutouts(id) {
       },
     };
   }
-  const shoutouts = organizations.getShoutouts(organization.id);
+  const shoutouts = await organizations.getShoutouts(organization.id);
 
   return {
     statusCode: 200,

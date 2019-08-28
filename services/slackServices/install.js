@@ -31,32 +31,40 @@ function sendOnboardingMessages(userList, token) {
 }
 
 exports.sendUserOnboardingMessage = async reqInfo => {
-  const { access_token } = await dbModel.read(reqInfo.team_id);
-  const message = {
-    channel: reqInfo.user_id,
-    text: `Hi, <@${reqInfo.user_id}>! Seems you need help using bravo, lets get you onboarded 🙌`,
-    token: access_token,
-    attachments: JSON.stringify([
-      {
-        fallback: 'Bravo Onboarding Message',
-        callback: 'installation onboarding',
-        attachment_type: 'default',
-        text:
-          '*How it works?* \n Just type `/bravo shoutout` and I will guide you through the process \n \n  *Our mission:* \n Award your peers with acknowledgments that act like coins/points in Slack when they do awesome things - and never let the acknowledgment of their good work get lost in the shuffle again. \n \n With bravo you will be able to give shoutouts to your team and collegues really easily. Also you will be able to see all the feedback and shoutouts that you get in your dashboard.',
-        color: '#4265ED',
-      },
-    ]),
-  };
+  try {
+    const { access_token } = await dbModel.read(reqInfo.team_id);
+    const message = {
+      channel: reqInfo.user_id,
+      text: `Hi, <@${reqInfo.user_id}>! Seems you need help using bravo, lets get you onboarded 🙌`,
+      token: access_token,
+      attachments: JSON.stringify([
+        {
+          fallback: 'Bravo Onboarding Message',
+          callback: 'installation onboarding',
+          attachment_type: 'default',
+          text:
+            '*How it works?* \n Just type `/bravo shoutout` and I will guide you through the process \n \n  *Our mission:* \n Award your peers with acknowledgments that act like coins/points in Slack when they do awesome things - and never let the acknowledgment of their good work get lost in the shuffle again. \n \n With bravo you will be able to give shoutouts to your team and collegues really easily. Also you will be able to see all the feedback and shoutouts that you get in your dashboard.',
+          color: '#4265ED',
+        },
+      ]),
+    };
 
-  await slackModel.message.postOpenMessage(message);
+    await slackModel.message.postOpenMessage(message);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.onBoardUsers = async orgId => {
-  const { access_token } = await dbModel.read(orgId);
-  const res = await slackModel.user.getWorkspaceUser(access_token);
-  const users = filterUsersToOnboard(res.members);
+  try {
+    const { access_token } = await dbModel.read(orgId);
+    const res = await slackModel.user.getWorkspaceUser(access_token);
+    const users = filterUsersToOnboard(res.members);
 
-  await sendOnboardingMessages(users, access_token);
+    await sendOnboardingMessages(users, access_token);
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 exports.completeInstall = async installData => {

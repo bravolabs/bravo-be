@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
       await shoutOutService.submitDialog(reqInfo);
     }
   } catch (err) {
-    console.log(err);
+    res.status(500).send(err);
   }
 });
 

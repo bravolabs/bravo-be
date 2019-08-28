@@ -38,7 +38,7 @@ router.post('/', async (req, res) => {
         .send('Type `/bravo help` for onboarding  or `/bravo shoutout` to get started');
     }
   } catch (err) {
-    console.log(err);
+    res.status(500).send(err);
   }
 });
 

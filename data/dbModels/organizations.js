@@ -1,15 +1,34 @@
 const db = require('../dbConfig');
+const util = require('util');
 
-function create(organization) {
-  return db.raw('INSERT INTO organizations (slack_org_id, name) VALUES (?, ?) ON CONFLICT (slack_org_id) DO UPDATE SET name = EXCLUDED.name RETURNING *', [ 
-    organization.slack_org_id,
-    organization.name
-  ])
-  .then(data => data.rows[0]);
+async function create(organization) {
+  try {
+    const insert = db('organizations')
+      .insert(organization)
+      .toString();
+
+    const update = db('organizations')
+      .update(organization, '*')
+      .whereRaw('organizations.slack_org_id = ?', [organization.slack_org_id]);
+
+    const query = util.format(
+      '%s ON CONFLICT (slack_org_id) DO UPDATE SET %s',
+      insert.toString(),
+      update.toString().replace(/^update\s.*\sset\s/i, '')
+    );
+
+    let savedOrg;
+    await db.raw(query).then(res => {
+      savedOrg = res.rows[0];
+    });
+    return savedOrg;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 function read(slack_org_id = null) {
-  if(slack_org_id) {
+  if (slack_org_id) {
     return db('organizations')
       .where({ slack_org_id })
       .first();
@@ -34,5 +53,5 @@ module.exports = {
   create,
   read,
   update,
-  remove
-}
+  remove,
+};

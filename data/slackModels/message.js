@@ -4,7 +4,7 @@ const { slack } = require('../../config');
 
 async function postMessage(message) {
   try {
-    await axios.post(`${slack.baseUrl}/chat.postEphemeral`, qs.stringify(message));
+    const res = await axios.post(`${slack.baseUrl}/chat.postEphemeral`, qs.stringify(message));
   } catch (err) {
     console.log(err);
   }

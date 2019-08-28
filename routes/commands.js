@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    await res.status(200).send('');
     const keyword = req.body.text;
 
     const { channel_id } = req.body;
@@ -18,6 +17,7 @@ router.post('/', async (req, res) => {
     // message from the feedback interactive message, please don't delete
 
     if (keyword === 'shoutout') {
+      await res.status(200).send('');
       const reqInfo = {
         channel_id: channel_id,
         user_id: user_id,
@@ -26,11 +26,16 @@ router.post('/', async (req, res) => {
 
       await shoutOutService.sendShoutOut(reqInfo);
     } else if (keyword === '' || keyword === 'help') {
+      await res.status(200).send('');
       const reqInfo = {
         user_id: user_id,
         team_id,
       };
       await installService.sendUserOnboardingMessage(reqInfo);
+    } else {
+      await res
+        .status(200)
+        .send('Type `/bravo help` for onboarding  or `/bravo shoutout` to get started');
     }
   } catch (err) {
     console.log(err);

@@ -1,10 +1,42 @@
 const { slackModel } = require('../../data/slackModels/slack');
 const dbModel = require('../../data/dbModels/organizations');
-const { slack } = require('../../config');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
 
-exports.onBoardUsers = async reqInfo => { 
+function filterUsersToOnboard(users) {
+  const nonBotUsers = users.filter(user => user.is_bot === false);
+  return nonBotUsers;
+}
+
+function sendOnboardingMessages(userList, token) {
+  const message = {
+    token,
+    attachments: JSON.stringify([
+      {
+        fallback: 'Bravo Onboarding Message',
+        callback: 'installation onboarding',
+        attachment_type: 'default',
+        title: 'Our mission:',
+        text:
+          'Award your peers with acknowledgments that act like coins/points in Slack when they do awesome things - and never let the acknowledgment of their good work get lost in the shuffle again. \n \n With bravo you will be able to give shoutouts to your team and collegues really easily. Also you will be able to see all the feedback and shoutouts that you get in your dashboard. \n \n *How it works?* \n Just type `/bravo` shoutout and I will guide you through the process',
+        color: '#4265ED',
+      },
+    ]),
+  };
+
+  userList.map(user => {
+    message.channel = user.id;
+    message.text = `Hi, <@${user.id}>! You have been invited to Bravo, lets get you onboarded 🙌 🙌`;
+    slackModel.message.postOpenMessage(message);
+  });
+}
+
+exports.onBoardUsers = async orgId => {
+  const { access_token } = await dbModel.read(orgId);
+  const res = await slackModel.user.getWorkspaceUser(access_token);
+  const users = filterUsersToOnboard(res.members);
+
+  await sendOnboardingMessages(users, access_token);
 };
 
 exports.completeInstall = async installData => {

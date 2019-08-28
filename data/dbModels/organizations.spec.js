@@ -180,3 +180,44 @@ describe('Remove organizations', () => {
     done();
   });
 });
+
+describe('Get shoutouts by organization ID', () => {
+  it('can get shoutouts by organization ID', async done => {
+    expect.assertions(6);
+
+    const organizations = await orgs.read();
+    expect(organizations).toHaveLength(0);
+
+    const organization = await orgs.create({
+      slack_org_id: 'AQYENEKWQS',
+      name: 'Lambda-School',
+      channel_name: '#djjjd',
+      channel_id: '83829',
+      access_token: '8299ddjdddd',
+    });
+
+    const orgShoutouts = await orgs.getShoutouts(organization.id);
+    expect(orgShoutouts).toHaveLength(0);
+
+    const giver = await users.create({
+      org_id: organization.id,
+      slack_mem_id: 'HUJAQNVCDGH',
+    });
+    const receiver = await users.create({
+      org_id: organization.id,
+      slack_mem_id: 'HUJWQOYHDGH',
+    });
+    await shoutouts.create({
+      giver_id: giver.id,
+      receiver_id: receiver.id,
+      message: 'Well done Job!',
+    });
+
+    const result = await orgs.getShoutouts(organization.id);
+    expect(result).toHaveLength(1);
+    expect(result[0].giverSlackId).toBe('HUJAQNVCDGH');
+    expect(result[0].receiverSlackId).toBe('HUJWQOYHDGH');
+    expect(result[0].receiverSlackId).toBe('Well done Job!');
+    done();
+  });
+});

@@ -1,3 +1,4 @@
+const { handleError } = require('./utils/errorHandler');
 const shoutouts = require('./shoutouts');
 const auths = require('./auths');
 const organizations = require('./organizations');
@@ -14,6 +15,8 @@ function routes(app) {
   app.use('/slack/command', commands);
   app.use('/slack/interactions', interactions);
   app.use('/slack/install', install);
+
+  app.use(handleError);
 }
 
 module.exports = routes;

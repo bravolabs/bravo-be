@@ -1,17 +1,25 @@
 const db = require('../dbConfig');
 
-function create(shoutout) {
-  return db('shoutouts')
-    .insert(shoutout)
-    .returning('*');
+async function create(shoutout) {
+  try {
+    const result = await db('shoutouts')
+      .insert(shoutout)
+      .returning('*');
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
-function read(receiver_id) {
-  return db('shoutouts')
-    .where({ receiver_id });
+async function read(receiver_id) {
+  try {
+    const results = await db('shoutouts').where({ receiver_id });
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 module.exports = {
   create,
-  read
-}
+  read,
+};

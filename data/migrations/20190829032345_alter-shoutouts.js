@@ -6,6 +6,6 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   return knex.schema.table('shoutouts', tbl => {
-    tbl.dropColumns('organization_id').notNullable();
+    tbl.dropColumns('organization_id');
   });
 };

@@ -49,9 +49,24 @@ function remove(id) {
     .returning('*');
 }
 
+function getShoutouts(org_id) {
+  return db
+    .select(
+      'message',
+      'created_at',
+      db.ref('g.slack_mem_id').as('giverSlackId'),
+      db.ref('r.slack_mem_id').as('receiverSlackId')
+    )
+    .from('shoutouts')
+    .join(db.ref('users').as('g'), 'giver_id', 'g.id')
+    .join(db.ref('users').as('r'), 'receiver_id', 'r.id')
+    .whereRaw(`g.org_id = ${org_id} AND r.org_id = ${org_id}`);
+}
+
 module.exports = {
   create,
   read,
   update,
   remove,
+  getShoutouts,
 };

@@ -12,9 +12,7 @@ router.get('/:userId/shoutouts', validateId, async (req, res, next) => {
     const result = await service.getShoutouts(userId);
     res.status(result.statusCode).json(result.data);
   } catch (error) {
-    res.status(500).json({
-      error: 'server error',
-    });
+    next(error);
   }
 });
 

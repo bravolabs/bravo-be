@@ -3,10 +3,10 @@ const service = require('../services/shoutouts');
 
 const router = express.Router();
 
-router.get('/:userId', async (req, res, next) => {
+router.get('/:id', async (req, res, next) => {
   try {
-    const { userId } = req.params;
-    const result = await service.getShoutouts(userId);
+    const { id } = req.params;
+    const result = await service.getShoutouts(id);
     res.status(result.statusCode).json(result.data);
   } catch (error) {
     res.status(500).json({

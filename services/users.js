@@ -12,7 +12,7 @@ async function getShoutouts(userId) {
     };
   }
 
-  const result = await shoutouts.read(userId);
+  const result = await shoutouts.read(user.id);
   if (result.length < 1) {
     return {
       statusCode: 404,

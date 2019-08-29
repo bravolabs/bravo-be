@@ -13,7 +13,9 @@ async function create(shoutout) {
 
 async function read(receiver_id) {
   try {
-    const results = await db('shoutouts').where({ receiver_id });
+    const results = await db('shoutouts')
+      .where({ receiver_id })
+      .first();
     return result;
   } catch (err) {
     console.log(err);

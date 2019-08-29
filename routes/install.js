@@ -19,9 +19,11 @@ router.post('/', async (req, res) => {
     });
 
     // onboard users of the team/organization
-    await installService.onBoardUsers(reqInfo.orgId);
+
+    // please do not delete the code below, though small it's as important as the entire codebase
+    // await installService.onBoardUsers(reqInfo.orgId);
   } catch (err) {
-    console.log(err);
+    res.status(500).send(err);
   }
 });
 

@@ -13,7 +13,7 @@ function routes(app) {
   app.use('/api/organizations', organizations);
   app.use('/api/users', users);
   app.use('/slack/command', commands);
-  app.use('/slack/interactions', interactions);
+  app.use('/slack/interactive', interactions);
   app.use('/slack/install', install);
 
   app.use(handleError);

@@ -23,7 +23,7 @@ async function loginUser(accessToken, userId) {
       });
       user = user[0];
     }
-    const token = jwt.sign(user, secret, { expiresIn: '1d' });
+    const token = jwt.sign(user, secret, { expiresIn: '30d' });
 
     return {
       statusCode: 200,

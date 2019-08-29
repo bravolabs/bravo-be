@@ -2,7 +2,7 @@ const shoutouts = require('../data/dbModels/shoutouts');
 
 async function getShoutouts(id) {
   const result = await shoutouts.read(null, id);
-  if (result.length < 1) {
+  if (!result || !result.id) {
     return {
       statusCode: 404,
       data: {

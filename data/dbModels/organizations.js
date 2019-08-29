@@ -27,13 +27,18 @@ async function create(organization) {
   }
 }
 
-function read(slack_org_id = null) {
-  if (slack_org_id) {
-    return db('organizations')
-      .where({ slack_org_id })
-      .first();
+async function read(slack_org_id = null) {
+  try {
+    if (slack_org_id) {
+      const org = db('organizations')
+        .where({ slack_org_id })
+        .first();
+      return org;
+    }
+    return db('organizations');
+  } catch (err) {
+    console.log(err);
   }
-  return db('organizations');
 }
 
 function update(id, changes) {

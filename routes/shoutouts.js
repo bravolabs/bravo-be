@@ -1,7 +1,9 @@
 const express = require('express');
 const service = require('../services/shoutouts');
+const auth = require('./utils/auth');
 
 const router = express.Router();
+router.use('/', auth.authenticate);
 
 router.get('/:id', async (req, res, next) => {
   try {

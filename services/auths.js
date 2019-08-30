@@ -10,18 +10,12 @@ async function loginUser(accessToken, userId) {
   const res = await axios.get(`${slack.baseUrl}/users.info?token=${accessToken}&user=${userId}`);
   if (res.data.user && res.data.user.id) {
     if (!user || !user.slack_mem_id || user.slack_mem_id !== res.data.user.id) {
-      const organization = await organizations.create({
-        slack_org_id: res.data.user.team_id,
-        name: '...',
-      });
-
-      user = await users.create({
-        org_id: organization.id,
-        slack_mem_id: res.data.user.id,
-        name: res.data.user.name,
-        email: res.data.user.profile.email,
-      });
-      user = user[0];
+      return {
+        statusCode: 401,
+        data: {
+          message: 'Invalid login credentials',
+        },
+      };
     }
     const token = jwt.sign(user, secret, { expiresIn: '30d' });
 

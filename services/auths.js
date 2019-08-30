@@ -1,24 +1,22 @@
 const users = require('../data/dbModels/users');
-const organizations = require('../data/dbModels/organizations');
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const { secret, slack } = require('../config');
 
 async function loginUser(accessToken, userId) {
   let user = await users.readBySlackId(userId);
+  if (!user || !user.slack_mem_id) {
+    return {
+      statusCode: 401,
+      data: {
+        message: 'Invalid login credentials',
+      },
+    };
+  }
 
   const res = await axios.get(`${slack.baseUrl}/users.info?token=${accessToken}&user=${userId}`);
-  if (res.data.user && res.data.user.id) {
-    if (!user || !user.slack_mem_id || user.slack_mem_id !== res.data.user.id) {
-      return {
-        statusCode: 401,
-        data: {
-          message: 'Invalid login credentials',
-        },
-      };
-    }
+  if (res.data.user && res.data.user.id && user.slack_mem_id === res.data.user.id) {
     const token = jwt.sign(user, secret, { expiresIn: '30d' });
-
     return {
       statusCode: 200,
       data: {

@@ -39,7 +39,7 @@ describe('/auths', () => {
         accessToken: 'xxxuser.YHHASY.ANAH72c.77HSY.HSH',
         userId: 'TWNUNDAQMS',
       })
-      .expect(401)
+      .expect(400)
       .expect('Content-Type', /json/)
       .then(res => {
         expect(res.body).toBeInstanceOf(Object);

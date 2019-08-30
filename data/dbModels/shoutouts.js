@@ -11,9 +11,11 @@ async function create(shoutout) {
   }
 }
 
-async function read(receiver_id) {
+async function read(id) {
   try {
-    const results = await db('shoutouts').where({ receiver_id });
+    const results = await db('shoutouts')
+      .where('giver_id', id)
+      .orWhere('receiver_id', id);
     return results;
   } catch (err) {
     console.log(err);

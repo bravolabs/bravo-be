@@ -3,6 +3,7 @@ const Organization = require('../../data/dbModels/organizations');
 const ShoutOutHelper = require('./shoutout.helpers');
 const ShoutOut = require('../../data/dbModels/shoutouts');
 const User = require('../../data/dbModels/users');
+const { clientUrl } = require('../../config');
 
 exports.sendShoutOut = async reqInfo => {
   try {
@@ -203,7 +204,7 @@ exports.getUserShoutOuts = async reqInfo => {
               {
                 type: 'button',
                 text: 'View',
-                url: 'https://flights.example.com/book/r123456',
+                url: `${clientUrl}/shoutout/${indiv.id}`,
               },
             ],
             footer: `Bravo | ${indiv.created_at}`,

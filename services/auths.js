@@ -28,7 +28,8 @@ async function loginUser(accessToken, userId) {
     return {
       statusCode: 200,
       data: {
-        ...user,
+        name: res.data.user.real_name,
+        avatar: res.data.user.profile.image_72,
         token,
       },
     };

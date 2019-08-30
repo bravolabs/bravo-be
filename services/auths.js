@@ -7,7 +7,7 @@ async function loginUser(accessToken, userId) {
   let user = await users.read(userId);
   if (!user || !user.slack_mem_id) {
     return {
-      statusCode: 401,
+      statusCode: 400,
       data: {
         message: 'Invalid login credentials',
       },

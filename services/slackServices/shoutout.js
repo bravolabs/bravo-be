@@ -170,16 +170,28 @@ exports.submitDialog = async reqInfo => {
 exports.getUserShoutOuts = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
-    const { id } = await User.readBySlackId(reqInfo.userId);
+    const user = await User.readBySlackId(reqInfo.userId);
+    const id = user ? user.id : 0;
     const userShoutouts = await ShoutOut.read(id);
 
+    // add an if conditionnto show when the don't have a shoutout
     // post title message firsst
-    const message = {
-      channel: reqInfo.channelId,
-      user: reqInfo.user_id,
-      token: org.access_token,
-      text: `Here are the last ${userShoutouts.length} shoutouts sent and recieved by <@${reqInfo.userId}> 🎉\n`,
-    };
+    let message;
+    if (userShoutouts.length === 0 || !user) {
+      message = {
+        channel: reqInfo.channelId,
+        user: reqInfo.user_id,
+        token: org.access_token,
+        text: "Yo! you haven't received or given a shoutout, you can start with `/bravo shoutout`",
+      };
+    } else {
+      message = {
+        channel: reqInfo.channelId,
+        user: reqInfo.user_id,
+        token: org.access_token,
+        text: `Here are the last ${userShoutouts.length} shoutouts sent and recieved by <@${reqInfo.userId}> 🎉\n`,
+      };
+    }
 
     await slackModel.message.postMessage(message);
 

@@ -13,10 +13,8 @@ async function create(shoutout) {
 
 async function read(receiver_id) {
   try {
-    const results = await db('shoutouts')
-      .where({ receiver_id })
-      .first();
-    return result;
+    const results = await db('shoutouts').where({ receiver_id });
+    return results;
   } catch (err) {
     console.log(err);
   }

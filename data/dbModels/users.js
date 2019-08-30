@@ -8,10 +8,12 @@ async function create(user) {
   return result[0];
 }
 
-function read(slack_mem_id) {
-  return db('users')
-    .where({ slack_mem_id })
-    .first();
+function read(slack_mem_id = null, org_id = null) {
+  if (slack_mem_id) {
+    return db('users')
+      .where({ slack_mem_id })
+      .first();
+  }
 }
 
 module.exports = {

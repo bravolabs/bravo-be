@@ -1,4 +1,5 @@
 const organizations = require('../data/dbModels/organizations');
+const usersModel = require('../data/dbModels/users');
 
 async function getShoutouts(id) {
   const organization = await organizations.read(id);

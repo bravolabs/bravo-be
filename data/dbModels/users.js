@@ -14,6 +14,17 @@ function read(slack_mem_id = null, org_id = null) {
       .where({ slack_mem_id })
       .first();
   }
+
+  return db
+    .select(
+      'id',
+      'name',
+      'email',
+      db.ref('org_id').as('organizationId'),
+      db.ref('slack_mem_id').as('userSlackId')
+    )
+    .from('users')
+    .where({ org_id });
 }
 
 module.exports = {

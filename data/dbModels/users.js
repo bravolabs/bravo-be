@@ -8,7 +8,7 @@ async function create(user) {
   return result[0];
 }
 
-function readBySlackId(slack_mem_id) {
+function read(slack_mem_id) {
   return db('users')
     .where({ slack_mem_id })
     .first();
@@ -16,5 +16,5 @@ function readBySlackId(slack_mem_id) {
 
 module.exports = {
   create,
-  readBySlackId,
+  read,
 };

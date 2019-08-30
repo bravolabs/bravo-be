@@ -21,6 +21,27 @@ async function getShoutouts(id) {
   };
 }
 
+async function getUsers(id) {
+  const organization = await organizations.read(id);
+  if (!organization || !organization.slack_org_id) {
+    return {
+      statusCode: 404,
+      data: {
+        message: 'Organization does not exist',
+      },
+    };
+  }
+  const users = await usersModel.read(null, organization.id);
+
+  return {
+    statusCode: 200,
+    data: {
+      data: users,
+    },
+  };
+}
+
 module.exports = {
   getShoutouts,
+  getUsers,
 };

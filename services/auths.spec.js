@@ -32,7 +32,7 @@ describe('/auths', () => {
       });
   });
 
-  it('[POST] /api/auths (authentication failed)', () => {
+  it('[POST] /api/auths (invalid login credentials)', () => {
     return request(server)
       .post('/api/auths')
       .send({
@@ -44,7 +44,7 @@ describe('/auths', () => {
       .then(res => {
         expect(res.body).toBeInstanceOf(Object);
         expect(res.body).toEqual({
-          message: 'Authentication failed.',
+          message: 'Invalid login credentials',
         });
       });
   });

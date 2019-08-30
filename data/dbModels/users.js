@@ -22,7 +22,19 @@ async function readBySlackId(slack_mem_id) {
   }
 }
 
+async function readById(id) {
+  try {
+    const result = await db('users')
+      .where({ id })
+      .first();
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   create,
   readBySlackId,
+  readById,
 };

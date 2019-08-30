@@ -1,6 +1,8 @@
 const { slackModel } = require('../../data/slackModels/slack');
 const Organization = require('../../data/dbModels/organizations');
 const ShoutOutHelper = require('./shoutout.helpers');
+const ShoutOut = require('../../data/dbModels/shoutouts');
+const User = require('../../data/dbModels/users');
 
 exports.sendShoutOut = async reqInfo => {
   try {
@@ -80,7 +82,27 @@ exports.respondToInteractiveMessage = async reqInfo => {
 
       await slackModel.message.createDialog(dialog);
     } else if (reqInfo.actions[0].value === 'retrieve') {
-      console.log('retrieve');
+      const dialog = {
+        token: org.access_token,
+        trigger_id: reqInfo.triggerId,
+        dialog: JSON.stringify({
+          title: 'View shoutouts',
+          callback_id: 'view-shoutout',
+          submit_label: 'View',
+          elements: [
+            {
+              label: 'Who do you want to see their shoutouts?',
+              placeholder: 'Choose a person',
+              type: 'select',
+              name: 'user',
+              optional: false,
+              data_source: 'users',
+            },
+          ],
+        }),
+      };
+
+      await slackModel.message.createDialog(dialog);
     }
   } catch (err) {
     console.log(err);
@@ -136,7 +158,60 @@ exports.submitDialog = async reqInfo => {
       receiver_id: reqInfo.recipient,
       message: reqInfo.content,
     };
-    await ShoutOutHelper.saveToDatabase(dbInfo);
+    const shoutoutData = await ShoutOutHelper.saveToDatabase(dbInfo);
+    await ShoutOut.create(shoutoutData);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+// for now let us only be able to return users recieved shoutouts
+exports.getUserShoutOuts = async reqInfo => {
+  try {
+    const org = await Organization.read(reqInfo.team);
+    const { id } = await User.readBySlackId(reqInfo.userId);
+    const userShoutouts = await ShoutOut.read(id);
+
+    // post title message firsst
+    const message = {
+      channel: reqInfo.channelId,
+      user: reqInfo.user_id,
+      token: org.access_token,
+      text: `Here are the last ${userShoutouts.length} shoutouts sent and recieved by <@${reqInfo.userId}> 🎉\n`,
+    };
+
+    await slackModel.message.postMessage(message);
+
+    // loop through shoutouts and post each one
+    userShoutouts.map(async indiv => {
+      const giverSlackId = await User.readById(indiv.giver_id);
+      const receiverSlackId = await User.readById(indiv.receiver_id);
+
+      const messageList = {
+        channel: reqInfo.channelId,
+        user: reqInfo.user_id,
+        token: org.access_token,
+
+        attachments: JSON.stringify([
+          {
+            fallback: 'Message from Bravo',
+            callback_id: 'individual_shoutout',
+            attachment_type: 'default',
+            text: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
+            color: '#4265ED',
+            actions: [
+              {
+                type: 'button',
+                text: 'View',
+                url: 'https://flights.example.com/book/r123456',
+              },
+            ],
+            footer: `Bravo | ${indiv.created_at}`,
+          },
+        ]),
+      };
+      await slackModel.message.postMessage(messageList);
+    });
   } catch (err) {
     console.log(err);
   }

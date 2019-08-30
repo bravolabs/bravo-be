@@ -16,6 +16,7 @@ router.post('/', async (req, res) => {
         triggerId: data.trigger_id,
         message_ts: data.message_ts,
         channel_id: data.channel.id,
+        userId: data.user.id,
       };
 
       await shoutOutService.respondToInteractiveMessage(reqInfo);
@@ -29,6 +30,16 @@ router.post('/', async (req, res) => {
       };
 
       await shoutOutService.submitDialog(reqInfo);
+    } else if (data.type === 'dialog_submission' && data.callback_id === 'view-shoutout') {
+      const reqInfo = {
+        channelId: data.channel.id,
+        userId: data.submission.user,
+        content: data.submission.ShoutOut,
+        team: data.team.id,
+        user_id: data.user.id,
+      };
+
+      await shoutOutService.getUserShoutOuts(reqInfo);
     }
   } catch (err) {
     res.status(500).send(err);

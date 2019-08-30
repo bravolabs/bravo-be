@@ -1,4 +1,3 @@
-const ShoutOut = require('../../data/dbModels/shoutouts');
 const Organization = require('../../data/dbModels/organizations');
 const User = require('../../data/dbModels/users');
 
@@ -29,5 +28,5 @@ exports.saveToDatabase = async dbInfo => {
     receiver_id: reciever.id,
     message: dbInfo.message,
   };
-  await ShoutOut.create(shoutoutData);
+  return shoutoutData;
 };

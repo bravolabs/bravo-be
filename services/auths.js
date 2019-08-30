@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { secret, slack } = require('../config');
 
 async function loginUser(accessToken, userId) {
-  let user = await users.readBySlackId(userId);
+  let user = await users.read(userId);
   if (!user || !user.slack_mem_id) {
     return {
       statusCode: 401,

@@ -2,7 +2,7 @@ const users = require('../data/dbModels/users');
 const shoutouts = require('../data/dbModels/shoutouts');
 
 async function getShoutouts(userId) {
-  const user = await users.readBySlackId(userId);
+  const user = await users.read(userId);
   if (!user || !user.slack_mem_id) {
     return {
       statusCode: 404,

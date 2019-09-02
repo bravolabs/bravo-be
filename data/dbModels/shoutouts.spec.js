@@ -20,7 +20,7 @@ describe('Create shoutouts', () => {
   it('can create shoutouts', async done => {
     expect.assertions(2);
 
-    let shoutouts = await shoutout.read();
+    let shoutouts = await shoutout.readAll();
     expect(shoutouts).toHaveLength(0);
 
     const organization = await orgs.create({
@@ -48,7 +48,7 @@ describe('Create shoutouts', () => {
       receiver_id: userpersona.id,
       message: 'Amazing Job too this week',
     });
-    shoutouts = await shoutout.read();
+    shoutouts = await shoutout.readAll();
     expect(shoutouts).toHaveLength(2);
     done();
   });

@@ -1,23 +1,12 @@
-const users = require('../data/dbModels/users');
 const shoutouts = require('../data/dbModels/shoutouts');
 
-async function getShoutouts(userId) {
-  const user = await users.readBySlackId(userId);
-  if (!user || !user.slack_mem_id) {
+async function getShoutouts(id) {
+  const result = await shoutouts.read(null, id);
+  if (!result || !result.id) {
     return {
       statusCode: 404,
       data: {
-        message: 'User not found',
-      },
-    };
-  }
-
-  const result = await shoutouts.read(user.id);
-  if (result.length < 1) {
-    return {
-      statusCode: 404,
-      data: {
-        message: 'No shoutouts found for the user',
+        message: 'No shoutout found',
       },
     };
   }

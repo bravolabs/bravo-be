@@ -13,6 +13,17 @@ function validateLoginCredentials(req, res, next) {
   next();
 }
 
+function validateId(req, res, next) {
+  const { userId, id } = req.params;
+  if ((!userId || userId.trim() === '') && (!id || id.trim() === '')) {
+    return res.status(400).json({
+      message: `Missing required ${userId ? 'userId' : 'id'} field`,
+    });
+  }
+  next();
+}
+
 module.exports = {
   validateLoginCredentials,
+  validateId,
 };

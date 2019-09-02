@@ -32,7 +32,8 @@ async function read(userId = null, id = null) {
       .from(db.ref('shoutouts').as('s'))
       .join(db.ref('users').as('g'), 's.giver_id', 'g.id')
       .join(db.ref('users').as('r'), 's.receiver_id', 'r.id')
-      .whereRaw(`s.receiver_id = ${userId} OR s.giver_id = ${userId}`);
+      .whereRaw(`s.receiver_id = ${userId} OR s.giver_id = ${userId}`)
+      .orderBy('created_at', 'desc');
   }
 
   return db

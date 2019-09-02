@@ -213,13 +213,14 @@ exports.getUserShoutOuts = async reqInfo => {
             attachment_type: 'default',
             text: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
             color: '#4265ED',
-            actions: [
-              {
-                type: 'button',
-                text: 'View',
-                url: `${clientUrl}/shoutout/${indiv.id}`,
-              },
-            ],
+            // please don't remove this code, very important
+            // actions: [
+            //   {
+            //     type: 'button',
+            //     text: 'View',
+            //     url: `${clientUrl}/shoutout/${indiv.id}`,
+            //   },
+            // ],
             footer: `Bravo | ${indiv.created_at}`,
           },
         ]),

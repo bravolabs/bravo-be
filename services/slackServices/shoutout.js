@@ -4,6 +4,7 @@ const ShoutOutHelper = require('./shoutout.helpers');
 const ShoutOut = require('../../data/dbModels/shoutouts');
 const User = require('../../data/dbModels/users');
 const { clientUrl } = require('../../config');
+const moment = require('moment');
 
 exports.sendShoutOut = async reqInfo => {
   try {
@@ -184,7 +185,8 @@ exports.getUserShoutOuts = async reqInfo => {
         channel: reqInfo.channelId,
         user: reqInfo.user_id,
         token: org.access_token,
-        text: "Yo! you haven't received or given a shoutout, you can start with `/bravo shoutout`",
+        text:
+          "Yo! the selected user hasn't received or given a shoutout, you can start with `/bravo shoutout`",
       };
     } else {
       message = {
@@ -202,11 +204,7 @@ exports.getUserShoutOuts = async reqInfo => {
       const giverSlackId = await User.readBySlackId(indiv.giverSlackId);
       const receiverSlackId = await User.readBySlackId(indiv.receiverSlackId);
       const date = indiv.created_at;
-      const newDate = date + ''.split('T');
-      // newDate.toISOString().slice(0, 10);
 
-      // var date_test = new Date(`${date}`.replace(/-/g, '/'));
-      console.log(newDate);
       const messageList = {
         channel: reqInfo.channelId,
         user: reqInfo.user_id,
@@ -226,7 +224,7 @@ exports.getUserShoutOuts = async reqInfo => {
             //     url: `${clientUrl}/shoutout/${indiv.id}`,
             //   },
             // ],
-            footer: `Bravo | ${indiv.created_at}`,
+            footer: `Bravo | ${moment(date).format('dddd, MMMM Do YYYY')}`,
           },
         ]),
       };

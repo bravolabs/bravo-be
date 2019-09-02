@@ -7,9 +7,9 @@ async function loginUser(accessToken, userId) {
   let user = await users.readBySlackId(userId);
   if (!user || !user.slack_mem_id) {
     return {
-      statusCode: 401,
+      statusCode: 404,
       data: {
-        message: 'Invalid login credentials',
+        message: 'Workspace not found. Please contact your workspace admin to install Bravo',
       },
     };
   }

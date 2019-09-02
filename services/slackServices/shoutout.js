@@ -159,10 +159,10 @@ exports.submitDialog = async reqInfo => {
       receiver_id: reqInfo.recipient,
       message: reqInfo.content,
       organization_id: org.slack_org_id,
+      access_token: org.access_token,
     };
 
-    const shoutoutData = await ShoutOutHelper.saveToDatabase(dbInfo);
-    await ShoutOut.create(shoutoutData);
+    await ShoutOutHelper.saveToDatabase(dbInfo);
   } catch (err) {
     console.log(err);
   }
@@ -201,7 +201,12 @@ exports.getUserShoutOuts = async reqInfo => {
     userShoutouts.map(async indiv => {
       const giverSlackId = await User.readBySlackId(indiv.giverSlackId);
       const receiverSlackId = await User.readBySlackId(indiv.receiverSlackId);
+      const date = indiv.created_at;
+      const newDate = date + ''.split('T');
+      // newDate.toISOString().slice(0, 10);
 
+      // var date_test = new Date(`${date}`.replace(/-/g, '/'));
+      console.log(newDate);
       const messageList = {
         channel: reqInfo.channelId,
         user: reqInfo.user_id,

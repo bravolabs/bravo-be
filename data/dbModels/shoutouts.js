@@ -11,12 +11,16 @@ async function create(shoutout) {
   }
 }
 
-async function read(id) {
+async function read(userId) {
   try {
-    const results = await db('shoutouts')
-      .where('giver_id', id)
-      .orWhere('receiver_id', id);
-    return results;
+    if (userId) {
+      const results = await db('shoutouts')
+        .where('giver_id', userId)
+        .orWhere('receiver_id', userId);
+      return results;
+    } else {
+      return await db('shoutouts');
+    }
   } catch (err) {
     console.log(err);
   }

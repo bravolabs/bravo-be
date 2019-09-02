@@ -158,7 +158,9 @@ exports.submitDialog = async reqInfo => {
       giver_id: reqInfo.userId,
       receiver_id: reqInfo.recipient,
       message: reqInfo.content,
+      organization_id: org.slack_org_id,
     };
+
     const shoutoutData = await ShoutOutHelper.saveToDatabase(dbInfo);
     await ShoutOut.create(shoutoutData);
   } catch (err) {
@@ -197,14 +199,13 @@ exports.getUserShoutOuts = async reqInfo => {
 
     // loop through shoutouts and post each one
     userShoutouts.map(async indiv => {
-      const giverSlackId = await User.readById(indiv.giver_id);
-      const receiverSlackId = await User.readById(indiv.receiver_id);
+      const giverSlackId = await User.readBySlackId(indiv.giverSlackId);
+      const receiverSlackId = await User.readBySlackId(indiv.receiverSlackId);
 
       const messageList = {
         channel: reqInfo.channelId,
         user: reqInfo.user_id,
         token: org.access_token,
-
         attachments: JSON.stringify([
           {
             fallback: 'Message from Bravo',

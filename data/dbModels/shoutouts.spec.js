@@ -56,7 +56,7 @@ describe('Create shoutouts', () => {
   it('can read shoutouts for a user correctly', async done => {
     expect.assertions(2);
 
-    let shoutouts = await shoutout.read();
+    let shoutouts = await shoutout.readAll();
     expect(shoutouts).toHaveLength(0);
 
     const organization = await orgs.create({

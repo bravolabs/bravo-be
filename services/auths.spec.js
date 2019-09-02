@@ -39,12 +39,12 @@ describe('/auths', () => {
         accessToken: 'xxxuser.YHHASY.ANAH72c.77HSY.HSH',
         userId: 'TWNUNDAQMS',
       })
-      .expect(401)
+      .expect(404)
       .expect('Content-Type', /json/)
       .then(res => {
         expect(res.body).toBeInstanceOf(Object);
         expect(res.body).toEqual({
-          message: 'Invalid login credentials',
+          message: 'Workspace not found. Please contact your workspace admin to install Bravo',
         });
       });
   });

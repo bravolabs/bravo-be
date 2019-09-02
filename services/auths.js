@@ -4,6 +4,11 @@ const jwt = require('jsonwebtoken');
 const { secret, slack } = require('../config');
 
 async function loginUser(accessToken, userId) {
+  // get user infomation from slack
+  const {
+    data: { user: slackUser },
+  } = await axios.get(`${slack.baseUrl}/users.info?token=${accessToken}&user=${userId}`);
+
   let user = await users.readBySlackId(userId);
   if (!user || !user.slack_mem_id) {
     return {

@@ -16,4 +16,14 @@ router.get('/:userId/shoutouts', validateId, async (req, res, next) => {
   }
 });
 
+router.get('/:userId', validateId, async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const result = await service.getUserInfo(userId);
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

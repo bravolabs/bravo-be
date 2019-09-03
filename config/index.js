@@ -4,6 +4,7 @@ dotenv.config();
 
 const port = process.env.PORT || 5000;
 const secret = process.env.JWT_SECRET;
+const clientUrl = process.env.CLIENT_URL;
 const slack = {
   slackToken: process.env.SLACK_APP_TOKEN,
   bravoChannel: process.env.BRAVO_CHANNEL,
@@ -18,4 +19,5 @@ module.exports = {
   port,
   secret,
   slack,
+  clientUrl,
 };

@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const secret = process.env.JWT_SECRET;
 const slack = {
   slackToken: process.env.SLACK_APP_TOKEN,

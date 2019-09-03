@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev-migration": "npx knex migrate:latest --env=development",
-    "server": "npm run dev-migration && nodemon index.js",
+    "server": "nodemon index.js",
     "migration": "npx knex migrate:latest --env=production",
     "start": "npm run migration && node index.js",
     "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",

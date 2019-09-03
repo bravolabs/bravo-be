@@ -21,13 +21,7 @@ async function create(user) {
     await db.raw(query).then(res => {
       savedUser = res.rows[0];
     });
-    console.log(savedUser);
-
     return savedUser;
-    // const result = await db('users')
-    //   .insert(user)
-    //   .returning('*');
-    // return result[0];
   } catch (err) {
     console.log(err);
   }

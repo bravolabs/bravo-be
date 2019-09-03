@@ -7,8 +7,9 @@
     "dev-migration": "npx knex migrate:latest --env=development",
     "server": "npm run dev-migration && nodemon index.js",
     "migration": "npx knex migrate:latest --env=production",
+    "migration-test": "npx knex migrate:latest --env=test",
     "start": "npm run migration && node index.js",
-    "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
+    "test": "npm run migration-test && nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
     "coverage": "jest --coverage --forceExit && cat ./tests/coverage/lcov.info | coveralls"
   },
   "jest": {
@@ -48,6 +49,7 @@
     "eslint-plugin-prettier": "^3.1.0",
     "istanbul": "^0.4.5",
     "jest": "^24.8.0",
+    "nock": "^10.0.6",
     "nodemon": "^1.19.1",
     "nyc": "^14.1.1",
     "rimraf": "^3.0.0",

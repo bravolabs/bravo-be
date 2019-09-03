@@ -7,7 +7,6 @@
     "dev-migration": "npx knex migrate:latest --env=development",
     "server": "npm run dev-migration && nodemon index.js",
     "migration": "npx knex migrate:latest --env=production",
-    "migration-test": "npx knex migrate:latest --env=test",
     "start": "npm run migration && node index.js",
     "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
     "coverage": "jest --coverage --forceExit && cat ./coverage/lcov.info | coveralls"

@@ -22,7 +22,7 @@ async function getUser(userSlackId, orgId, accessToken) {
     }
     return user;
   } catch (err) {
-    console.log(err);
+    return null;
   }
 }
 

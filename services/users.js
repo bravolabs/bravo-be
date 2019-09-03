@@ -49,7 +49,7 @@ async function getUserInfo(userId) {
     return {
       statusCode: 404,
       data: {
-        message: "Couldn't get user info",
+        message: 'User not found',
       },
     };
   }

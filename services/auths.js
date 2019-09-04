@@ -9,7 +9,6 @@ async function loginUser(accessToken, userId) {
   const { data: slackRes } = await axios.get(
     `${slack.baseUrl}/users.info?token=${accessToken}&user=${userId}`
   );
-
   if ('user' in slackRes) {
     const { user: slackUser } = slackRes;
     // get user's organization

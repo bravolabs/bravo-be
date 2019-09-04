@@ -12,6 +12,7 @@ function randomGifs() {
     'http://giphygifs.s3.amazonaws.com/media/dsMFrxB2agKf6/giphy.gif',
     'https://media.giphy.com/media/iyGfMZYxDQBSE/giphy.gif',
     'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif',
+    'https://media.giphy.com/media/kBZBlLVlfECvOQAVno/giphy.gif',
   ];
 
   const randomInt = Math.floor(Math.random() * Math.floor(gifArray.length));

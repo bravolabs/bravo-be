@@ -30,17 +30,17 @@ async function create(organization) {
 async function read(slack_org_id = null, org_id = null) {
   try {
     if (slack_org_id) {
-      const org = db('organizations')
+      const org = await db('organizations')
         .where({ slack_org_id })
         .first();
       return org;
     } else if (org_id) {
-      const org = db('organizations')
+      const org = await db('organizations')
         .where({ id: org_id })
         .first();
       return org;
     }
-    return db('organizations');
+    return await db('organizations');
   } catch (err) {
     console.log(err);
   }

@@ -47,7 +47,7 @@ exports.sendShoutOut = async reqInfo => {
 
     await slackModel.message.postMessage(message);
   } catch (err) {
-    return null;
+    console.log(err);
   }
 };
 
@@ -107,7 +107,7 @@ exports.respondToInteractiveMessage = async reqInfo => {
       await slackModel.message.createDialog(dialog);
     }
   } catch (err) {
-    return null;
+    console.log(err);
   }
 };
 
@@ -165,7 +165,7 @@ exports.submitDialog = async reqInfo => {
 
     await ShoutOutHelper.saveToDatabase(dbInfo);
   } catch (err) {
-    return null;
+    console.log(err);
   }
 };
 
@@ -231,6 +231,6 @@ exports.getUserShoutOuts = async reqInfo => {
       await slackModel.message.postMessage(messageList);
     });
   } catch (err) {
-    return null;
+    console.log(err);
   }
 };

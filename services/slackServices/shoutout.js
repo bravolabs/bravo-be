@@ -146,7 +146,7 @@ exports.submitDialog = async reqInfo => {
 
     const channelAlert = {
       channel: org.channel_id,
-      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}>! 🎉🎉`,
+      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉🎉`,
       token: org.access_token,
       attachments: JSON.stringify([
         {

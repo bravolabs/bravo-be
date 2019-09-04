@@ -22,7 +22,7 @@ async function getShoutouts(id) {
 }
 
 async function getUsers(id) {
-  const organization = await organizations.read(id);
+  const organization = await organizations.read(null, id);
   if (!organization || !organization.slack_org_id) {
     return {
       statusCode: 404,
@@ -31,7 +31,7 @@ async function getUsers(id) {
       },
     };
   }
-  const users = await usersModel.read(null, organization.id);
+  const users = await usersModel.readUsersByOrganization(id);
 
   return {
     statusCode: 200,

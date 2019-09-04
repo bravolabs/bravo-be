@@ -42,7 +42,11 @@ router.post('/', async (req, res) => {
       await shoutOutService.getUserShoutOuts(reqInfo);
     }
   } catch (err) {
-    res.status(500).send(err);
+    res.status(500).send(`
+      Error creating interaction
+
+      Stack: ${JSON.stringify(err.stack)}
+    `);
   }
 });
 

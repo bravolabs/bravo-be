@@ -15,12 +15,14 @@ router.post('/', validateLoginCredentials, async (req, res, next) => {
   }
 });
 
-router.post('/add', async (req, res) => {
-  const user = req.body;
-  const addeduser = await shoutout.create(user);
-  res.json(addeduser);
-  console.log(addeduser);
+router.post('/add', async (req, res, next) => {
+  try {
+    const user = req.body;
+    const addedUser = await shoutout.create(user);
+    res.json(addedUser);
+  } catch (error) {
+    next(error);
+  }
 });
-
 
 module.exports = router;

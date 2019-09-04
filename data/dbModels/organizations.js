@@ -3,11 +3,11 @@ const util = require('util');
 
 async function create(organization) {
   try {
-    const insert = await db('organizations')
+    const insert = db('organizations')
       .insert(organization)
       .toString();
 
-    const update = await db('organizations')
+    const update = db('organizations')
       .update(organization, '*')
       .whereRaw('organizations.slack_org_id = ?', [organization.slack_org_id]);
 
@@ -30,17 +30,17 @@ async function create(organization) {
 async function read(slack_org_id = null, org_id = null) {
   try {
     if (slack_org_id) {
-      const org = await db('organizations')
+      const org = db('organizations')
         .where({ slack_org_id })
         .first();
       return org;
     } else if (org_id) {
-      const org = await db('organizations')
+      const org = db('organizations')
         .where({ id: org_id })
         .first();
       return org;
     }
-    return await db('organizations');
+    return db('organizations');
   } catch (err) {
     console.log(err);
   }

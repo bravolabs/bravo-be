@@ -9,7 +9,7 @@ async function create(organization) {
 
     const update = await db('organizations')
       .update(organization, '*')
-      .whereRaw('organizations.slack_org_id = $1', [organization.slack_org_id]);
+      .whereRaw('organizations.slack_org_id = ?', [organization.slack_org_id]);
 
     const query = util.format(
       '%s ON CONFLICT (slack_org_id) DO UPDATE SET %s',

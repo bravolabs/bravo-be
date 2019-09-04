@@ -16,7 +16,6 @@ function randomGifs() {
   ];
 
   const randomInt = Math.floor(Math.random() * Math.floor(gifArray.length));
-  console.log(randomInt);
   return gifArray[randomInt];
 }
 

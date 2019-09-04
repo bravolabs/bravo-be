@@ -1,7 +1,6 @@
 const axios = require('axios');
 const qs = require('qs');
 const { slack } = require('../../config');
-const Organization = require('../../data/dbModels/organizations');
 
 async function postMessage(message) {
   try {

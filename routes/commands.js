@@ -8,7 +8,7 @@ const router = express.Router();
 router.post('/', async (req, res) => {
   try {
     const keyword = req.body.text;
-    
+
     const { channel_id } = req.body;
     const { user_id } = req.body;
     const { team_id } = req.body;
@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
         user_id,
         team_id,
       };
-      
+
       await installService.sendUserOnboardingMessage(reqInfo);
     } else {
       await res

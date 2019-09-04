@@ -25,13 +25,23 @@ router.post('/', async (req, res) => {
       };
 
       await shoutOutService.sendShoutOut(reqInfo);
-    } else if (keyword === '' || keyword === 'help') {
+    } else if (keyword === 'help') {
       await res.status(200).send('');
       const reqInfo = {
         channel_id: channel_id,
         user_id,
         team_id,
       };
+
+      await installService.sendUserHelpMessage(reqInfo);
+    } else if (keyword === '') {
+      await res.status(200).send('');
+      const reqInfo = {
+        channel_id: channel_id,
+        user_id,
+        team_id,
+      };
+
       await installService.sendUserOnboardingMessage(reqInfo);
     } else {
       await res

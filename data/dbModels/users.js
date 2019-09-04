@@ -38,6 +38,15 @@ async function readBySlackId(slack_mem_id) {
   }
 }
 
+async function readUsersByOrganization(id) {
+  try {
+    const users = await db('users').where({ org_id: id });
+    return users;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function readById(id) {
   try {
     const result = await db('users')
@@ -53,4 +62,5 @@ module.exports = {
   create,
   readBySlackId,
   readById,
+  readUsersByOrganization,
 };

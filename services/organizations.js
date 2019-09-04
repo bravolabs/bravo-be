@@ -31,7 +31,7 @@ async function getUsers(id) {
       },
     };
   }
-  const users = await organizations.readOrgUsers(id);
+  const users = await usersModel.readUsersByOrganization(id);
 
   return {
     statusCode: 200,

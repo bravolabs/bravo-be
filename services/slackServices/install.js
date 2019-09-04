@@ -36,7 +36,7 @@ exports.sendUserOnboardingMessage = async reqInfo => {
     const message = {
       channel: reqInfo.channel_id,
       user: reqInfo.user_id,
-      text: `Hi, what would you like to do?`,
+      text: `*Hi, what would you like to do?*`,
       token: access_token,
       attachments: JSON.stringify([
         {

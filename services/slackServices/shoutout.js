@@ -128,7 +128,7 @@ exports.submitDialog = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
     const message = {
-      channel: reqInfo.userId,
+      channel: reqInfo.channelId,
       user: reqInfo.userId,
       text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌 on <#${org.channel_id}>`,
       token: org.access_token,

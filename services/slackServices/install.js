@@ -36,6 +36,58 @@ exports.sendUserOnboardingMessage = async reqInfo => {
     const message = {
       channel: reqInfo.channel_id,
       user: reqInfo.user_id,
+      text: `Hi, what would you like to do?`,
+      token: access_token,
+      attachments: JSON.stringify([
+        {
+          fallback: 'Bravo Onboarding Message',
+          callback_id: 'shoutout',
+          attachment_type: 'default',
+          text: 'Give a shoutout',
+          color: '#4265ED',
+          divider: true,
+          actions: [
+            {
+              name: 'Send a Shoutout',
+              text: 'Send a Shoutout',
+              type: 'button',
+              value: 'give',
+              style: 'default',
+            },
+          ],
+        },
+        {
+          fallback: 'Bravo Onboarding Message',
+          callback_id: 'shoutout',
+          attachment_type: 'default',
+          text: 'View shoutouts of the selected user',
+          color: '#4265ED',
+          divider: true,
+          actions: [
+            {
+              name: 'View shoutouts',
+              text: 'View shoutouts',
+              type: 'button',
+              value: 'retrieve',
+              style: 'default',
+            },
+          ],
+        },
+      ]),
+    };
+
+    await slackModel.message.postMessage(message);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.sendUserHelpMessage = async reqInfo => {
+  try {
+    const { access_token } = await dbModel.read(reqInfo.team_id);
+    const message = {
+      channel: reqInfo.channel_id,
+      user: reqInfo.user_id,
       text: `Hi, <@${reqInfo.user_id}>! Seems you need help using bravo, lets get you onboarded 🙌`,
       token: access_token,
       attachments: JSON.stringify([
@@ -43,8 +95,7 @@ exports.sendUserOnboardingMessage = async reqInfo => {
           fallback: 'Bravo Onboarding Message',
           callback: 'installation onboarding',
           attachment_type: 'default',
-          text:
-            '*How it works?* \n Just type `/bravo shoutout` and I will guide you through the process.',
+          text: '*How it works?* \n Just type `/bravo` and I will guide you through the process.',
           color: '#4265ED',
         },
       ]),

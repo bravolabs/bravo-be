@@ -41,6 +41,17 @@ async function read(slack_org_id = null) {
   }
 }
 
+async function readOrgUsers(id) {
+  try {
+    const users = await db('users')
+      .where({ org: id })
+      .first();
+    return users;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 function update(id, changes) {
   return db('organizations')
     .update(changes, '*')
@@ -71,6 +82,7 @@ function getShoutouts(org_id) {
 module.exports = {
   create,
   read,
+  readOrgUsers,
   update,
   remove,
   getShoutouts,

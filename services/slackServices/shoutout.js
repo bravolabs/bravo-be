@@ -140,6 +140,13 @@ exports.submitDialog = async reqInfo => {
           text: `*${reqInfo.content}*`,
           color: '#4265ED',
         },
+        {
+          callback_id: 'alert message',
+          attachment_type: 'default',
+          title: '',
+          color: '#4265ED',
+          image_url: `${randomGifs()}`,
+        },
       ]),
     };
     await slackModel.message.postMessage(message);
@@ -155,6 +162,13 @@ exports.submitDialog = async reqInfo => {
           title: 'Shoutout:',
           text: `*${reqInfo.content}*`,
           color: '#4265ED',
+        },
+        {
+          callback_id: 'alert message',
+          attachment_type: 'default',
+          title: '',
+          color: '#4265ED',
+          image_url: `${randomGifs()}`,
         },
       ]),
     };

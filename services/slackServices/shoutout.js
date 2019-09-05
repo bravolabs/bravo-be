@@ -142,7 +142,7 @@ exports.submitDialog = async reqInfo => {
         },
       ]),
     };
-    await slackModel.message.postOpenMessage(message);
+    await slackModel.message.postMessage(message);
 
     const channelAlert = {
       channel: org.channel_id,

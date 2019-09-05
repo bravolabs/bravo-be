@@ -143,29 +143,6 @@ exports.submitDialog = async reqInfo => {
     };
     await slackModel.message.postMessage(message);
 
-    const channelAlert = {
-      channel: org.channel_id,
-      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉🎉`,
-      token: org.access_token,
-      attachments: JSON.stringify([
-        {
-          callback_id: 'alert message',
-          attachment_type: 'default',
-          title: 'Shoutout:',
-          text: `*${reqInfo.content}*`,
-          color: '#4265ED',
-        },
-        {
-          callback_id: 'alert message',
-          attachment_type: 'default',
-          title: '',
-          color: '#4265ED',
-          image_url: `${randomGifs()}`,
-        },
-      ]),
-    };
-    await slackModel.message.postOpenMessage(channelAlert);
-
     const recipientAlert = {
       channel: reqInfo.recipient,
       token: org.access_token,
@@ -190,7 +167,37 @@ exports.submitDialog = async reqInfo => {
       access_token: org.access_token,
     };
 
-    await ShoutOutHelper.saveToDatabase(dbInfo);
+    const storedShoutOut = await ShoutOutHelper.saveToDatabase(dbInfo);
+
+    const channelAlert = {
+      channel: org.channel_id,
+      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉🎉`,
+      token: org.access_token,
+      attachments: JSON.stringify([
+        {
+          callback_id: 'alert message',
+          attachment_type: 'default',
+          title: 'Shoutout:',
+          text: `*${reqInfo.content}*`,
+          color: '#4265ED',
+          actions: [
+            {
+              type: 'button',
+              text: 'View',
+              url: `${clientUrl}/shoutouts/${storedShoutOut.id}`,
+            },
+          ],
+        },
+        {
+          callback_id: 'alert message',
+          attachment_type: 'default',
+          title: '',
+          color: '#4265ED',
+          image_url: `${randomGifs()}`,
+        },
+      ]),
+    };
+    await slackModel.message.postOpenMessage(channelAlert);
   } catch (err) {
     console.log(err);
   }
@@ -253,13 +260,13 @@ exports.getUserShoutOuts = async reqInfo => {
             text: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
             color: '#4265ED',
             // please don't remove this code, very important
-            // actions: [
-            //   {
-            //     type: 'button',
-            //     text: 'View',
-            //     url: `${clientUrl}/shoutout/${indiv.id}`,
-            //   },
-            // ],
+            actions: [
+              {
+                type: 'button',
+                text: 'View',
+                url: `${clientUrl}/shoutouts/${indiv.id}`,
+              },
+            ],
             footer: `Bravo | ${moment(date).format('dddd, MMMM Do YYYY')}`,
           },
         ]),

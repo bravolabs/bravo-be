@@ -95,7 +95,37 @@ exports.respondToInteractiveMessage = async reqInfo => {
         }),
       };
 
+      const reqData = {
+        token: org.access_token,
+        channel: 'CMTJ4G1TK',
+      };
+
+      const checkTimestamp = async function() {
+        let isDone = false;
+        if (isDone) {
+          clearInterval(listener);
+          return;
+        }
+
+        let timestampCheck = await slackModel.message.getMessageTimestamp(reqData);
+        const reactions = {
+          token: org.access_token,
+          name: 'heart',
+          channel: 'CMTJ4G1TK',
+          timestamp: `${timestampCheck}`,
+        };
+
+        if (lastTimestamp !== timestampCheck) {
+          const result = await slackModel.message.addReactions(reactions);
+          let isDone = true;
+        }
+      };
+
+      const lastTimestamp = await slackModel.message.getMessageTimestamp(reqData);
       await slackModel.message.createDialog(dialog);
+      var listener = await setInterval(function() {
+        checkTimestamp();
+      }, 5000);
     } else if (reqInfo.actions[0].value === 'retrieve') {
       const dialog = {
         token: org.access_token,

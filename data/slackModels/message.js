@@ -26,8 +26,37 @@ async function createDialog(dialog) {
   }
 }
 
+async function addReactions(reactions) {
+  try {
+    await axios.post(`${slack.baseUrl}/reactions.add`, qs.stringify(reactions));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+async function getMessageTimestamp(reqData) {
+  try {
+    const history = await axios.post(`${slack.baseUrl}/channels.history`, qs.stringify(reqData))
+      .then(res => {
+        return qs.parse(res);
+      });
+
+    const timestamps = history.data.messages.map(msg => {
+      if (msg.subtype === 'bot_message') {
+        return msg.ts;
+      }
+    });
+
+    return timestamps[0];
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   postMessage,
   postOpenMessage,
   createDialog,
+  addReactions,
+  getMessageTimestamp,
 };

@@ -130,22 +130,14 @@ exports.submitDialog = async reqInfo => {
     const message = {
       channel: reqInfo.channelId,
       user: reqInfo.userId,
-      text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌 on <#${org.channel_id}>`,
       token: org.access_token,
       attachments: JSON.stringify([
         {
           callback_id: 'submitDialog',
           attachment_type: 'default',
-          title: 'Shoutout:',
-          text: `*${reqInfo.content}*`,
-          color: '#4265ED',
-        },
-        {
-          callback_id: 'alert message',
-          attachment_type: 'default',
-          title: '',
-          color: '#4265ED',
-          image_url: `${randomGifs()}`,
+          title: 'Bravo Confirmation:',
+          text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌 on <#${org.channel_id}>`,
+          color: '#A9A9A9',
         },
       ]),
     };

@@ -111,7 +111,6 @@ exports.respondToInteractiveMessage = async reqInfo => {
       let isDone = false;
 
       const checkTimestamp = async function() {
-        console.log(isDone);
         if (isDone) {
           clearInterval(listener);
           return;

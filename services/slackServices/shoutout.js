@@ -197,7 +197,6 @@ exports.submitDialog = async reqInfo => {
   }
 };
 
-// for now let us only be able to return users recieved shoutouts
 exports.getUserShoutOuts = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
@@ -205,7 +204,6 @@ exports.getUserShoutOuts = async reqInfo => {
     const id = user ? user.id : 0;
     const userShoutouts = await ShoutOut.read(id);
 
-    // add an if conditionnto show when the don't have a shoutout
     // post title message firsst
     let message;
     if (userShoutouts.length === 0 || !user) {
@@ -244,7 +242,7 @@ exports.getUserShoutOuts = async reqInfo => {
             attachment_type: 'default',
             text: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
             color: '#A9A9A9',
-            // please don't remove this code, very important
+
             actions: [
               {
                 type: 'button',

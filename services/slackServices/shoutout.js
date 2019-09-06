@@ -100,25 +100,39 @@ exports.respondToInteractiveMessage = async reqInfo => {
         channel: 'CMTJ4G1TK',
       };
 
+      let reactions = {
+        token: org.access_token,
+        name: '',
+        channel: 'CMTJ4G1TK',
+        timestamp: '',
+      };
+
+      const reactionNames = ['heart', 'clap', 'tada', 'fire'];
+      let isDone = false;
+
       const checkTimestamp = async function() {
-        let isDone = false;
+        console.log(isDone);
         if (isDone) {
           clearInterval(listener);
           return;
         }
 
         let timestampCheck = await slackModel.message.getMessageTimestamp(reqData);
-        const reactions = {
-          token: org.access_token,
-          name: 'heart',
-          channel: 'CMTJ4G1TK',
-          timestamp: `${timestampCheck}`,
-        };
 
         if (lastTimestamp !== timestampCheck) {
-          const result = await slackModel.message.addReactions(reactions);
-          let isDone = true;
+          reactionNames.map(async reaction => {
+            reactions = {
+              ...reactions,
+              name: reaction,
+              timestamp: timestampCheck,
+            };
+            await slackModel.message.addReactions(reactions);
+            isDone = true;
+            return isDone;
+          });
+          return isDone;
         }
+        return isDone;
       };
 
       const lastTimestamp = await slackModel.message.getMessageTimestamp(reqData);

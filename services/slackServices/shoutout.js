@@ -35,8 +35,8 @@ exports.sendShoutOut = async reqInfo => {
           callback_id: 'shoutout',
           attachment_type: 'default',
           title: 'Shoutout Options',
-          text: 'kindly select an option for your bot task',
-          color: '#4265ED',
+          text: 'please select what you would like to do',
+          color: '#A9A9A9',
           divider: true,
           actions: [
             {
@@ -148,7 +148,15 @@ exports.submitDialog = async reqInfo => {
     const recipientAlert = {
       channel: reqInfo.recipient,
       token: org.access_token,
-      text: `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
+      attachments: JSON.stringify([
+        {
+          callback_id: 'submitDialog',
+          attachment_type: 'default',
+          title: 'Bravo Confirmation:',
+          text: `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
+          color: '#A9A9A9',
+        },
+      ]),
     };
     await slackModel.message.postOpenMessage(recipientAlert);
 
@@ -164,7 +172,7 @@ exports.submitDialog = async reqInfo => {
 
     const channelAlert = {
       channel: org.channel_id,
-      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉🎉`,
+      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉`,
       token: org.access_token,
       attachments: JSON.stringify([
         {
@@ -235,7 +243,7 @@ exports.getUserShoutOuts = async reqInfo => {
             callback_id: 'individual_shoutout',
             attachment_type: 'default',
             text: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
-            color: '#4265ED',
+            color: '#A9A9A9',
             // please don't remove this code, very important
             actions: [
               {

@@ -6,18 +6,20 @@ const User = require('../../data/dbModels/users');
 const { clientUrl } = require('../../config');
 const moment = require('moment');
 
-function randomGifs() {
-  const gifArray = [
-    'https://media0.giphy.com/media/xJjs8eGVbjNYY/giphy.gif',
-    'http://giphygifs.s3.amazonaws.com/media/dsMFrxB2agKf6/giphy.gif',
-    'https://media.giphy.com/media/iyGfMZYxDQBSE/giphy.gif',
-    'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif',
-    'https://media.giphy.com/media/kBZBlLVlfECvOQAVno/giphy.gif',
-  ];
+// please do not delete the commented function below, useful in the future
 
-  const randomInt = Math.floor(Math.random() * Math.floor(gifArray.length));
-  return gifArray[randomInt];
-}
+// function randomGifs() {
+//   const gifArray = [
+//     'https://media0.giphy.com/media/xJjs8eGVbjNYY/giphy.gif',
+//     'http://giphygifs.s3.amazonaws.com/media/dsMFrxB2agKf6/giphy.gif',
+//     'https://media.giphy.com/media/iyGfMZYxDQBSE/giphy.gif',
+//     'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif',
+//     'https://media.giphy.com/media/kBZBlLVlfECvOQAVno/giphy.gif',
+//   ];
+
+//   const randomInt = Math.floor(Math.random() * Math.floor(gifArray.length));
+//   return gifArray[randomInt];
+// }
 
 exports.sendShoutOut = async reqInfo => {
   try {
@@ -33,8 +35,8 @@ exports.sendShoutOut = async reqInfo => {
           callback_id: 'shoutout',
           attachment_type: 'default',
           title: 'Shoutout Options',
-          text: 'kindly select an option for your bot task',
-          color: '#4265ED',
+          text: 'please select what you would like to do',
+          color: '#A9A9A9',
           divider: true,
           actions: [
             {
@@ -146,14 +148,13 @@ exports.submitDialog = async reqInfo => {
     const recipientAlert = {
       channel: reqInfo.recipient,
       token: org.access_token,
-      text: `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
       attachments: JSON.stringify([
         {
-          callback_id: 'alert message',
+          callback_id: 'submitDialog',
           attachment_type: 'default',
-          title: '',
-          color: '#4265ED',
-          image_url: `${randomGifs()}`,
+          title: 'Bravo Confirmation:',
+          text: `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
+          color: '#A9A9A9',
         },
       ]),
     };
@@ -171,14 +172,14 @@ exports.submitDialog = async reqInfo => {
 
     const channelAlert = {
       channel: org.channel_id,
-      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉🎉`,
+      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉`,
       token: org.access_token,
       attachments: JSON.stringify([
         {
           callback_id: 'alert message',
           attachment_type: 'default',
           title: 'Shoutout:',
-          text: `*${reqInfo.content}*`,
+          text: `${reqInfo.content}`,
           color: '#4265ED',
           actions: [
             {
@@ -188,13 +189,6 @@ exports.submitDialog = async reqInfo => {
             },
           ],
         },
-        {
-          callback_id: 'alert message',
-          attachment_type: 'default',
-          title: '',
-          color: '#4265ED',
-          image_url: `${randomGifs()}`,
-        },
       ]),
     };
     await slackModel.message.postOpenMessage(channelAlert);
@@ -203,7 +197,6 @@ exports.submitDialog = async reqInfo => {
   }
 };
 
-// for now let us only be able to return users recieved shoutouts
 exports.getUserShoutOuts = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
@@ -211,7 +204,6 @@ exports.getUserShoutOuts = async reqInfo => {
     const id = user ? user.id : 0;
     const userShoutouts = await ShoutOut.read(id);
 
-    // add an if conditionnto show when the don't have a shoutout
     // post title message firsst
     let message;
     if (userShoutouts.length === 0 || !user) {
@@ -228,15 +220,6 @@ exports.getUserShoutOuts = async reqInfo => {
         user: reqInfo.user_id,
         token: org.access_token,
         text: `Here are the last ${userShoutouts.length} shoutouts sent and recieved by <@${reqInfo.userId}> 🎉\n`,
-        attachments: JSON.stringify([
-          {
-            callback_id: 'alert message',
-            attachment_type: 'default',
-            title: '',
-            color: '#4265ED',
-            image_url: `${randomGifs()}`,
-          },
-        ]),
       };
     }
 
@@ -258,8 +241,8 @@ exports.getUserShoutOuts = async reqInfo => {
             callback_id: 'individual_shoutout',
             attachment_type: 'default',
             text: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
-            color: '#4265ED',
-            // please don't remove this code, very important
+            color: '#A9A9A9',
+
             actions: [
               {
                 type: 'button',
@@ -276,4 +259,33 @@ exports.getUserShoutOuts = async reqInfo => {
   } catch (err) {
     console.log(err);
   }
+};
+
+exports.sendPublicUrl = async reqInfo => {
+  const org = await Organization.read(reqInfo.team);
+  const message = {
+    channel: reqInfo.user_id,
+    token: org.access_token,
+    text: `Here is the public url you requested <${reqInfo.link}>`,
+  };
+  await slackModel.message.postOpenMessage(message);
+};
+
+exports.cheatErrorMessage = async reqInfo => {
+  const org = await Organization.read(reqInfo.team);
+  const message = {
+    channel: reqInfo.channelId,
+    user: reqInfo.userId,
+    token: org.access_token,
+    attachments: JSON.stringify([
+      {
+        callback_id: 'submitDialog',
+        attachment_type: 'default',
+        title: 'Bravo Error:',
+        text: `Sorry, but you cannot give yourself a shoutout ⚠️`,
+        color: '#A9A9A9',
+      },
+    ]),
+  };
+  await slackModel.message.postMessage(message);
 };

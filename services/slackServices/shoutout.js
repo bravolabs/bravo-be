@@ -6,18 +6,20 @@ const User = require('../../data/dbModels/users');
 const { clientUrl } = require('../../config');
 const moment = require('moment');
 
-function randomGifs() {
-  const gifArray = [
-    'https://media0.giphy.com/media/xJjs8eGVbjNYY/giphy.gif',
-    'http://giphygifs.s3.amazonaws.com/media/dsMFrxB2agKf6/giphy.gif',
-    'https://media.giphy.com/media/iyGfMZYxDQBSE/giphy.gif',
-    'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif',
-    'https://media.giphy.com/media/kBZBlLVlfECvOQAVno/giphy.gif',
-  ];
+// please do not delete the commented function below, useful in the future
 
-  const randomInt = Math.floor(Math.random() * Math.floor(gifArray.length));
-  return gifArray[randomInt];
-}
+// function randomGifs() {
+//   const gifArray = [
+//     'https://media0.giphy.com/media/xJjs8eGVbjNYY/giphy.gif',
+//     'http://giphygifs.s3.amazonaws.com/media/dsMFrxB2agKf6/giphy.gif',
+//     'https://media.giphy.com/media/iyGfMZYxDQBSE/giphy.gif',
+//     'https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif',
+//     'https://media.giphy.com/media/kBZBlLVlfECvOQAVno/giphy.gif',
+//   ];
+
+//   const randomInt = Math.floor(Math.random() * Math.floor(gifArray.length));
+//   return gifArray[randomInt];
+// }
 
 exports.sendShoutOut = async reqInfo => {
   try {
@@ -147,15 +149,6 @@ exports.submitDialog = async reqInfo => {
       channel: reqInfo.recipient,
       token: org.access_token,
       text: `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
-      attachments: JSON.stringify([
-        {
-          callback_id: 'alert message',
-          attachment_type: 'default',
-          title: '',
-          color: '#4265ED',
-          image_url: `${randomGifs()}`,
-        },
-      ]),
     };
     await slackModel.message.postOpenMessage(recipientAlert);
 
@@ -187,13 +180,6 @@ exports.submitDialog = async reqInfo => {
               url: `${clientUrl}/shoutouts/${storedShoutOut.id}`,
             },
           ],
-        },
-        {
-          callback_id: 'alert message',
-          attachment_type: 'default',
-          title: '',
-          color: '#4265ED',
-          image_url: `${randomGifs()}`,
         },
       ]),
     };
@@ -228,15 +214,6 @@ exports.getUserShoutOuts = async reqInfo => {
         user: reqInfo.user_id,
         token: org.access_token,
         text: `Here are the last ${userShoutouts.length} shoutouts sent and recieved by <@${reqInfo.userId}> 🎉\n`,
-        attachments: JSON.stringify([
-          {
-            callback_id: 'alert message',
-            attachment_type: 'default',
-            title: '',
-            color: '#4265ED',
-            image_url: `${randomGifs()}`,
-          },
-        ]),
       };
     }
 

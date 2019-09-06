@@ -29,7 +29,11 @@ router.post('/', async (req, res) => {
         team: data.team.id,
       };
 
-      await shoutOutService.submitDialog(reqInfo);
+      if (reqInfo.userId === reqInfo.recipient) {
+        await shoutOutService.cheatErrorMessage(reqInfo);
+      } else {
+        await shoutOutService.submitDialog(reqInfo);
+      }
     } else if (data.type === 'dialog_submission' && data.callback_id === 'view-shoutout') {
       const reqInfo = {
         channelId: data.channel.id,

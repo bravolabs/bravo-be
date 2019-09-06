@@ -272,3 +272,22 @@ exports.sendPublicUrl = async reqInfo => {
   };
   await slackModel.message.postOpenMessage(message);
 };
+
+exports.cheatErrorMessage = async reqInfo => {
+  const org = await Organization.read(reqInfo.team);
+  const message = {
+    channel: reqInfo.channelId,
+    user: reqInfo.userId,
+    token: org.access_token,
+    attachments: JSON.stringify([
+      {
+        callback_id: 'submitDialog',
+        attachment_type: 'default',
+        title: 'Bravo Error:',
+        text: `Sorry, but you cannot give yourself a shoutout ⚠️`,
+        color: '#A9A9A9',
+      },
+    ]),
+  };
+  await slackModel.message.postMessage(message);
+};

@@ -178,7 +178,7 @@ exports.submitDialog = async reqInfo => {
           callback_id: 'alert message',
           attachment_type: 'default',
           title: 'Shoutout:',
-          text: `*${reqInfo.content}*`,
+          text: `${reqInfo.content}`,
           color: '#4265ED',
           actions: [
             {
@@ -276,4 +276,14 @@ exports.getUserShoutOuts = async reqInfo => {
   } catch (err) {
     console.log(err);
   }
+};
+
+exports.sendPublicUrl = async reqInfo => {
+  const org = await Organization.read(reqInfo.team);
+  const message = {
+    channel: reqInfo.user_id,
+    token: org.access_token,
+    text: `Here is the public url you requested <${reqInfo.link}>`,
+  };
+  await slackModel.message.postOpenMessage(message);
 };

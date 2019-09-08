@@ -26,7 +26,7 @@ async function read(userId = null, id = null) {
         's.id',
         'message',
         'created_at',
-        db.ref('g.slack_mem_id').as('giverSlackId'),
+        db.ref('g.name').as('giverName'),
         db.ref('r.slack_mem_id').as('receiverSlackId')
       )
       .from(db.ref('shoutouts').as('s'))

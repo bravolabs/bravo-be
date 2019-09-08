@@ -28,7 +28,8 @@ async function read(userId = null, id = null) {
         'created_at',
         db.ref('g.name').as('giverName'),
         db.ref('g.avatar').as('giverAvatar'),
-        db.ref('r.name').as('receiverName')
+        db.ref('r.name').as('receiverName'),
+        db.ref('r.avatar').as('receiverAvatar')
       )
       .from(db.ref('shoutouts').as('s'))
       .join(db.ref('users').as('g'), 's.giver_id', 'g.id')

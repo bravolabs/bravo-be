@@ -26,8 +26,10 @@ async function loginUser(accessToken, userId) {
       }
       const token = jwt.sign(user, secret, { expiresIn: '30d' });
       return {
+        // successful authentication response
         statusCode: 200,
         data: {
+          id: user.id,
           name: user.name,
           avatar: user.avatar,
           token,

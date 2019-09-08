@@ -4,17 +4,7 @@ const organizations = require('../data/dbModels/organizations');
 const slackUsers = require('./slackServices/users');
 
 async function getShoutouts(userId) {
-  const user = await users.read(userId);
-  if (!user || !user.slack_mem_id) {
-    return {
-      statusCode: 404,
-      data: {
-        message: 'User not found',
-      },
-    };
-  }
-
-  const result = await shoutouts.read(user.id);
+  const result = await shoutouts.read(userId);
   if (result.length < 1) {
     return {
       statusCode: 404,

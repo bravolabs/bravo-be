@@ -27,6 +27,7 @@ async function read(userId = null, id = null) {
         'message',
         'created_at',
         db.ref('g.name').as('giverName'),
+        db.ref('g.avatar').as('giverAvatar'),
         db.ref('r.name').as('receiverName')
       )
       .from(db.ref('shoutouts').as('s'))

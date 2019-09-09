@@ -43,32 +43,11 @@ exports.respondToInteractiveMessage = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
     if (reqInfo.actions[0].value === 'give') {
-      const dialog = {
-        token: org.access_token,
+      const data = {
+        access_token: org.access_token,
         trigger_id: reqInfo.triggerId,
-        dialog: JSON.stringify({
-          title: 'Send Shoutout',
-          callback_id: 'shoutout',
-          submit_label: 'Send',
-          elements: [
-            {
-              label: 'Who do you want to send a shoutout to?',
-              placeholder: 'Choose a person',
-              type: 'select',
-              name: 'Recipient',
-              optional: false,
-              data_source: 'users',
-            },
-            {
-              label: 'Shoutout message',
-              type: 'textarea',
-              name: 'ShoutOut',
-              optional: false,
-              placeholder: 'Write your shoutout message',
-            },
-          ],
-        }),
       };
+      const dialog = slackComponent.dialog.giveShoutOutDialog(data);
 
       await slackModel.message.createDialog(dialog);
     } else if (reqInfo.actions[0].value === 'retrieve') {

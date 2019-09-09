@@ -51,25 +51,11 @@ exports.respondToInteractiveMessage = async reqInfo => {
 
       await slackModel.message.createDialog(dialog);
     } else if (reqInfo.actions[0].value === 'retrieve') {
-      const dialog = {
-        token: org.access_token,
+      const data = {
+        access_token: org.access_token,
         trigger_id: reqInfo.triggerId,
-        dialog: JSON.stringify({
-          title: 'View shoutouts',
-          callback_id: 'view-shoutout',
-          submit_label: 'View',
-          elements: [
-            {
-              label: 'Who do you want to see their shoutouts?',
-              placeholder: 'Choose a person',
-              type: 'select',
-              name: 'user',
-              optional: false,
-              data_source: 'users',
-            },
-          ],
-        }),
       };
+      const dialog = slackComponent.dialog.retrieveShoutoutDialog(data);
 
       await slackModel.message.createDialog(dialog);
     }

@@ -27,3 +27,26 @@ exports.giveShoutOutDialog = data => {
   };
   return dialog;
 };
+
+exports.retrieveShoutoutDialog = data => {
+  const dialog = {
+    token: data.access_token,
+    trigger_id: data.trigger_id,
+    dialog: JSON.stringify({
+      title: 'View shoutouts',
+      callback_id: 'view-shoutout',
+      submit_label: 'View',
+      elements: [
+        {
+          label: 'Who do you want to see their shoutouts?',
+          placeholder: 'Choose a person',
+          type: 'select',
+          name: 'user',
+          optional: false,
+          data_source: 'users',
+        },
+      ],
+    }),
+  };
+  return dialog;
+};

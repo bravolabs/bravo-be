@@ -185,13 +185,12 @@ exports.submitDialog = async reqInfo => {
             {
               type: 'button',
               text: 'View',
-              url: `${clientUrl}/shoutouts/${storedShoutOut.id}`,
+              url: `${clientUrl}/shoutout/${storedShoutOut.id}`,
             },
           ],
         },
       ]),
     };
-    console.log(channelAlert)
     await slackModel.message.postOpenMessage(channelAlert);
   } catch (err) {
     console.log(err);

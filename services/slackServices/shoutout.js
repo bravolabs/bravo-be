@@ -248,7 +248,7 @@ exports.getUserShoutOuts = async reqInfo => {
               {
                 type: 'button',
                 text: 'View',
-                url: `${clientUrl}/shoutouts/${indiv.id}`,
+                url: 'https://develop.saybravo.io',
               },
             ],
             footer: `Bravo | ${moment(date).format('dddd, MMMM Do YYYY')}`,

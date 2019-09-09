@@ -27,7 +27,11 @@ async function read(userId = null, id = null) {
         'message',
         'created_at',
         db.ref('g.slack_mem_id').as('giverSlackId'),
-        db.ref('r.slack_mem_id').as('receiverSlackId')
+        db.ref('g.name').as('giverName'),
+        db.ref('g.avatar').as('giverAvatar'),
+        db.ref('r.slack_mem_id').as('receiverSlackId'),
+        db.ref('r.name').as('receiverName'),
+        db.ref('r.avatar').as('receiverAvatar')
       )
       .from(db.ref('shoutouts').as('s'))
       .join(db.ref('users').as('g'), 's.giver_id', 'g.id')
@@ -42,7 +46,11 @@ async function read(userId = null, id = null) {
       'message',
       'created_at',
       db.ref('g.slack_mem_id').as('giverSlackId'),
-      db.ref('r.slack_mem_id').as('receiverSlackId')
+      db.ref('g.name').as('giverName'),
+      db.ref('g.avatar').as('giverAvatar'),
+      db.ref('r.slack_mem_id').as('receiverSlackId'),
+      db.ref('r.name').as('receiverName'),
+      db.ref('r.avatar').as('receiverAvatar')
     )
     .from(db.ref('shoutouts').as('s'))
     .join(db.ref('users').as('g'), 's.giver_id', 'g.id')

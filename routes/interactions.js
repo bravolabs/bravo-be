@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
     } else if (data.type === 'dialog_submission' && data.callback_id === 'view-shoutout') {
       const reqInfo = {
         channelId: data.channel.id,
-        userId: data.submission.user,
+        viewedUser: data.submission.user,
         content: data.submission.ShoutOut,
         team: data.team.id,
         user_id: data.user.id,

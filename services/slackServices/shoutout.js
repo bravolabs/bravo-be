@@ -126,7 +126,7 @@ exports.submitDialog = async reqInfo => {
 exports.getUserShoutOuts = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
-    const user = await User.readBySlackId(reqInfo.userId);
+    const user = await User.readBySlackId(reqInfo.viewedUser);
     const id = user ? user.id : 0;
     const userShoutouts = await ShoutOut.read(id);
 
@@ -147,7 +147,7 @@ exports.getUserShoutOuts = async reqInfo => {
       message = slackComponent.message.private(data);
       message.attachments = slackComponent.attachments.confirmation(noShoutoutText);
     } else {
-      const shoutoutsIntroText = `Here are the last *${userShoutouts.length}* shoutouts sent and recieved by <@${reqInfo.userId}> 🎉\n`;
+      const shoutoutsIntroText = `Here are the last *${userShoutouts.length}* shoutouts sent and recieved by <@${reqInfo.viewedUser}> 🎉\n`;
 
       message = slackComponent.message.private(data);
       message.attachments = slackComponent.attachments.confirmation(shoutoutsIntroText);

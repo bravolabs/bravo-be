@@ -1,4 +1,5 @@
 const { slackModel } = require('../../data/slackModels/slack');
+const slackComponent = require('../../data/slackComponents');
 const Organization = require('../../data/dbModels/organizations');
 const ShoutOutHelper = require('./shoutout.helpers');
 const ShoutOut = require('../../data/dbModels/shoutouts');
@@ -29,36 +30,8 @@ exports.sendShoutOut = async reqInfo => {
       channel: reqInfo.channel_id,
       user: reqInfo.user_id,
       token: org.access_token,
-      attachments: JSON.stringify([
-        {
-          fallback: 'Message from BRAVO',
-          callback_id: 'shoutout',
-          attachment_type: 'default',
-          title: 'Shoutout Options',
-          text: 'please select what you would like to do',
-          color: '#A9A9A9',
-          divider: true,
-          actions: [
-            {
-              name: 'Send a Shoutout',
-              text: 'Send a Shoutout',
-              type: 'button',
-              value: 'give',
-              style: 'default',
-            },
-            {
-              name: 'View shoutouts',
-              text: 'View shoutouts',
-              type: 'button',
-              value: 'retrieve',
-              style: 'default',
-            },
-          ],
-        },
-      ]),
+      attachments: slackComponent.attachments.shoutOutResponse(),
     };
-
-    message.channel.toString();
 
     await slackModel.message.postMessage(message);
   } catch (err) {

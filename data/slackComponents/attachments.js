@@ -55,14 +55,20 @@ exports.errorALert = text => {
   return attachment;
 };
 
-exports.channelNotification = data => {
+exports.channelNotification = (data, type = null) => {
+  let color;
+  if (type === 'view') {
+    color = '#A9A9A9';
+  } else {
+    color = '#4265ED';
+  }
   const attachment = JSON.stringify([
     {
       callback_id: 'alert message',
       attachment_type: 'default',
       title: 'Shoutout:',
       text: `${data.content}`,
-      color: '#4265ED',
+      color: color,
       actions: [
         {
           type: 'button',

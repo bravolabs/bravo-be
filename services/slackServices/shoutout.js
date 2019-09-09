@@ -181,12 +181,11 @@ exports.submitDialog = async reqInfo => {
           title: 'Shoutout:',
           text: `${reqInfo.content}`,
           color: '#4265ED',
-          fallback: `Book your flights at ${clientUrl}/shoutouts/${storedShoutOut.id}`,
           actions: [
             {
               type: 'button',
               text: 'View',
-              url: 'https://develop.saybravo.io',
+              url: `https://develop.saybravo.io/shoutout/${storedShoutOut.id}`,
             },
           ],
         },
@@ -248,7 +247,7 @@ exports.getUserShoutOuts = async reqInfo => {
               {
                 type: 'button',
                 text: 'View',
-                url: 'https://develop.saybravo.io',
+                url: `https://develop.saybravo.io/shoutout/${indiv.id}`,
               },
             ],
             footer: `Bravo | ${moment(date).format('dddd, MMMM Do YYYY')}`,

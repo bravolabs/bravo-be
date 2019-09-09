@@ -29,7 +29,11 @@ router.post('/', async (req, res) => {
         team: data.team.id,
       };
 
-      await shoutOutService.submitDialog(reqInfo);
+      if (reqInfo.userId === reqInfo.recipient) {
+        await shoutOutService.cheatErrorMessage(reqInfo);
+      } else {
+        await shoutOutService.submitDialog(reqInfo);
+      }
     } else if (data.type === 'dialog_submission' && data.callback_id === 'view-shoutout') {
       const reqInfo = {
         channelId: data.channel.id,
@@ -40,13 +44,24 @@ router.post('/', async (req, res) => {
       };
 
       await shoutOutService.getUserShoutOuts(reqInfo);
+    } else if (
+      data.type === 'message_action' &&
+      data.callback_id === 'send_shoutout_link' &&
+      data.message.subtype === 'bot_message' &&
+      data.message.attachments[0].actions
+    ) {
+      const url = data.message.attachments[0].actions[0].url;
+      const urlArray = url.split('/');
+      const sharablelink = `https://saybravo.io/shoutouts/public/${urlArray[4]}`;
+      const reqInfo = {
+        team: data.team.id,
+        user_id: data.user.id,
+        link: sharablelink,
+      };
+      await shoutOutService.sendPublicUrl(reqInfo);
     }
   } catch (err) {
-    res.status(500).send(`
-      Error creating interaction
-
-      Stack: ${JSON.stringify(err.stack)}
-    `);
+    console.log(err);
   }
 });
 

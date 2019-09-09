@@ -1,3 +1,4 @@
+const uuid = require('uuid');
 const { getUser } = require('./users');
 const ShoutOut = require('../../data/dbModels/shoutouts');
 
@@ -12,5 +13,5 @@ exports.saveToDatabase = async dbInfo => {
     timestamp: dbInfo.timestamp,
   };
 
-  await ShoutOut.create(shoutoutData);
+  return await ShoutOut.create(shoutoutData);
 };

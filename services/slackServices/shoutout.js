@@ -95,11 +95,6 @@ exports.respondToInteractiveMessage = async reqInfo => {
         }),
       };
 
-      const reqData = {
-        token: org.access_token,
-        channel: 'CMTJ4G1TK',
-      };
-
       let reactions = {
         token: org.access_token,
         name: '',
@@ -116,7 +111,8 @@ exports.respondToInteractiveMessage = async reqInfo => {
           return;
         }
 
-        let timestampCheck = await slackModel.message.getMessageTimestamp(reqData);
+        let messages = await ShoutOut.readAll();
+        const timestampCheck = messages[messages.length - 1].timestamp;
 
         if (lastTimestamp !== timestampCheck) {
           reactionNames.map(async reaction => {
@@ -134,7 +130,8 @@ exports.respondToInteractiveMessage = async reqInfo => {
         return isDone;
       };
 
-      const lastTimestamp = await slackModel.message.getMessageTimestamp(reqData);
+      let messages = await ShoutOut.readAll();
+      const lastTimestamp = messages[messages.length - 1].timestamp;
       await slackModel.message.createDialog(dialog);
       var listener = await setInterval(function() {
         checkTimestamp();
@@ -207,7 +204,7 @@ exports.submitDialog = async reqInfo => {
         },
       ]),
     };
-    await slackModel.message.postOpenMessage(channelAlert);
+    const shoutoutData = await slackModel.message.postOpenMessage(channelAlert);
 
     const recipientAlert = {
       channel: reqInfo.recipient,
@@ -231,6 +228,7 @@ exports.submitDialog = async reqInfo => {
       message: reqInfo.content,
       organization_id: org.slack_org_id,
       access_token: org.access_token,
+      timestamp: shoutoutData.data.message.ts,
     };
 
     await ShoutOutHelper.saveToDatabase(dbInfo);

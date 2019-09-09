@@ -26,8 +26,10 @@ async function read(userId = null, id = null) {
         's.id',
         'message',
         'created_at',
+        db.ref('g.slack_mem_id').as('giverSlackId'),
         db.ref('g.name').as('giverName'),
         db.ref('g.avatar').as('giverAvatar'),
+        db.ref('r.slack_mem_id').as('receiverSlackId'),
         db.ref('r.name').as('receiverName'),
         db.ref('r.avatar').as('receiverAvatar')
       )

@@ -53,7 +53,7 @@ exports.errorALert = text => {
     },
   ]);
   return attachment;
-}
+};
 
 exports.channelNotification = data => {
   const attachment = JSON.stringify([

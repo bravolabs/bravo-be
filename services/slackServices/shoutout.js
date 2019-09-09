@@ -191,6 +191,7 @@ exports.submitDialog = async reqInfo => {
         },
       ]),
     };
+    console.log(channelAlert)
     await slackModel.message.postOpenMessage(channelAlert);
   } catch (err) {
     console.log(err);

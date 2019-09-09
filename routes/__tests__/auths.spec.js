@@ -5,6 +5,22 @@ const { slack } = require('../../config');
 const nock = require('nock');
 const organizations = require('../../data/dbModels/organizations');
 
+const slackSuccessRes = {
+  ok: true,
+  user: {
+    name: 'Example User',
+    id: 'DKDENFKK',
+    email: 'exampleuser@email.com',
+    image_512: 'https://secure.gravatar.com/avatar/512.png',
+  },
+  team: {
+    id: 'KSJSJENK',
+    name: 'Banana',
+    image_230: 'https://a.img/avatars-teams/230.png',
+    image_default: true,
+  },
+};
+
 beforeEach(async () => {
   await db.raw('truncate organizations cascade;');
   await db.raw('truncate users cascade;');
@@ -52,18 +68,8 @@ describe('/auths route', () => {
     const accessToken = 'xoxp-74333-54487-74136-4bcb14e';
     const userId = 'OSJRJGOSJT';
     nock(slack.baseUrl)
-      .get(`/users.info?token=${accessToken}&user=${userId}`)
-      .reply(200, {
-        ok: true,
-        user: {
-          id: 'OSJRJGOSJT',
-          team_id: 'KSDKJTNWNR',
-          real_name: 'Example User',
-          profile: {
-            image_512: 'https://secure.gravatar.com/avatar/512.png',
-          },
-        },
-      });
+      .get(`/users.identity?token=${accessToken}`)
+      .reply(200, slackSuccessRes);
 
     return request(server)
       .post('/api/auths')
@@ -92,18 +98,8 @@ describe('/auths route', () => {
       access_token: accessToken,
     });
     nock(slack.baseUrl)
-      .get(`/users.info?token=${accessToken}&user=${userId}`)
-      .reply(200, {
-        ok: true,
-        user: {
-          id: 'KJSDNKJN',
-          team_id: 'KSJSJENK',
-          real_name: name,
-          profile: {
-            image_512: avatar,
-          },
-        },
-      });
+      .get(`/users.identity?token=${accessToken}`)
+      .reply(200, slackSuccessRes);
 
     return request(server)
       .post('/api/auths')
@@ -123,7 +119,7 @@ describe('/auths route', () => {
     const accessToken = 'xoxp-2567';
     const userId = 'KJSD';
     nock(slack.baseUrl)
-      .get(`/users.info?token=${accessToken}&user=${userId}`)
+      .get(`/users.identity?token=${accessToken}`)
       .reply(200, {
         ok: true,
         error: 'invalid_auth',
@@ -138,7 +134,7 @@ describe('/auths route', () => {
       .then(res => {
         expect(res.body).toBeInstanceOf(Object);
         expect(res.body).toEqual({
-          error: 'server error',
+          message: 'invalid_auth',
         });
       });
   });

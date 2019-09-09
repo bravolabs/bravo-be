@@ -69,16 +69,21 @@ exports.respondToInteractiveMessage = async reqInfo => {
 
 exports.submitDialog = async reqInfo => {
   try {
-    const { channel_id, userId, recipient } = reqInfo;
+    const { channelId, userId, recipient } = reqInfo;
     const org = await Organization.read(reqInfo.team);
     const senderConfirmationText = `You have sent a shoutout to <@${reqInfo.recipient}> 🙌 on <#${org.channel_id}>`;
     const receiverConfirmationText = `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`;
 
     const data = {
-      channel_id,
-      userId,
+      channel_id: channelId,
+      user_id: userId,
       access_token: org.access_token,
-      text: '',
+    };
+
+    const receiverData = {
+      channel_id: recipient,
+      user_id: userId,
+      access_token: org.access_token,
     };
 
     const dbInfo = {
@@ -90,7 +95,7 @@ exports.submitDialog = async reqInfo => {
     };
 
     const message = slackComponent.message.private(data);
-    const recipientAlert = slackComponent.message.public(data);
+    const recipientAlert = slackComponent.message.public(receiverData);
 
     message.attachments = slackComponent.attachments.confirmation(senderConfirmationText);
     recipientAlert.attachments = slackComponent.attachments.confirmation(receiverConfirmationText);
@@ -127,7 +132,7 @@ exports.getUserShoutOuts = async reqInfo => {
 
     // post title message firsst
     let message;
-    const { channelId, user_id } = reqinfo;
+    const { channelId, user_id } = reqInfo;
     const data = {
       channel_id: channelId,
       user_id,
@@ -166,11 +171,11 @@ exports.getUserShoutOuts = async reqInfo => {
       messageConfig = {
         channel_id: channelId,
         user_id,
-        token: org.access_token,
+        access_token: org.access_token,
       };
 
       const messageList = slackComponent.message.private(messageConfig);
-      messageList.attachments = slackComponent.attachments.channelNotification(data);
+      messageList.attachments = slackComponent.attachments.channelNotification(data, 'view');
 
       await slackModel.message.postMessage(messageList);
     });

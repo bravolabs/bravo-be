@@ -185,7 +185,7 @@ exports.submitDialog = async reqInfo => {
             {
               type: 'button',
               text: 'View',
-              url: `${clientUrl}/shoutout/${storedShoutOut.id}`,
+              url: 'https://develop.saybravo.io',
             },
           ],
         },

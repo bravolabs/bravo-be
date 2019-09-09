@@ -9,6 +9,7 @@ exports.saveToDatabase = async dbInfo => {
     giver_id: giver.id,
     receiver_id: reciever.id,
     message: dbInfo.message,
+    timestamp: dbInfo.timestamp,
   };
 
   await ShoutOut.create(shoutoutData);

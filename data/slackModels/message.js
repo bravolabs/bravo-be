@@ -12,7 +12,8 @@ async function postMessage(message) {
 
 async function postOpenMessage(message) {
   try {
-    await axios.post(`${slack.baseUrl}/chat.postMessage`, qs.stringify(message));
+    const result = await axios.post(`${slack.baseUrl}/chat.postMessage`, qs.stringify(message));
+    return result;
   } catch (err) {
     console.log(err);
   }
@@ -34,29 +35,9 @@ async function addReactions(reactions) {
   }
 }
 
-async function getMessageTimestamp(reqData) {
-  try {
-    const history = await axios.post(`${slack.baseUrl}/channels.history`, qs.stringify(reqData))
-      .then(res => {
-        return qs.parse(res);
-      });
-
-    const timestamps = history.data.messages.map(msg => {
-      if (msg.subtype === 'bot_message') {
-        return msg.ts;
-      }
-    });
-
-    return timestamps[0];
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 module.exports = {
   postMessage,
   postOpenMessage,
   createDialog,
   addReactions,
-  getMessageTimestamp,
 };

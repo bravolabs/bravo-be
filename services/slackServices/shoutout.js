@@ -181,6 +181,7 @@ exports.submitDialog = async reqInfo => {
           title: 'Shoutout:',
           text: `${reqInfo.content}`,
           color: '#4265ED',
+          fallback: `Book your flights at ${clientUrl}/shoutouts/${storedShoutOut.id}`,
           actions: [
             {
               type: 'button',

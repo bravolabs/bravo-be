@@ -124,12 +124,10 @@ exports.submitDialog = async reqInfo => {
     const threadConfig = slackComponent.message.public({
       channel_id: org.channel_id,
       access_token: org.access_token,
-      text: 'Thread here',
+      text: '👇Comments On this Thread👇',
     });
     threadConfig.thread_ts = timeStamp;
-    console.log(threadConfig);
-    const response1 = await slackModel.message.postOpenMessage(threadConfig);
-    console.log(response1);
+    await slackModel.message.postOpenMessage(threadConfig);
   } catch (err) {
     console.log(err);
   }

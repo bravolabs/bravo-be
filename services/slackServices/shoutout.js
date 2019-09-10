@@ -68,10 +68,10 @@ exports.sendShoutOut = async reqInfo => {
 
 exports.respondToInteractiveMessage = async reqInfo => {
   try {
-    const org = await Organization.read(reqInfo.team);
+    const org = await Organization.read(reqInfo.team_id);
     if (reqInfo.actions[0].value === 'give') {
       const dialog = {
-        token: org.access_token,
+        token: org[0].access_token,
         trigger_id: reqInfo.triggerId,
         dialog: JSON.stringify({
           title: 'Send Shoutout',
@@ -97,47 +97,7 @@ exports.respondToInteractiveMessage = async reqInfo => {
         }),
       };
 
-      let reactions = {
-        token: org.access_token,
-        name: '',
-        channel: 'CMTJ4G1TK',
-        timestamp: '',
-      };
-
-      const reactionNames = ['heart', 'clap', 'tada', 'fire'];
-      let isDone = false;
-
-      const checkTimestamp = async function() {
-        if (isDone) {
-          clearInterval(listener);
-          return;
-        }
-
-        let messages = await ShoutOut.readAll();
-        const timestampCheck = messages[messages.length - 1].timestamp;
-
-        if (lastTimestamp !== timestampCheck) {
-          reactionNames.map(async reaction => {
-            reactions = {
-              ...reactions,
-              name: reaction,
-              timestamp: timestampCheck,
-            };
-            await slackModel.message.addReactions(reactions);
-            isDone = true;
-            return isDone;
-          });
-          return isDone;
-        }
-        return isDone;
-      };
-
-      let messages = await ShoutOut.readAll();
-      const lastTimestamp = messages[messages.length - 1].timestamp;
       await slackModel.message.createDialog(dialog);
-      var listener = await setInterval(function() {
-        checkTimestamp();
-      }, 5000);
     } else if (reqInfo.actions[0].value === 'retrieve') {
       const dialog = {
         token: org.access_token,
@@ -198,7 +158,7 @@ exports.submitDialog = async reqInfo => {
         },
       ]),
     };
-    await slackModel.message.postOpenMessage(recipientAlert);
+    const shoutoutData = await slackModel.message.postOpenMessage(recipientAlert);
 
     const dbInfo = {
       giver_id: reqInfo.userId,
@@ -232,7 +192,25 @@ exports.submitDialog = async reqInfo => {
         },
       ]),
     };
-    await slackModel.message.postOpenMessage(channelAlert);
+
+    const reactionNames = ['heart', 'clap', 'tada', 'fire'];
+
+    const msg = await slackModel.message.postOpenMessage(channelAlert);
+
+    let reactions = {
+      token: org.access_token,
+      name: '',
+      channel: 'CMTJ4G1TK',
+      timestamp: msg.data.message.ts,
+    };
+
+    reactionNames.map(async reaction => {
+      reactions = {
+        ...reactions,
+        name: reaction,
+      };
+      await slackModel.message.addReactions(reactions);
+    });
   } catch (err) {
     console.log(err);
   }

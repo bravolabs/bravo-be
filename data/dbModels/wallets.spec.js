@@ -63,7 +63,7 @@ describe('Create wallets', () => {
   });
 
   it('can update wallet by user', async done => {
-    expect.assertions(3);
+    expect.assertions(4);
 
     let wallets = await db('wallets');
     expect(wallets).toHaveLength(0);

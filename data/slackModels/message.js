@@ -12,7 +12,8 @@ async function postMessage(message) {
 
 async function postOpenMessage(message) {
   try {
-    await axios.post(`${slack.baseUrl}/chat.postMessage`, qs.stringify(message));
+    const res = await axios.post(`${slack.baseUrl}/chat.postMessage`, qs.stringify(message));
+    return res.data;
   } catch (err) {
     console.log(err);
   }

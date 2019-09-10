@@ -1,6 +1,9 @@
 exports.up = function(knex) {
   return knex.schema.table('users', tbl => {
-    tbl.integer('wallet');
+    tbl
+      .integer('wallet')
+      .notNullable()
+      .defaultTo(0);
   });
 };
 

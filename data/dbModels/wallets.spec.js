@@ -1,6 +1,7 @@
 const db = require('../dbConfig');
 const walletsModel = require('./wallets');
 const usersModel = require('./users');
+const orgsModel = require('./organizations');
 
 beforeEach(async () => {
   await db.raw('truncate wallets cascade;');
@@ -18,6 +19,13 @@ afterAll(async done => {
 });
 
 const stageData = async () => {
+  const { id: org_id } = await orgsModel.create({
+    slack_org_id: 'dhbsh3ii3',
+    name: 'hbbwej3',
+    channel_name: 'bots',
+    channel_id: 'ejwjkqe',
+    access_token: 'bfqhjwfbwjf',
+  });
   return usersModel.create({
     org_id: org_id,
     slack_mem_id: 'testing123',

@@ -1,4 +1,5 @@
 const { slackModel } = require('../../data/slackModels/slack');
+const slackComponent = require('../../data/slackComponents');
 const Organization = require('../../data/dbModels/organizations');
 const ShoutOutHelper = require('./shoutout.helpers');
 const ShoutOut = require('../../data/dbModels/shoutouts');
@@ -23,42 +24,17 @@ const moment = require('moment');
 
 exports.sendShoutOut = async reqInfo => {
   try {
-    const org = await Organization.read(reqInfo.team_id);
     // respond to user commmand with interactive message
-    const message = {
-      channel: reqInfo.channel_id,
-      user: reqInfo.user_id,
-      token: org.access_token,
-      attachments: JSON.stringify([
-        {
-          fallback: 'Message from BRAVO',
-          callback_id: 'shoutout',
-          attachment_type: 'default',
-          title: 'Shoutout Options',
-          text: 'please select what you would like to do',
-          color: '#A9A9A9',
-          divider: true,
-          actions: [
-            {
-              name: 'Send a Shoutout',
-              text: 'Send a Shoutout',
-              type: 'button',
-              value: 'give',
-              style: 'default',
-            },
-            {
-              name: 'View shoutouts',
-              text: 'View shoutouts',
-              type: 'button',
-              value: 'retrieve',
-              style: 'default',
-            },
-          ],
-        },
-      ]),
+    const org = await Organization.read(reqInfo.team_id);
+    const { channel_id, user_id } = reqInfo;
+    const data = {
+      channel_id,
+      user_id,
+      access_token: org.access_token,
     };
 
-    message.channel.toString();
+    const message = slackComponent.message.private(data);
+    message.attachments = slackComponent.attachments.shoutOutResponse();
 
     await slackModel.message.postMessage(message);
   } catch (err) {
@@ -70,54 +46,19 @@ exports.respondToInteractiveMessage = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
     if (reqInfo.actions[0].value === 'give') {
-      const dialog = {
-        token: org.access_token,
+      const data = {
+        access_token: org.access_token,
         trigger_id: reqInfo.triggerId,
-        dialog: JSON.stringify({
-          title: 'Send Shoutout',
-          callback_id: 'shoutout',
-          submit_label: 'Send',
-          elements: [
-            {
-              label: 'Who do you want to send a shoutout to?',
-              placeholder: 'Choose a person',
-              type: 'select',
-              name: 'Recipient',
-              optional: false,
-              data_source: 'users',
-            },
-            {
-              label: 'Shoutout message',
-              type: 'textarea',
-              name: 'ShoutOut',
-              optional: false,
-              placeholder: 'Write your shoutout message',
-            },
-          ],
-        }),
       };
+      const dialog = slackComponent.dialog.giveShoutOutDialog(data);
 
       await slackModel.message.createDialog(dialog);
     } else if (reqInfo.actions[0].value === 'retrieve') {
-      const dialog = {
-        token: org.access_token,
+      const data = {
+        access_token: org.access_token,
         trigger_id: reqInfo.triggerId,
-        dialog: JSON.stringify({
-          title: 'View shoutouts',
-          callback_id: 'view-shoutout',
-          submit_label: 'View',
-          elements: [
-            {
-              label: 'Who do you want to see their shoutouts?',
-              placeholder: 'Choose a person',
-              type: 'select',
-              name: 'user',
-              optional: false,
-              data_source: 'users',
-            },
-          ],
-        }),
       };
+      const dialog = slackComponent.dialog.retrieveShoutoutDialog(data);
 
       await slackModel.message.createDialog(dialog);
     }
@@ -128,37 +69,22 @@ exports.respondToInteractiveMessage = async reqInfo => {
 
 exports.submitDialog = async reqInfo => {
   try {
+    const { channelId, userId, recipient } = reqInfo;
     const org = await Organization.read(reqInfo.team);
-    const message = {
-      channel: reqInfo.channelId,
-      user: reqInfo.userId,
-      token: org.access_token,
-      attachments: JSON.stringify([
-        {
-          callback_id: 'submitDialog',
-          attachment_type: 'default',
-          title: 'Bravo Confirmation:',
-          text: `You have sent a shoutout to <@${reqInfo.recipient}> 🙌 on <#${org.channel_id}>`,
-          color: '#A9A9A9',
-        },
-      ]),
-    };
-    await slackModel.message.postMessage(message);
+    const senderConfirmationText = `You have sent a shoutout to <@${reqInfo.recipient}> 🙌 on <#${org.channel_id}>`;
+    const receiverConfirmationText = `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`;
 
-    const recipientAlert = {
-      channel: reqInfo.recipient,
-      token: org.access_token,
-      attachments: JSON.stringify([
-        {
-          callback_id: 'submitDialog',
-          attachment_type: 'default',
-          title: 'Bravo Confirmation:',
-          text: `*Hurray, You are the newest shoutout Recipient* 🎉🎉 \n You just received a shoutout from <@${reqInfo.userId}> on <#${org.channel_id}>`,
-          color: '#A9A9A9',
-        },
-      ]),
+    const data = {
+      channel_id: channelId,
+      user_id: userId,
+      access_token: org.access_token,
     };
-    await slackModel.message.postOpenMessage(recipientAlert);
+
+    const receiverData = {
+      channel_id: recipient,
+      user_id: userId,
+      access_token: org.access_token,
+    };
 
     const dbInfo = {
       giver_id: reqInfo.userId,
@@ -168,29 +94,29 @@ exports.submitDialog = async reqInfo => {
       access_token: org.access_token,
     };
 
+    const message = slackComponent.message.private(data);
+    const recipientAlert = slackComponent.message.public(receiverData);
+
+    message.attachments = slackComponent.attachments.confirmation(senderConfirmationText);
+    recipientAlert.attachments = slackComponent.attachments.confirmation(receiverConfirmationText);
+
+    await slackModel.message.postMessage(message);
+    await slackModel.message.postOpenMessage(recipientAlert);
     const storedShoutOut = await ShoutOutHelper.saveToDatabase(dbInfo);
 
-    const channelAlert = {
-      channel: org.channel_id,
-      text: `<@${reqInfo.userId}> sent a shoutout to <@${reqInfo.recipient}> 🎉`,
-      token: org.access_token,
-      attachments: JSON.stringify([
-        {
-          callback_id: 'alert message',
-          attachment_type: 'default',
-          title: 'Shoutout:',
-          text: `${reqInfo.content}`,
-          color: '#4265ED',
-          actions: [
-            {
-              type: 'button',
-              text: 'View',
-              url: `https://develop.saybravo.io/shoutout/${storedShoutOut.id}`,
-            },
-          ],
-        },
-      ]),
-    };
+    const channelAlert = slackComponent.message.public({
+      channel_id: org.channel_id,
+      access_token: org.access_token,
+      text: `<@${userId}> sent a shoutout to <@${recipient}> 🎉`,
+    });
+
+    channelAlert.attachments = slackComponent.attachments.channelNotification({
+      content: reqInfo.content,
+      clientUrl,
+      id: storedShoutOut.id,
+      footer: 'powered by Bravo Labs',
+    });
+
     await slackModel.message.postOpenMessage(channelAlert);
   } catch (err) {
     console.log(err);
@@ -200,27 +126,31 @@ exports.submitDialog = async reqInfo => {
 exports.getUserShoutOuts = async reqInfo => {
   try {
     const org = await Organization.read(reqInfo.team);
-    const user = await User.readBySlackId(reqInfo.userId);
+    const user = await User.readBySlackId(reqInfo.viewedUser);
     const id = user ? user.id : 0;
     const userShoutouts = await ShoutOut.read(id);
 
     // post title message firsst
     let message;
+    const { channelId, user_id } = reqInfo;
+    const data = {
+      channel_id: channelId,
+      user_id,
+      access_token: org.access_token,
+    };
+
+    // prevent user from giving themself a shoutout
     if (userShoutouts.length === 0 || !user) {
-      message = {
-        channel: reqInfo.channelId,
-        user: reqInfo.user_id,
-        token: org.access_token,
-        text:
-          "Yo! the selected user hasn't received or given a shoutout, you can start with `/bravo shoutout`",
-      };
+      const noShoutoutText =
+        "Yo! the selected user hasn't received or given a shoutout, you can start with `/bravo shoutout`";
+
+      message = slackComponent.message.private(data);
+      message.attachments = slackComponent.attachments.confirmation(noShoutoutText);
     } else {
-      message = {
-        channel: reqInfo.channelId,
-        user: reqInfo.user_id,
-        token: org.access_token,
-        text: `Here are the last ${userShoutouts.length} shoutouts sent and recieved by <@${reqInfo.userId}> 🎉\n`,
-      };
+      const shoutoutsIntroText = `Here are the last *${userShoutouts.length}* shoutouts sent and recieved by <@${reqInfo.viewedUser}> 🎉\n`;
+
+      message = slackComponent.message.private(data);
+      message.attachments = slackComponent.attachments.confirmation(shoutoutsIntroText);
     }
 
     await slackModel.message.postMessage(message);
@@ -231,29 +161,22 @@ exports.getUserShoutOuts = async reqInfo => {
       const receiverSlackId = await User.readBySlackId(indiv.receiverSlackId);
       const date = indiv.created_at;
 
-      const messageList = {
-        channel: reqInfo.channelId,
-        user: reqInfo.user_id,
-        token: org.access_token,
-        attachments: JSON.stringify([
-          {
-            fallback: 'Message from Bravo',
-            callback_id: 'individual_shoutout',
-            attachment_type: 'default',
-            text: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
-            color: '#A9A9A9',
-
-            actions: [
-              {
-                type: 'button',
-                text: 'View',
-                url: `https://develop.saybravo.io/shoutout/${indiv.id}`,
-              },
-            ],
-            footer: `Bravo | ${moment(date).format('dddd, MMMM Do YYYY')}`,
-          },
-        ]),
+      const data = {
+        content: `\n <@${giverSlackId.slack_mem_id}> sent a shoutout to <@${receiverSlackId.slack_mem_id}> 🎉\n${indiv.message}`,
+        clientUrl,
+        id: indiv.id,
+        footer: `Bravo | ${moment(date).format('dddd, MMMM Do YYYY')}`,
       };
+
+      messageConfig = {
+        channel_id: channelId,
+        user_id,
+        access_token: org.access_token,
+      };
+
+      const messageList = slackComponent.message.private(messageConfig);
+      messageList.attachments = slackComponent.attachments.channelNotification(data, 'view');
+
       await slackModel.message.postMessage(messageList);
     });
   } catch (err) {
@@ -261,31 +184,15 @@ exports.getUserShoutOuts = async reqInfo => {
   }
 };
 
-exports.sendPublicUrl = async reqInfo => {
-  const org = await Organization.read(reqInfo.team);
-  const message = {
-    channel: reqInfo.user_id,
-    token: org.access_token,
-    text: `Here is the public url you requested <${reqInfo.link}>`,
-  };
-  await slackModel.message.postOpenMessage(message);
-};
-
 exports.cheatErrorMessage = async reqInfo => {
   const org = await Organization.read(reqInfo.team);
-  const message = {
-    channel: reqInfo.channelId,
-    user: reqInfo.userId,
+  const text = `Sorry, but you cannot give yourself a shoutout ⚠️`;
+  const message = slackComponent.message.private({
+    channel_id: reqInfo.channelId,
+    user_id: reqInfo.userId,
     token: org.access_token,
-    attachments: JSON.stringify([
-      {
-        callback_id: 'submitDialog',
-        attachment_type: 'default',
-        title: 'Bravo Error:',
-        text: `Sorry, but you cannot give yourself a shoutout ⚠️`,
-        color: '#A9A9A9',
-      },
-    ]),
-  };
+  });
+  message.attachments = slackComponent.attachments.errorALert(text);
+
   await slackModel.message.postMessage(message);
 };

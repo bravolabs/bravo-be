@@ -61,4 +61,26 @@ describe('Create wallets', () => {
     expect(newWallet).toHaveProperty('amount', 0);
     done();
   });
+
+  it('can update wallet by user', async done => {
+    expect.assertions(3);
+
+    let wallets = await db('wallets');
+    expect(wallets).toHaveLength(0);
+
+    let user = await stageData();
+    await walletsModel.create({
+      user_id: user.id,
+    });
+
+    wallets = await db('wallets');
+    expect(wallets).toHaveLength(1);
+
+    let newWallet = await walletsModel.readByUserId(user.id);
+    expect(newWallet).toHaveProperty('amount', 0);
+
+    newWallet = await walletsModel.updateByUserId(user.id, 100);
+    expect(newWallet).toHaveProperty('amount', 100);
+    done();
+  });
 });

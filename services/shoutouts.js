@@ -31,7 +31,6 @@ async function getShoutoutReplies(id) {
       },
     };
   }
-  // console.log(result);
   const user = await users.readBySlackId(result.giverSlackId);
   const organizationData = await organization.read(null, user.org_id);
   const slackResponse = await slackModel.message.getThread({

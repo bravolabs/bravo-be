@@ -14,3 +14,5 @@ router.get('/org/full/:orgId(/:page)?(/:pageSize)?', async (req, res, next) => {
     next(error);
   }
 });
+
+module.exports = router;

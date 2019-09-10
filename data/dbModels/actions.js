@@ -22,3 +22,14 @@ async function readById(id) {
     console.log(err);
   }
 }
+
+async function readByName(name) {
+  try {
+    const result = await db('actions')
+      .where({ name })
+      .first();
+    return result;
+  } catch (err) {
+    console.log(err);
+  }
+}

@@ -3,7 +3,7 @@ const action = require('./actions');
 const shoutout = require('./shoutouts');
 const user = require('./users');
 const orgs = require('./organizations');
-const transaction = require('./transactions');
+const transactionModel = require('./transactions');
 
 const createdAction = null;
 
@@ -67,10 +67,18 @@ const stageData = async () => {
 };
 
 describe('Create transactions', () => {
-  it('can create actions', async done => {
-    expect.assertions(1);
+  it('can create transaction', async done => {
+    expect.assertions(2);
     let transactions = await db('transactions');
     expect(transactions).toHaveLength(0);
+    const data = await stageData();
+    await transactionModel.create({
+      ...data,
+      action_id: createdAction.id,
+    });
+
+    transactions = await db('transactions');
+    expect(transactions).toHaveLength(1);
     done();
   });
 });

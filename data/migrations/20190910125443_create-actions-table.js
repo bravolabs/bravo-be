@@ -5,6 +5,7 @@ exports.up = function(knex) {
       .integer('reward')
       .notNullable()
       .defaultTo(1);
+    tbl.text('name').notNullable();
   });
 };
 

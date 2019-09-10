@@ -6,6 +6,7 @@ const users = require('./users');
 const commands = require('./commands');
 const interactions = require('./interactions');
 const install = require('./install');
+const events = require('./events');
 
 function routes(app) {
   app.use('/api/shoutouts', shoutouts);
@@ -14,6 +15,7 @@ function routes(app) {
   app.use('/api/users', users);
   app.use('/slack/command', commands);
   app.use('/slack/interactive', interactions);
+  app.use('/slack/events', events);
   app.use('/slack/install', install);
 
   app.use(handleError);

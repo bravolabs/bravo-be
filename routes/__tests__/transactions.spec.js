@@ -11,6 +11,8 @@ const auth = require('../utils/auth');
 let server;
 let createdAction = null;
 let org_id;
+let giver_id;
+let receiver_id;
 
 beforeAll(async () => {
   await db.raw('truncate actions cascade;');
@@ -34,6 +36,8 @@ beforeEach(async () => {
     action_id: createdAction.id,
   });
   org_id = data.org_id;
+  giver_id = data.giver_id;
+  receiver_id = data.receiver_id;
 });
 
 afterEach(async () => {
@@ -89,6 +93,17 @@ describe('Get transaction', () => {
   it('[GET] /api/transactions/org/full', () => {
     return request(server)
       .get('/api/transactions/org/full/' + org_id)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(res => {
+        expect(res.body.data[0]).toHaveProperty('giverSlackId', '773jjf');
+        expect(res.body.data[0]).toHaveProperty('reward', 5);
+        expect(res.body.data[0]).toHaveProperty('receiverName', 'Aaron');
+      });
+  });
+  it('[GET] /api/transactions/user', () => {
+    return request(server)
+      .get('/api/transactions/user/' + giver_id)
       .expect(200)
       .expect('Content-Type', /json/)
       .then(res => {

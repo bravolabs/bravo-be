@@ -36,6 +36,7 @@ const transactionsFullyJoined = () => {
 
 async function read(orgId, offset = 0, limit = 50) {
   try {
+    if (!orgId) throw new Error('No orgId provided');
     return db
       .select(
         db.ref('t.id').as('id'),
@@ -57,6 +58,7 @@ async function read(orgId, offset = 0, limit = 50) {
 
 async function readByUser(userId, offset = 0, limit = 20) {
   try {
+    if (!userId) throw new Error('No userId provided');
     return transactionsFullyJoined()
       .whereRaw(`t.receiver_id = ${userId} OR t.giver_id = ${userId}`)
       .orderBy('created_at', 'desc')
@@ -69,6 +71,7 @@ async function readByUser(userId, offset = 0, limit = 20) {
 
 async function readWithData(orgId, offset = 0, limit = 20) {
   try {
+    if (!orgId) throw new Error('No orgId provided');
     return transactionsFullyJoined()
       .whereRaw(`t.org_id = ${orgId}`)
       .orderBy('created_at', 'desc')
@@ -82,4 +85,6 @@ async function readWithData(orgId, offset = 0, limit = 20) {
 module.exports = {
   create,
   readWithData,
+  readByUser,
+  read,
 };

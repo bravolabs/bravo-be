@@ -7,6 +7,7 @@ async function loginUser(user) {
     statusCode: 200,
     data: {
       id: user.id,
+      org_id: user.org_id,
       name: user.name,
       avatar: user.avatar,
       token,

@@ -22,7 +22,21 @@ async function readByUserId(userId) {
   }
 }
 
+async function updateByUserId(userId, amount) {
+  try {
+    if (!userId) throw new Error('No userId provided');
+    if (!amount) throw new Error('No amount provided');
+    const result = await db('wallets')
+      .update({ amount }, '*')
+      .where({ user_id: userId });
+    return result[0];
+  } catch (error) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   create,
   readByUserId,
+  updateByUserId,
 };

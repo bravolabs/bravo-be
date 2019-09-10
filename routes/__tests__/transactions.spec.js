@@ -20,6 +20,9 @@ beforeAll(async () => {
     name: 'testAction',
     reward: 5,
   });
+
+  // We're stubbing the authenticate middleware here. Authenticating with slack seems
+  // to sparingly work in tests, so instead we are just negating it entierly.
   sinon.stub(auth, 'authenticate').callsFake(function(req, res, next) {
     return next();
   });
@@ -48,6 +51,8 @@ afterEach(async () => {
 afterAll(async done => {
   await db.raw('truncate actions cascade;');
   await new Promise(resolve => setTimeout(() => resolve(), 500));
+
+  // Restore the stubbed authenticate in case other tests need it.
   auth.authenticate.restore();
   done();
 });

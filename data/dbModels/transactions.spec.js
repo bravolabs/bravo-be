@@ -100,4 +100,23 @@ describe('Create transactions', () => {
     expect(transactions[0]).toHaveProperty('action', 'reaction');
     done();
   });
+  it('can read transactions per user', async done => {
+    expect.assertions(5);
+    let transactions = await db('transactions');
+    expect(transactions).toHaveLength(0);
+    const data = await stageData();
+    await transactionModel.create({
+      ...data,
+      action_id: createdAction.id,
+    });
+
+    transactions = await db('transactions');
+    expect(transactions).toHaveLength(1);
+
+    transactions = await transactionModel.readByUser(data.receiver_id);
+    expect(transactions[0]).toHaveProperty('reward', 5);
+    expect(transactions[0]).toHaveProperty('receiverName', 'Aaron');
+    expect(transactions[0]).toHaveProperty('action', 'reaction');
+    done();
+  });
 });

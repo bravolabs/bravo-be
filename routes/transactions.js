@@ -7,9 +7,18 @@ router.use('/', auth.authenticate);
 
 router.get('/org/full/:orgId/:page?/:pageSize?', async (req, res, next) => {
   try {
-    console.log(req.params);
     let { orgId, page, pageSize } = req.params;
     const result = await service.getFullTransactionsForOrganization(orgId, page, pageSize);
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/org/basic/:orgId/:page?/:pageSize?', async (req, res, next) => {
+  try {
+    let { orgId, page, pageSize } = req.params;
+    const result = await service.getTransactionsForOrganization(orgId, page, pageSize);
     res.status(result.statusCode).json(result.data);
   } catch (error) {
     next(error);

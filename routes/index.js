@@ -16,7 +16,7 @@ function routes(app) {
   app.use('/slack/command', commands);
   app.use('/slack/interactive', interactions);
   app.use('/slack/install', install);
-  app.user('/api/transactions', transactions);
+  app.use('/api/transactions', transactions);
 
   app.use(handleError);
 }

@@ -117,7 +117,19 @@ exports.submitDialog = async reqInfo => {
       footer: 'powered by Bravo Labs',
     });
 
-    await slackModel.message.postOpenMessage(channelAlert);
+    const response = await slackModel.message.postOpenMessage(channelAlert);
+
+    // add a thread instructing users on what to do
+    const timeStamp = response.ts;
+    const threadConfig = slackComponent.message.public({
+      channel_id: org.channel_id,
+      access_token: org.access_token,
+      text: 'Thread here',
+    });
+    threadConfig.thread_ts = timeStamp;
+    console.log(threadConfig);
+    const response1 = await slackModel.message.postOpenMessage(threadConfig);
+    console.log(response1);
   } catch (err) {
     console.log(err);
   }

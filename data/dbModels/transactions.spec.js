@@ -1,8 +1,18 @@
 const db = require('../dbConfig');
+const action = require('./actions');
 const shoutout = require('./shoutouts');
 const user = require('./users');
 const orgs = require('./organizations');
 const transaction = require('./transactions');
+
+const createdAction = null;
+
+beforeAll(async () => {
+  createdAction = await action.create({
+    name: 'reaction',
+    reward: 5,
+  });
+});
 
 beforeEach(async () => {
   await db.raw('truncate organizations cascade;');

@@ -8,7 +8,10 @@ const clamp = (num, min, max) => {
 };
 
 async function getTransactionsForOrganization(orgId, page = 1, pageSize = pageLimit) {
-  let size = clamp(pageSize, 1, pageLimit);
+  // Make sure page is 1 or heigher
+  page = Math.max(Number(page), 1);
+  // Clamp size between 1 and size limit to prevent crashes
+  let size = clamp(Number(pageSize), 1, pageLimit);
   const offset = (page - 1) * size;
   const result = await transactions.read(orgId, offset, size);
   if (!result) {
@@ -28,7 +31,10 @@ async function getTransactionsForOrganization(orgId, page = 1, pageSize = pageLi
 }
 
 async function getFullTransactionsForOrganization(orgId, page = 1, pageSize = pageLimit) {
-  let size = clamp(pageSize, 1, pageLimit);
+  // Make sure page is 1 or heigher
+  page = Math.max(Number(page), 1);
+  // Clamp size between 1 and size limit to prevent crashes
+  let size = clamp(Number(pageSize), 1, pageLimit);
   const offset = (page - 1) * size;
   const result = await transactions.readWithData(orgId, offset, size);
   if (!result) {
@@ -48,7 +54,10 @@ async function getFullTransactionsForOrganization(orgId, page = 1, pageSize = pa
 }
 
 async function getTransactionsForUser(userId, page = 1, pageSize = pageLimit) {
-  let size = clamp(pageSize, 1, pageLimit);
+  // Make sure page is 1 or heigher
+  page = Math.max(Number(page), 1);
+  // Clamp size between 1 and size limit to prevent crashes
+  let size = clamp(Number(pageSize), 1, pageLimit);
   const offset = (page - 1) * size;
   const result = await transactions.readByUser(userId, offset, size);
   if (!result) {

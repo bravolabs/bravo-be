@@ -36,6 +36,7 @@ exports.up = function(knex) {
       .inTable('shoutouts')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
+    tbl.timestamps(false, true);
   });
 };
 

@@ -48,3 +48,11 @@ function remove(id) {
     .returning('*')
     .first();
 }
+
+module.exports = {
+  create,
+  readById,
+  readByName,
+  update,
+  remove,
+};

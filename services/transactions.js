@@ -1,6 +1,8 @@
 const transactions = require('../data/dbModels/transactions');
 const organizations = require('../data/dbModels/organizations');
 
+const pageLimit = Number(process.env.TRANSACTION_PAGE_LIMIT || '50');
+
 async function getTransactionsForOrganization(orgId) {
   const result = await transactions.read(orgId);
   if (!result) {

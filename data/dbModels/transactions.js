@@ -12,7 +12,7 @@ async function create(transaction) {
   }
 }
 
-async function readAllWithData(orgId) {
+async function readWithData(orgId, offset = 0, limit = 20) {
   try {
     return db
       .select(
@@ -34,7 +34,9 @@ async function readAllWithData(orgId) {
       .join(db.ref('organisations').as('o'), 's.org_id', 'o.id')
       .join(db.ref('actions').as('a'), 's.action_id', 'a.id')
       .whereRaw(`s.org_id = ${orgId}`)
-      .orderBy('created_at', 'desc');
+      .orderBy('created_at', 'desc')
+      .limit(limit)
+      .offset(offset);
   } catch (err) {
     console.log(err);
   }
@@ -42,5 +44,5 @@ async function readAllWithData(orgId) {
 
 module.exports = {
   create,
-  readAllWithData,
+  readWithData,
 };

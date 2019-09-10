@@ -18,6 +18,19 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
     action_id: action.id,
     shoutout_id: shoutoutId,
   });
+
+  if (!transaction) throw new Error("transaction couldn't be created");
+
+  const userWallet = await wallets.readByUserId(userId);
+  if (!userWallet) throw new Error("Couldn't get user wallet");
+
+  const newAmount = userWallet.amount + action.reward;
+  const updatedWallet = await wallets.updateByUserId(userId, newAmount);
+
+  return {
+    transaction,
+    wallet: updatedWallet,
+  };
 }
 
 module.exports = {

@@ -47,7 +47,25 @@ async function getFullTransactionsForOrganization(orgId, page = 1, pageSize = pa
   };
 }
 
-async function getTransactionsForUser(userId, page = 1, pageSize = pageLimit) {}
+async function getTransactionsForUser(userId, page = 1, pageSize = pageLimit) {
+  let size = clamp(pageSize, 1, pageLimit);
+  const offset = (page - 1) * size;
+  const result = await transactions.readByUser(userId, offset, size);
+  if (!result) {
+    return {
+      statusCode: 404,
+      data: {
+        message: 'No transactions found for user',
+      },
+    };
+  }
+  return {
+    statusCode: 200,
+    data: {
+      data: result,
+    },
+  };
+}
 
 module.exports = {
   getTransactionsForOrganization,

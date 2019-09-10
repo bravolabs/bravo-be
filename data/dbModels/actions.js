@@ -40,3 +40,11 @@ function update(id, changes) {
     .where({ id })
     .first();
 }
+
+function remove(id) {
+  return db('actions')
+    .delete()
+    .where({ id })
+    .returning('*')
+    .first();
+}

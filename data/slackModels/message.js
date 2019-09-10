@@ -28,8 +28,20 @@ async function createDialog(dialog) {
   }
 }
 
+async function getThread(query) {
+  try {
+    const res = await axios.get(
+      `${slack.baseUrl}/conversations.replies?token=${query.token}&&channel=${query.channel}&&ts=${query.ts}`
+    );
+    return res.data;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   postMessage,
   postOpenMessage,
   createDialog,
+  getThread,
 };

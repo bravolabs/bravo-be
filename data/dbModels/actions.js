@@ -14,6 +14,10 @@ async function create(action) {
 
 async function readById(id) {
   try {
+    const result = await db('actions')
+      .where({ id })
+      .first();
+    return result;
   } catch (err) {
     console.log(err);
   }

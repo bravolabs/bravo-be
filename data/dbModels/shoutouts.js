@@ -11,10 +11,11 @@ async function create(shoutout) {
   }
 }
 
-async function update(shoutout) {
+async function update(id, shoutout) {
   try {
     const result = await db('shoutouts')
       .update(shoutout)
+      .where({ id })
       .returning('*');
   } catch (err) {
     console.log(err);

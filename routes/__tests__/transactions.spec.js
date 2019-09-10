@@ -25,6 +25,12 @@ beforeAll(async () => {
 beforeEach(async () => {
   await db.raw('truncate organizations cascade;');
   await db.raw('truncate transactions cascade;');
+
+  const data = await stageData();
+  await transactionModel.create({
+    ...data,
+    action_id: createdAction.id,
+  });
 });
 
 afterEach(async () => {
@@ -74,3 +80,9 @@ const stageData = async () => {
     shoutout_id,
   };
 };
+
+describe('Get transaction', () => {
+  it('can get joined transactions for org', async done => {
+    expect.assertions(2);
+  });
+});

@@ -10,10 +10,12 @@ const auth = require('../utils/auth');
 
 let server;
 let createdAction = null;
+let org_id;
 
 beforeAll(async () => {
+  await db.raw('truncate actions cascade;');
   createdAction = await action.create({
-    name: 'reaction',
+    name: 'testAction',
     reward: 5,
   });
   sinon.stub(auth, 'authenticate').callsFake(function(req, res, next) {
@@ -31,6 +33,7 @@ beforeEach(async () => {
     ...data,
     action_id: createdAction.id,
   });
+  org_id = data.org_id;
 });
 
 afterEach(async () => {
@@ -39,6 +42,7 @@ afterEach(async () => {
 });
 
 afterAll(async done => {
+  await db.raw('truncate actions cascade;');
   await new Promise(resolve => setTimeout(() => resolve(), 500));
   auth.authenticate.restore();
   done();
@@ -82,7 +86,15 @@ const stageData = async () => {
 };
 
 describe('Get transaction', () => {
-  it('can get joined transactions for org', async done => {
-    expect.assertions(2);
+  it('[GET] /api/transactions/org/full', () => {
+    return request(server)
+      .get('/api/transactions/org/full/' + org_id)
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(res => {
+        expect(res.body.data[0]).toHaveProperty('giverSlackId', '773jjf');
+        expect(res.body.data[0]).toHaveProperty('reward', 5);
+        expect(res.body.data[0]).toHaveProperty('receiverName', 'Aaron');
+      });
   });
 });

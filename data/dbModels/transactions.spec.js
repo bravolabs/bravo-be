@@ -5,7 +5,7 @@ const user = require('./users');
 const orgs = require('./organizations');
 const transactionModel = require('./transactions');
 
-const createdAction = null;
+let createdAction = null;
 
 beforeAll(async () => {
   createdAction = await action.create({

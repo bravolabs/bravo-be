@@ -33,6 +33,7 @@ describe('Create actions', () => {
 
     actions = await db('actions');
     expect(actions).toHaveLength(2);
+    done();
   });
 
   it('can read actions by id', async done => {
@@ -49,5 +50,6 @@ describe('Create actions', () => {
     let newAction = await actionsModel.readById(id);
     expect(newAction).toHaveProperty('name', 'shoutout');
     expect(newAction).toHaveProperty('reward', 10);
+    done();
   });
 });

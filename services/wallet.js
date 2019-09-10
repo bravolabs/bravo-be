@@ -13,8 +13,15 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
     }
     if (!action) throw new Error('action invalid');
 
-    const userWallet = await wallets.readByUserId(userId);
-    if (!userWallet) throw new Error("Couldn't get user wallet");
+    let userWallet = await wallets.readByUserId(userId);
+    //Create user wallet if it doesn't exist
+    if (!userWallet) {
+      userWallet = await wallets.create({
+        user_id: userId,
+      });
+    }
+    // Something went very wrong if we still don't have a wallet
+    if (!userWallet) throw new Error('Error getting user wallet');
 
     // Update user wallet with new amount
     const newAmount = userWallet.amount + action.reward;

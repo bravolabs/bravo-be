@@ -44,7 +44,7 @@ exports.sendShoutOut = async reqInfo => {
 
 exports.respondToInteractiveMessage = async reqInfo => {
   try {
-    const org = await Organization.read(reqInfo.team_id);
+    const org = await Organization.read(reqInfo.team);
     if (reqInfo.actions[0].value === 'give') {
       const data = {
         access_token: org.access_token,
@@ -92,7 +92,6 @@ exports.submitDialog = async reqInfo => {
       message: reqInfo.content,
       organization_id: org.slack_org_id,
       access_token: org.access_token,
-      timestamp: shoutoutData.data.message.ts,
     };
 
     const message = slackComponent.message.private(data);
@@ -118,7 +117,21 @@ exports.submitDialog = async reqInfo => {
       footer: 'powered by Bravo Labs',
     });
 
-    await slackModel.message.postOpenMessage(channelAlert);
+    const reactionNames = ['heart', 'clap', 'tada', 'fire'];
+    const msg = await slackModel.message.postOpenMessage(channelAlert);
+    let reactions = {
+      token: org.access_token,
+      name: '',
+      channel: 'CMTJ4G1TK',
+      timestamp: msg.data.message.ts,
+    };
+    reactionNames.map(async reaction => {
+      reactions = {
+        ...reactions,
+        name: reaction,
+      };
+      await slackModel.message.addReactions(reactions);
+    });
   } catch (err) {
     console.log(err);
   }

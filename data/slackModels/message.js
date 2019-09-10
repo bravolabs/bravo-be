@@ -28,6 +28,14 @@ async function createDialog(dialog) {
   }
 }
 
+async function addReactions(reactions) {
+  try {
+    await axios.post(`${slack.baseUrl}/reactions.add`, qs.stringify(reactions));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function getThread(query) {
   try {
     const res = await axios.get(
@@ -43,5 +51,6 @@ module.exports = {
   postMessage,
   postOpenMessage,
   createDialog,
+  addReactions,
   getThread,
 };

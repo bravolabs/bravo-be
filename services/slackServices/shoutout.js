@@ -117,10 +117,24 @@ exports.submitDialog = async reqInfo => {
       footer: 'powered by Bravo Labs',
     });
 
-    const response = await slackModel.message.postOpenMessage(channelAlert);
+    const reactionNames = ['heart', 'clap', 'tada', 'fire'];
+    const msgData = await slackModel.message.postOpenMessage(channelAlert);
+    let reactions = {
+      token: org.access_token,
+      name: '',
+      channel: 'CMTJ4G1TK',
+      timestamp: msgData.message.ts,
+    };
+    reactionNames.map(async reaction => {
+      reactions = {
+        ...reactions,
+        name: reaction,
+      };
+      await slackModel.message.addReactions(reactions);
+    });
 
     // add a thread instructing users on what to do
-    const timeStamp = response.ts;
+    const timeStamp = msgData.ts;
     await ShoutOut.update(storedShoutOut.id, { message_ts: timeStamp });
 
     const threadConfig = slackComponent.message.public({

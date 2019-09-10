@@ -29,6 +29,13 @@ exports.up = function(knex) {
       .inTable('actions')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
+    tbl
+      .integer('shoutout_id')
+      .notNullable()
+      .references('id')
+      .inTable('shoutouts')
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE');
   });
 };
 

@@ -30,7 +30,7 @@ const transactionsFullyJoined = () => {
     .from(db.ref('transactions').as('t'))
     .join(db.ref('users').as('g'), 't.giver_id', 'g.id')
     .join(db.ref('users').as('r'), 't.receiver_id', 'r.id')
-    .join(db.ref('organisations').as('o'), 't.org_id', 'o.id')
+    .join(db.ref('organizations').as('o'), 't.org_id', 'o.id')
     .join(db.ref('actions').as('a'), 't.action_id', 'a.id');
 };
 

@@ -121,6 +121,8 @@ exports.submitDialog = async reqInfo => {
 
     // add a thread instructing users on what to do
     const timeStamp = response.ts;
+    await ShoutOut.update(storedShoutOut.id, { message_ts: timeStamp });
+
     const threadConfig = slackComponent.message.public({
       channel_id: org.channel_id,
       access_token: org.access_token,

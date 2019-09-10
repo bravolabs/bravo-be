@@ -28,10 +28,18 @@ const stageData = async () => {
 
 describe('Create wallets', () => {
   it('can create wallet for user', async done => {
-    expect.assertions(1);
+    expect.assertions(2);
 
     let wallets = await db('wallets');
     expect(wallets).toHaveLength(0);
+
+    let user = await stageData();
+    let newWallet = await walletsModel.create({
+      user_id: user.id,
+    });
+
+    wallets = await db('wallets');
+    expect(wallets).toHaveLength(1);
     done();
   });
 });

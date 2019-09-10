@@ -25,7 +25,6 @@ async function readAllWithData(orgId) {
         db.ref('r.slack_mem_id').as('receiverSlackId'),
         db.ref('r.name').as('receiverName'),
         db.ref('r.avatar').as('receiverAvatar'),
-        db.ref('r.avatar').as('receiverAvatar'),
         db.ref('a.reward').as('reward'),
         db.ref('a.name').as('action')
       )
@@ -43,4 +42,5 @@ async function readAllWithData(orgId) {
 
 module.exports = {
   create,
+  readAllWithData,
 };

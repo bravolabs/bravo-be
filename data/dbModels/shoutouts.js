@@ -11,6 +11,16 @@ async function create(shoutout) {
   }
 }
 
+async function update(shoutout) {
+  try {
+    const result = await db('shoutouts')
+      .update(shoutout)
+      .returning('*');
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function readAll() {
   try {
     return await db('shoutouts');
@@ -62,5 +72,6 @@ async function read(userId = null, id = null) {
 module.exports = {
   create,
   read,
+  update,
   readAll,
 };

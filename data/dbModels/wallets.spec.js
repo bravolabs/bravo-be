@@ -42,4 +42,23 @@ describe('Create wallets', () => {
     expect(wallets).toHaveLength(1);
     done();
   });
+
+  it('can get wallet for user', async done => {
+    expect.assertions(3);
+
+    let wallets = await db('wallets');
+    expect(wallets).toHaveLength(0);
+
+    let user = await stageData();
+    await walletsModel.create({
+      user_id: user.id,
+    });
+
+    wallets = await db('wallets');
+    expect(wallets).toHaveLength(1);
+
+    let newWallet = await walletsModel.readByUserId(user.id);
+    expect(newWallet).toHaveProperty('amount', 0);
+    done();
+  });
 });

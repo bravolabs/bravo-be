@@ -184,17 +184,6 @@ exports.getUserShoutOuts = async reqInfo => {
   }
 };
 
-exports.sendPublicUrl = async reqInfo => {
-  const org = await Organization.read(reqInfo.team);
-  const text = `Here is the public url you requested <${reqInfo.link}>`;
-  const message = slackComponent.message.public({
-    channel_id: reqInfo.user_id,
-    access_token: org.access_token,
-  });
-  message.attachments = slackComponent.attachments.confirmation(text);
-  await slackModel.message.postOpenMessage(message);
-};
-
 exports.cheatErrorMessage = async reqInfo => {
   const org = await Organization.read(reqInfo.team);
   const text = `Sorry, but you cannot give yourself a shoutout ⚠️`;

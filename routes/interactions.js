@@ -44,21 +44,6 @@ router.post('/', async (req, res) => {
       };
 
       await shoutOutService.getUserShoutOuts(reqInfo);
-    } else if (
-      data.type === 'message_action' &&
-      data.callback_id === 'send_shoutout_link' &&
-      data.message.subtype === 'bot_message' &&
-      data.message.attachments[0].actions
-    ) {
-      const url = data.message.attachments[0].actions[0].url;
-      const urlArray = url.split('/');
-      const sharablelink = `https://saybravo.io/shoutouts/public/${urlArray[4]}`;
-      const reqInfo = {
-        team: data.team.id,
-        user_id: data.user.id,
-        link: sharablelink,
-      };
-      await shoutOutService.sendPublicUrl(reqInfo);
     }
   } catch (err) {
     console.log(err);

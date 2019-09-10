@@ -118,12 +118,12 @@ exports.submitDialog = async reqInfo => {
     });
 
     const reactionNames = ['heart', 'clap', 'tada', 'fire'];
-    const msg = await slackModel.message.postOpenMessage(channelAlert);
+    const msgData = await slackModel.message.postOpenMessage(channelAlert);
     let reactions = {
       token: org.access_token,
       name: '',
       channel: 'CMTJ4G1TK',
-      timestamp: msg.data.message.ts,
+      timestamp: msgData.message.ts,
     };
     reactionNames.map(async reaction => {
       reactions = {

@@ -5,6 +5,7 @@ const wallets = require('../data/dbModels/wallets');
 async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {
   try {
     let action;
+    // Convert action name or id to action
     if (typeof actionNameOrId === 'string') {
       action = await actions.readByName(actionNameOrId);
     } else {
@@ -15,6 +16,7 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
     const userWallet = await wallets.readByUserId(userId);
     if (!userWallet) throw new Error("Couldn't get user wallet");
 
+    // Update user wallet with new amount
     const newAmount = userWallet.amount + action.reward;
     const updatedWallet = await wallets.updateByUserId(userId, newAmount);
 
@@ -28,6 +30,7 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
 
     if (!transaction) throw new Error("transaction couldn't be created");
 
+    // Return both transaction and updated user wallet
     return {
       transaction,
       wallet: updatedWallet,

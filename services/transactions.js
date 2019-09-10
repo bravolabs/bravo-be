@@ -47,7 +47,10 @@ async function getFullTransactionsForOrganization(orgId, page = 1, pageSize = pa
   };
 }
 
+async function getTransactionsForUser(userId, page = 1, pageSize = pageLimit) {}
+
 module.exports = {
   getTransactionsForOrganization,
   getFullTransactionsForOrganization,
+  getTransactionsForUser,
 };

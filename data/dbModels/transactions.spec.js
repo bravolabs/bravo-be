@@ -55,3 +55,12 @@ const stageData = async () => {
     shoutout_id,
   };
 };
+
+describe('Create transactions', () => {
+  it('can create actions', async done => {
+    expect.assertions(1);
+    let transactions = await db('transactions');
+    expect(transactions).toHaveLength(0);
+    done();
+  });
+});

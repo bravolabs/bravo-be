@@ -25,3 +25,13 @@ const stageData = async () => {
     name: 'test',
   });
 };
+
+describe('Create wallets', () => {
+  it('can create wallet for user', async done => {
+    expect.assertions(1);
+
+    let wallets = await db('wallets');
+    expect(wallets).toHaveLength(0);
+    done();
+  });
+});

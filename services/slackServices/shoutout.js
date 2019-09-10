@@ -117,7 +117,19 @@ exports.submitDialog = async reqInfo => {
       footer: 'powered by Bravo Labs',
     });
 
-    await slackModel.message.postOpenMessage(channelAlert);
+    const response = await slackModel.message.postOpenMessage(channelAlert);
+
+    // add a thread instructing users on what to do
+    const timeStamp = response.ts;
+    await ShoutOut.update(storedShoutOut.id, { message_ts: timeStamp });
+
+    const threadConfig = slackComponent.message.public({
+      channel_id: org.channel_id,
+      access_token: org.access_token,
+      text: '👇Comments On this Thread👇',
+    });
+    threadConfig.thread_ts = timeStamp;
+    await slackModel.message.postOpenMessage(threadConfig);
   } catch (err) {
     console.log(err);
   }
@@ -190,7 +202,7 @@ exports.cheatErrorMessage = async reqInfo => {
   const message = slackComponent.message.private({
     channel_id: reqInfo.channelId,
     user_id: reqInfo.userId,
-    token: org.access_token,
+    access_token: org.access_token,
   });
   message.attachments = slackComponent.attachments.errorALert(text);
 

@@ -11,6 +11,18 @@ async function create(wallet) {
   }
 }
 
+async function readByUserId(userId) {
+  try {
+    if (!userId) throw new Error('No userId provided');
+    return db('wallets')
+      .where({ user_id: userId })
+      .first();
+  } catch (error) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   create,
+  readByUserId,
 };

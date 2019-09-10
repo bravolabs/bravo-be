@@ -53,7 +53,7 @@ afterAll(async done => {
   await new Promise(resolve => setTimeout(() => resolve(), 500));
 
   // Restore the stubbed authenticate in case other tests need it.
-  auth.authenticate.restore();
+  sinon.restore();
   done();
 });
 

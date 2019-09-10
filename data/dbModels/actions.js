@@ -33,3 +33,10 @@ async function readByName(name) {
     console.log(err);
   }
 }
+
+function update(id, changes) {
+  return db('actions')
+    .update(changes, '*')
+    .where({ id })
+    .first();
+}

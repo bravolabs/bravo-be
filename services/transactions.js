@@ -19,6 +19,9 @@ async function getTransactionsForOrganization(orgId) {
   };
 }
 
+async function getFullTransactionsForOrganization(orgId) {}
+
 module.exports = {
   getTransactionsForOrganization,
+  getFullTransactionsForOrganization,
 };

@@ -190,7 +190,7 @@ exports.cheatErrorMessage = async reqInfo => {
   const message = slackComponent.message.private({
     channel_id: reqInfo.channelId,
     user_id: reqInfo.userId,
-    token: org.access_token,
+    access_token: org.access_token,
   });
   message.attachments = slackComponent.attachments.errorALert(text);
 

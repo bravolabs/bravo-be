@@ -4,6 +4,7 @@ exports.up = function(knex) {
     tbl
       .integer('user_id')
       .notNullable()
+      .unique()
       .references('id')
       .inTable('users')
       .onUpdate('CASCADE')

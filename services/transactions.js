@@ -19,7 +19,23 @@ async function getTransactionsForOrganization(orgId) {
   };
 }
 
-async function getFullTransactionsForOrganization(orgId) {}
+async function getFullTransactionsForOrganization(orgId) {
+  const result = await transactions.readWithData(orgId);
+  if (!result) {
+    return {
+      statusCode: 404,
+      data: {
+        message: 'No transactions found for organization',
+      },
+    };
+  }
+  return {
+    statusCode: 200,
+    data: {
+      data: result,
+    },
+  };
+}
 
 module.exports = {
   getTransactionsForOrganization,

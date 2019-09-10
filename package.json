@@ -9,7 +9,7 @@
     "migration": "npx knex migrate:latest --env=production",
     "start": "npm run migration && node index.js",
     "test": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --forceExit",
-    "test-watch": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --watch",
+    "test-watch": "cross-env DB_ENV=test nyc --reporter=html --reporter=text --reporter=lcov jest --verbose --watch --runInBand",
     "coverage": "jest --coverage --forceExit && cat ./coverage/lcov.info | coveralls"
   },
   "jest": {

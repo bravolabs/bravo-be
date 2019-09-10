@@ -29,7 +29,7 @@ beforeAll(async () => {
   server = require('../../express-server');
 });
 
-beforeEach(async () => {
+beforeEach(async done => {
   await db.raw('truncate organizations cascade;');
   await db.raw('truncate transactions cascade;');
 
@@ -41,6 +41,8 @@ beforeEach(async () => {
   org_id = data.org_id;
   giver_id = data.giver_id;
   receiver_id = data.receiver_id;
+
+  done();
 });
 
 afterEach(async () => {

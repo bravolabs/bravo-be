@@ -34,19 +34,19 @@ async function readByName(name) {
   }
 }
 
-function update(id, changes) {
-  return db('actions')
+async function update(id, changes) {
+  const result = await db('actions')
     .update(changes, '*')
-    .where({ id })
-    .first();
+    .where({ id });
+  return result[0];
 }
 
-function remove(id) {
-  return db('actions')
+async function remove(id) {
+  const result = await db('actions')
     .delete()
     .where({ id })
-    .returning('*')
-    .first();
+    .returning('*');
+  return result[0];
 }
 
 module.exports = {

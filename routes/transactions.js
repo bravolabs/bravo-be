@@ -25,4 +25,14 @@ router.get('/org/basic/:orgId/:page?/:pageSize?', async (req, res, next) => {
   }
 });
 
+router.get('/user/:userId/:page?/:pageSize?', async (req, res, next) => {
+  try {
+    let { userId, page, pageSize } = req.params;
+    const result = await service.getTransactionsForUser(userId, page, pageSize);
+    res.status(result.statusCode).json(result.data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

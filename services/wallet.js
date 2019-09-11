@@ -4,6 +4,12 @@ const wallets = require('../data/dbModels/wallets');
 
 const pageLimit = Number(process.env.LEADERBOARD_PAGE_LIMIT || '50');
 
+const clamp = (num, min, max) => {
+  return Math.min(Math.max(num, min), max);
+};
+
+async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {}
+
 async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {
   try {
     let action;
@@ -51,4 +57,5 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
 
 module.exports = {
   ProcessTransaction,
+  getLeaderboardForOrganization,
 };

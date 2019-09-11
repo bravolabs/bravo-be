@@ -61,3 +61,14 @@ const stageData = async () => {
     user_2,
   };
 };
+
+beforeEach(async done => {
+  await db.raw('truncate organizations cascade;');
+  await db.raw('truncate users cascade;');
+  await db.raw('truncate wallets cascade;');
+
+  const data = await stageData();
+  org_id = data.org_id;
+
+  done();
+});

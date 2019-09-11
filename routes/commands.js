@@ -10,10 +10,9 @@ router.post('/', async (req, res) => {
     const keyword = req.body.text;
 
     const { channel_id, user_id, team_id } = req.body;
-
+    await res.status(200).send('');
     switch (keyword) {
       case 'shoutout':
-        await res.status(200).send('');
         const reqInfo = {
           channel_id: channel_id,
           user_id: user_id,
@@ -21,9 +20,8 @@ router.post('/', async (req, res) => {
         };
 
         await shoutOutService.sendShoutOut(reqInfo);
-
+        break;
       case 'help':
-        await res.status(200).send('');
         const helpreqInfo = {
           channel_id: channel_id,
           user_id,
@@ -31,9 +29,8 @@ router.post('/', async (req, res) => {
         };
 
         await installService.sendUserHelpMessage(helpreqInfo);
-
+        break;
       case '':
-        await res.status(200).send('');
         const emptyreqInfo = {
           channel_id: channel_id,
           user_id,
@@ -41,7 +38,7 @@ router.post('/', async (req, res) => {
         };
 
         await installService.sendUserOnboardingMessage(emptyreqInfo);
-
+        break;
       default:
         await res
           .status(200)

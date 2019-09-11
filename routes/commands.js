@@ -29,6 +29,7 @@ router.post('/', async (req, res) => {
           user_id,
           team_id,
         };
+        await walletService.getUserWalletBalance(walletReqinfo);
         break;
       case 'help':
         await res.status(200).send('');

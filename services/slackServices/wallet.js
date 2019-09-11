@@ -4,7 +4,7 @@ const slackComponent = require('../../data/slackComponents');
 const { getUserWallet } = require('../wallet');
 const { slackModel } = require('../../data/slackModels/slack');
 
-exports.getUserWalletBalance = async slackUserId => {
+exports.getUserWalletBalance = async reqInfo => {
   try {
     const { user_id, channel_id, team_id } = reqInfo;
     if (!user_id) throw new Error('provide slack userid please');

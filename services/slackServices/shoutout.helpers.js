@@ -1,5 +1,6 @@
 const uuid = require('uuid');
 const { getUser } = require('./users');
+const { ProcessTransaction } = require('../wallet');
 const ShoutOut = require('../../data/dbModels/shoutouts');
 
 exports.saveToDatabase = async dbInfo => {
@@ -12,5 +13,7 @@ exports.saveToDatabase = async dbInfo => {
     message: dbInfo.message,
   };
 
-  return await ShoutOut.create(shoutoutData);
+  const result = await ShoutOut.create(shoutoutData);
+  await ProcessTransaction(reciever.id, giver.id, reciever.org_id, result.id, 'shoutout');
+  return result;
 };

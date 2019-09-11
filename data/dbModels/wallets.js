@@ -35,7 +35,14 @@ async function updateByUserId(userId, amount) {
   }
 }
 
-async function getWalletLeaderboard(orgId) {}
+async function getWalletLeaderboard(orgId) {
+  return db.select(
+    db.ref('w.amount').as('wallet'),
+    db.ref('u.slack_mem_id').as('slack_mem_id'),
+    db.ref('u.name').as('name'),
+    db.ref('u.avatar').as('avatar')
+  );
+}
 
 module.exports = {
   create,

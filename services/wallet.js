@@ -9,14 +9,9 @@ const clamp = (num, min, max) => {
 };
 
 async function getUserWallet(userId) {
-  const result = await wallets.readByUserId(userId);
+  let result = await wallets.readByUserId(userId);
   if (!result) {
-    return {
-      statusCode: 404,
-      data: {
-        message: 'No wallet found for user',
-      },
-    };
+    result = await wallets.create({ user_id: userId });
   }
   return {
     statusCode: 200,

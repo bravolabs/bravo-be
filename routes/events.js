@@ -7,7 +7,10 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    res.status(200).send('');
+    if (req.body.type === 'url_verification') {
+      res.status(200).send(req.body.challenge);
+    }
+    res.status(200).send(req.body.challenge);
     const { user, team } = req.body.event;
     await installService.onboardNewUser(user, team);
   } catch (err) {

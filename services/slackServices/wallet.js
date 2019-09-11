@@ -1,6 +1,8 @@
 const User = require('../../data/dbModels/users');
-const { slackModel } = require('../../data/slackModels/slack');
+const Organization = require('../../data/dbModels/organizations');
+const slackComponent = require('../../data/slackComponents');
 const { getUserWallet } = require('../wallet');
+const { slackModel } = require('../../data/slackModels/slack');
 
 exports.getUserWalletBalance = async slackUserId => {
   try {

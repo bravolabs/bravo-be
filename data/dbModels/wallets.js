@@ -44,7 +44,9 @@ async function getWalletLeaderboard(orgId) {
       db.ref('u.avatar').as('avatar')
     )
     .from(db.ref('wallets').as('w'))
-    .join(db.ref('users').as('u'), 'w.user_id', 'u.id');
+    .join(db.ref('users').as('u'), 'w.user_id', 'u.id')
+    .whereRaw(`u.org_id = ${orgId}`)
+    .orderBy('amount', 'desc');
 }
 
 module.exports = {

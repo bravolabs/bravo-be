@@ -35,8 +35,11 @@ async function updateByUserId(userId, amount) {
   }
 }
 
+async function getWalletLeaderboard(orgId) {}
+
 module.exports = {
   create,
   readByUserId,
   updateByUserId,
+  getWalletLeaderboard,
 };

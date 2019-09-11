@@ -15,8 +15,8 @@ router.post('/', async (req, res) => {
       case 'shoutout':
         await res.status(200).send('');
         const reqInfo = {
-          channel_id: channel_id,
-          user_id: user_id,
+          channel_id,
+          user_id,
           team_id,
         };
 

@@ -30,6 +30,7 @@ exports.getUserWalletBalance = async slackUserId => {
         color: '#4265ED',
       },
     ]);
+    await slackModel.message.postMessage(message);
   } catch (err) {
     console.log(err);
   }

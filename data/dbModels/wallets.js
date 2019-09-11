@@ -35,7 +35,7 @@ async function updateByUserId(userId, amount) {
   }
 }
 
-async function getWalletLeaderboard(orgId) {
+async function getWalletLeaderboard(orgId, offset = 0, limit = 50) {
   return db
     .select(
       db.ref('w.amount').as('wallet'),
@@ -46,7 +46,9 @@ async function getWalletLeaderboard(orgId) {
     .from(db.ref('wallets').as('w'))
     .join(db.ref('users').as('u'), 'w.user_id', 'u.id')
     .whereRaw(`u.org_id = ${orgId}`)
-    .orderBy('amount', 'desc');
+    .orderBy('amount', 'desc')
+    .limit(limit)
+    .offset(offset);
 }
 
 module.exports = {

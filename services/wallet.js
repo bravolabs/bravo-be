@@ -8,6 +8,8 @@ const clamp = (num, min, max) => {
   return Math.min(Math.max(num, min), max);
 };
 
+async function getUserWallet(userId) {}
+
 async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
   // Make sure page is 1 or heigher
   page = Math.max(Number(page), 1);
@@ -79,4 +81,5 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
 module.exports = {
   ProcessTransaction,
   getLeaderboardForOrganization,
+  getUserWallet,
 };

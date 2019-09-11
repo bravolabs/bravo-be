@@ -18,7 +18,18 @@ exports.getUserWalletBalance = async slackUserId => {
       user_id,
       access_token: org.access_token,
     };
+
     const message = slackComponent.message.private(messageConfig);
+    message.text = `<@${user_id}> requested his wallet count`;
+    message.attachments = JSON.stringify([
+      {
+        callback_id: 'alert message',
+        attachment_type: 'default',
+        title: 'Wallet:',
+        text: `You currently have ${wallet.data.data.amount} bravos in your wallet 🎈`,
+        color: '#4265ED',
+      },
+    ]);
   } catch (err) {
     console.log(err);
   }

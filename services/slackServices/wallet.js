@@ -13,6 +13,11 @@ exports.getUserWalletBalance = async slackUserId => {
     const wallet = await getUserWallet(user.id);
 
     const org = await Organization.read(team_id, null);
+    const messageConfig = {
+      channel_id,
+      user_id,
+      access_token: org.access_token,
+    };
   } catch (err) {
     console.log(err);
   }

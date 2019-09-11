@@ -72,3 +72,9 @@ beforeEach(async done => {
 
   done();
 });
+
+afterEach(async () => {
+  await db.raw('truncate organizations cascade;');
+  await db.raw('truncate users cascade;');
+  await db.raw('truncate wallets cascade;');
+});

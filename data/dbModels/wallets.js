@@ -36,12 +36,15 @@ async function updateByUserId(userId, amount) {
 }
 
 async function getWalletLeaderboard(orgId) {
-  return db.select(
-    db.ref('w.amount').as('wallet'),
-    db.ref('u.slack_mem_id').as('slack_mem_id'),
-    db.ref('u.name').as('name'),
-    db.ref('u.avatar').as('avatar')
-  );
+  return db
+    .select(
+      db.ref('w.amount').as('wallet'),
+      db.ref('u.slack_mem_id').as('slack_mem_id'),
+      db.ref('u.name').as('name'),
+      db.ref('u.avatar').as('avatar')
+    )
+    .from(db.ref('wallets').as('w'))
+    .join(db.ref('users').as('u'), 'w.user_id', 'u.id');
 }
 
 module.exports = {

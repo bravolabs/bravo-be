@@ -8,6 +8,7 @@ router.post('/', async (req, res) => {
     if (req.body.type === 'url_verification') {
       res.status(200).send(req.body.challenge);
     } else if (req.body.event.type === 'member_joined_channel') {
+      res.status(200).send('');
       const { user, team } = req.body.event;
       await installService.onboardNewUser(user, team);
     }

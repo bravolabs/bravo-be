@@ -78,3 +78,11 @@ afterEach(async () => {
   await db.raw('truncate users cascade;');
   await db.raw('truncate wallets cascade;');
 });
+
+afterAll(async done => {
+  await new Promise(resolve => setTimeout(() => resolve(), 500));
+
+  // Restore the stubbed authenticate in case other tests need it.
+  sinon.restore();
+  done();
+});

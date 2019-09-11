@@ -117,7 +117,33 @@ exports.submitDialog = async reqInfo => {
       footer: 'powered by Bravo Labs',
     });
 
-    await slackModel.message.postOpenMessage(channelAlert);
+    const reactionNames = ['heart', 'clap', 'tada', 'fire'];
+    const msgData = await slackModel.message.postOpenMessage(channelAlert);
+    let reactions = {
+      token: org.access_token,
+      name: '',
+      channel: 'CMTJ4G1TK',
+      timestamp: msgData.message.ts,
+    };
+    reactionNames.map(async reaction => {
+      reactions = {
+        ...reactions,
+        name: reaction,
+      };
+      await slackModel.message.addReactions(reactions);
+    });
+
+    // add a thread instructing users on what to do
+    const timeStamp = msgData.ts;
+    await ShoutOut.update(storedShoutOut.id, { message_ts: timeStamp });
+
+    const threadConfig = slackComponent.message.public({
+      channel_id: org.channel_id,
+      access_token: org.access_token,
+      text: '👇Comments On this Thread👇',
+    });
+    threadConfig.thread_ts = timeStamp;
+    await slackModel.message.postOpenMessage(threadConfig);
   } catch (err) {
     console.log(err);
   }
@@ -190,7 +216,7 @@ exports.cheatErrorMessage = async reqInfo => {
   const message = slackComponent.message.private({
     channel_id: reqInfo.channelId,
     user_id: reqInfo.userId,
-    token: org.access_token,
+    access_token: org.access_token,
   });
   message.attachments = slackComponent.attachments.errorALert(text);
 

@@ -11,6 +11,17 @@ async function create(shoutout) {
   }
 }
 
+async function update(id, shoutout) {
+  try {
+    const result = await db('shoutouts')
+      .update(shoutout)
+      .where({ id })
+      .returning('*');
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 async function readAll() {
   try {
     return await db('shoutouts');
@@ -26,6 +37,7 @@ async function read(userId = null, id = null) {
         's.id',
         'message',
         'created_at',
+        'message_ts',
         db.ref('g.slack_mem_id').as('giverSlackId'),
         db.ref('g.name').as('giverName'),
         db.ref('g.avatar').as('giverAvatar'),
@@ -45,6 +57,7 @@ async function read(userId = null, id = null) {
       's.id',
       'message',
       'created_at',
+      'message_ts',
       db.ref('g.slack_mem_id').as('giverSlackId'),
       db.ref('g.name').as('giverName'),
       db.ref('g.avatar').as('giverAvatar'),
@@ -62,5 +75,6 @@ async function read(userId = null, id = null) {
 module.exports = {
   create,
   read,
+  update,
   readAll,
 };

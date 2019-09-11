@@ -22,6 +22,17 @@ function sendOnboardingMessages(userList, token) {
   });
 }
 
+exports.onboardNewUser = async (user, orgId) => {
+  const { access_token } = await dbModel.read(orgId);
+  const message = {
+    channel: user,
+    token: access_token,
+    text: `Hi, <@${user}>! You have been invited to Bravo, lets get you onboarded 🙌`,
+    attachments: slackComponent.attachments.onboardingAttachments(),
+  };
+  slackModel.message.postOpenMessage(message);
+};
+
 exports.sendUserOnboardingMessage = async reqInfo => {
   try {
     const { access_token } = await dbModel.read(reqInfo.team_id);

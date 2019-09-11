@@ -16,4 +16,14 @@ router.get('/:id', validateId, async (req, res, next) => {
   }
 });
 
+router.get('/:id/replies', validateId, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await service.getShoutoutReplies(id);
+    res.status(result.statusCode).json(result.data);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 module.exports = router;

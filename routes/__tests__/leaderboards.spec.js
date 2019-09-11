@@ -86,3 +86,16 @@ afterAll(async done => {
   sinon.restore();
   done();
 });
+
+describe('Get leaderboard', () => {
+  it('[GET] /api/leaderboard/', () => {
+    return request(server)
+      .get('/api/leaderboard')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .then(res => {
+        expect(res.body.data[0]).toHaveProperty('wallet', 100);
+        expect(res.body.data[1]).toHaveProperty('wallet', 50);
+      });
+  });
+});

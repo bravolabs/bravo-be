@@ -21,6 +21,9 @@ router.post('/', async (req, res) => {
 
         await shoutOutService.sendShoutOut(reqInfo);
         break;
+      case 'wallet':
+        const walletReqInfo = {};
+        break;
       case 'help':
         const helpreqInfo = {
           channel_id: channel_id,

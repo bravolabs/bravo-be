@@ -8,7 +8,14 @@ const clamp = (num, min, max) => {
   return Math.min(Math.max(num, min), max);
 };
 
-async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {}
+async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
+  // Make sure page is 1 or heigher
+  page = Math.max(Number(page), 1);
+  // Clamp size between 1 and size limit to prevent crashes
+  let size = clamp(Number(pageSize), 1, pageLimit);
+  const offset = (page - 1) * size;
+  const result = await wallets.getWalletLeaderboard(orgId, offset, size);
+}
 
 async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {
   try {

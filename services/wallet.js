@@ -2,6 +2,8 @@ const transactions = require('../data/dbModels/transactions');
 const actions = require('../data/dbModels/actions');
 const wallets = require('../data/dbModels/wallets');
 
+const pageLimit = Number(process.env.LEADERBOARD_PAGE_LIMIT || '50');
+
 async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {
   try {
     let action;

@@ -15,3 +15,5 @@ router.get('/:page?/:pageSize?', async (req, res, next) => {
     next(error);
   }
 });
+
+module.exports = router;

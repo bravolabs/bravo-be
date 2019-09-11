@@ -12,6 +12,13 @@ async function getUserWallet(userId) {
   let result = await wallets.readByUserId(userId);
   if (!result) {
     result = await wallets.create({ user_id: userId });
+    if (!result)
+      return {
+        statusCode: 404,
+        data: {
+          message: 'No wallet found for user',
+        },
+      };
   }
   return {
     statusCode: 200,

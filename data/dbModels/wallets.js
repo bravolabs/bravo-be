@@ -37,6 +37,7 @@ async function updateByUserId(userId, amount) {
 
 async function getWalletLeaderboard(orgId, offset = 0, limit = 50) {
   try {
+    if (!orgId) throw new Error('No orgId provided');
     return db
       .select(
         db.ref('w.amount').as('wallet'),

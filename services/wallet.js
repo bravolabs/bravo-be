@@ -8,7 +8,23 @@ const clamp = (num, min, max) => {
   return Math.min(Math.max(num, min), max);
 };
 
-async function getUserWallet(userId) {}
+async function getUserWallet(userId) {
+  const result = await wallets.readByUserId(userId);
+  if (!result) {
+    return {
+      statusCode: 404,
+      data: {
+        message: 'No wallet found for user',
+      },
+    };
+  }
+  return {
+    statusCode: 200,
+    data: {
+      data: result,
+    },
+  };
+}
 
 async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
   // Make sure page is 1 or heigher

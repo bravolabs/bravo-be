@@ -11,6 +11,8 @@ exports.getUserWalletBalance = async slackUserId => {
     const user = await User.readBySlackId(user_id);
     if (!user) throw new Error('user does not exist on the database');
     const wallet = await getUserWallet(user.id);
+
+    const org = await Organization.read(team_id, null);
   } catch (err) {
     console.log(err);
   }

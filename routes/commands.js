@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
       case 'help':
         await res.status(200).send('');
         const helpreqInfo = {
-          channel_id: channel_id,
+          channel_id,
           user_id,
           team_id,
         };
@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
       case '':
         await res.status(200).send('');
         const emptyreqInfo = {
-          channel_id: channel_id,
+          channel_id,
           user_id,
           team_id,
         };

@@ -18,6 +18,7 @@ exports.getUserWalletBalance = async slackUserId => {
       user_id,
       access_token: org.access_token,
     };
+    const message = slackComponent.message.private(messageConfig);
   } catch (err) {
     console.log(err);
   }

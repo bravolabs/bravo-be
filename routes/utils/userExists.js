@@ -1,4 +1,5 @@
 const users = require('../../data/dbModels/users');
+const wallets = require('../../data/dbModels/wallets');
 
 module.exports = async function userExists(req, res, next) {
   const { body, slackRes, userOrg } = req;
@@ -11,6 +12,10 @@ module.exports = async function userExists(req, res, next) {
       email: slackRes.user.email,
       avatar: slackRes.user.image_512,
       org_id: userOrg.id,
+    });
+
+    await wallets.create({
+      user_id: user.id,
     });
   }
 

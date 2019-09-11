@@ -11,40 +11,46 @@ router.post('/', async (req, res) => {
 
     const { channel_id, user_id, team_id } = req.body;
 
-    // the callback here is what differentiates a shoutout
-    // message from the feedback interactive message, please don't delete
+    switch (keyword) {
+      case 'shoutout':
+        await res.status(200).send('');
+        const reqInfo = {
+          channel_id: channel_id,
+          user_id: user_id,
+          team_id,
+        };
 
+        await shoutOutService.sendShoutOut(reqInfo);
+
+      case 'help':
+        await res.status(200).send('');
+        const helpreqInfo = {
+          channel_id: channel_id,
+          user_id,
+          team_id,
+        };
+
+        await installService.sendUserHelpMessage(helpreqInfo);
+
+      case '':
+        await res.status(200).send('');
+        const emptyreqInfo = {
+          channel_id: channel_id,
+          user_id,
+          team_id,
+        };
+
+        await installService.sendUserOnboardingMessage(emptyreqInfo);
+
+      default:
+        await res
+          .status(200)
+          .send('Type `/bravo help` for onboarding  or `/bravo shoutout` to get started');
+    }
     if (keyword === 'shoutout') {
-      await res.status(200).send('');
-      const reqInfo = {
-        channel_id: channel_id,
-        user_id: user_id,
-        team_id,
-      };
-
-      await shoutOutService.sendShoutOut(reqInfo);
     } else if (keyword === 'help') {
-      await res.status(200).send('');
-      const reqInfo = {
-        channel_id: channel_id,
-        user_id,
-        team_id,
-      };
-
-      await installService.sendUserHelpMessage(reqInfo);
     } else if (keyword === '') {
-      await res.status(200).send('');
-      const reqInfo = {
-        channel_id: channel_id,
-        user_id,
-        team_id,
-      };
-
-      await installService.sendUserOnboardingMessage(reqInfo);
     } else {
-      await res
-        .status(200)
-        .send('Type `/bravo help` for onboarding  or `/bravo shoutout` to get started');
     }
   } catch (err) {
     res.status(500).send(err);

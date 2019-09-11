@@ -6,7 +6,11 @@ const { slackModel } = require('../../data/slackModels/slack');
 
 exports.getUserWalletBalance = async slackUserId => {
   try {
-    if (!slackUserId) throw new Error('provide slack userid please');
+    const { user_id, channel_id, team_id } = reqInfo;
+    if (!user_id) throw new Error('provide slack userid please');
+    const user = await User.readBySlackId(user_id);
+    if (!user) throw new Error('user does not exist on the database');
+    const wallet = await getUserWallet(user.id);
   } catch (err) {
     console.log(err);
   }

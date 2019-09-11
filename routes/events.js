@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/', async (req, res) => {
   try {
-    console.log(req.body);
     if (req.body.type === 'url_verification') {
       res.status(200).send(req.body.challenge);
     } else if (req.body.event.type === 'member_joined_channel') {

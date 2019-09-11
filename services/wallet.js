@@ -15,6 +15,20 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
   let size = clamp(Number(pageSize), 1, pageLimit);
   const offset = (page - 1) * size;
   const result = await wallets.getWalletLeaderboard(orgId, offset, size);
+  if (!result) {
+    return {
+      statusCode: 404,
+      data: {
+        message: 'No wallets found for organization',
+      },
+    };
+  }
+  return {
+    statusCode: 200,
+    data: {
+      data: result,
+    },
+  };
 }
 
 async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {

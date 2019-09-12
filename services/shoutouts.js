@@ -21,6 +21,11 @@ async function getShoutouts(id) {
   };
 }
 
+async function getUser(userId) {
+  let user = await users.readBySlackId(userId);
+  return user;
+}
+
 async function getShoutoutReplies(id) {
   const result = await shoutouts.read(null, id);
   if (!result || !result.id) {
@@ -38,13 +43,28 @@ async function getShoutoutReplies(id) {
     channel: organizationData.channel_id,
     ts: result.message_ts,
   });
-  const replies = slackResponse.messages.filter(
+  if (!slackResponse.messages) throw new Error('message not found');
+  // filter out bot messages on thread
+  let replies = slackResponse.messages.filter(
     reply => !reply.subtype || !reply.subtype === 'bot_message'
+  );
+  // loop through all messages and add users avatar and name
+  newReplies = await Promise.all(
+    replies.map(async reply => {
+      let user = await getUser(reply.user);
+      return {
+        id: reply.client_msg_id,
+        timestamp: reply.ts,
+        text: reply.text,
+        name: user.name,
+        avatar: user.avatar,
+      };
+    })
   );
   return {
     statusCode: 200,
     data: {
-      data: replies,
+      data: newReplies,
     },
   };
 }

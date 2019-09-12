@@ -27,6 +27,7 @@ describe('Create organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     await orgs.create({
       slack_org_id: 'SWYEUJGHDR',
@@ -34,6 +35,7 @@ describe('Create organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     organizations = await orgs.read();
     expect(organizations).toHaveLength(2);
@@ -52,6 +54,7 @@ describe('Create organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     expect(result.name).toBe('Lambda-School');
     done();
@@ -66,6 +69,7 @@ describe('Create organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     expect(organization.name).toBe('Bravo-Labs');
     done();
@@ -80,6 +84,7 @@ describe('Create organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     const organization = await orgs.create({
       slack_org_id: 'SWYEUJGHDR',
@@ -87,6 +92,7 @@ describe('Create organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     expect(organization.name).toBe('Bravo-Labs');
     done();
@@ -106,6 +112,7 @@ describe('Read organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     await orgs.create({
       slack_org_id: 'AWRUIDOSOS',
@@ -113,6 +120,7 @@ describe('Read organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     organizations = await orgs.read();
     expect(organizations[0].name).toBe('Bravo-Labs');
@@ -132,6 +140,7 @@ describe('Read organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     organizations = await orgs.read('AQYENEKWQS');
     expect(organizations.name).toBe('Lambda-School');
@@ -152,6 +161,7 @@ describe('Update organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     result = await orgs.update(result.id, {
       name: 'Bravo-Labs',
@@ -174,6 +184,7 @@ describe('Remove organizations', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
     result = await orgs.remove(result.id);
     expect(result[0].name).toBe('Bravo-Labs');
@@ -194,6 +205,7 @@ describe('Get shoutouts by organization ID', () => {
       channel_name: '#djjjd',
       channel_id: '83829',
       access_token: '8299ddjdddd',
+      bot_access_token: 'test_token',
     });
 
     const orgShoutouts = await orgs.getShoutouts(organization.id);

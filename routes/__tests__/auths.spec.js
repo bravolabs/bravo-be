@@ -96,6 +96,7 @@ describe('/auths route', () => {
       channel_name: '#sample',
       channel_id: 'NKKFKEEJ',
       access_token: accessToken,
+      bot_access_token: 'test_token',
     });
     nock(slack.baseUrl)
       .get(`/users.identity?token=${accessToken}`)

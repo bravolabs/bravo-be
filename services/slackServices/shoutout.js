@@ -120,9 +120,9 @@ exports.submitDialog = async reqInfo => {
     const reactionNames = ['heart', 'clap', 'tada', 'fire'];
     const msgData = await slackModel.message.postOpenMessage(channelAlert);
     let reactions = {
-      token: org.access_token,
+      token: org.bot_access_token,
       name: '',
-      channel: 'CMTJ4G1TK',
+      channel: org.channel_id,
       timestamp: msgData.message.ts,
     };
     reactionNames.map(async reaction => {

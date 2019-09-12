@@ -29,6 +29,7 @@ describe('Create shoutouts', () => {
       channel_name: 'bots',
       channel_id: 'ejwjkqe',
       access_token: 'bfqhjwfbwjf',
+      bot_access_token: 'test_token',
     });
 
     const userpersona = await user.create({
@@ -65,6 +66,7 @@ describe('Create shoutouts', () => {
       channel_name: 'bots',
       channel_id: 'ejwjkqe',
       access_token: 'bfqhjwfbwjf',
+      bot_access_token: 'test_token',
     });
 
     const userpersona = await user.create({

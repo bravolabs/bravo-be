@@ -39,7 +39,7 @@ async function getShoutoutReplies(id) {
     channel: organizationData.channel_id,
     ts: result.message_ts,
   });
-  const replies = slackResponse.messages.filter(
+  if (!slackResponse.messages) throw new Error('message not found');
     reply => !reply.subtype || !reply.subtype === 'bot_message'
   );
   return {

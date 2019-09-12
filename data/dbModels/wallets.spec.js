@@ -92,4 +92,22 @@ describe('Create wallets', () => {
     expect(newWallet).toHaveProperty('amount', 100);
     done();
   });
+  it('can get leaderboard for organization', async done => {
+    expect.assertions(3);
+
+    let wallets = await db('wallets');
+    expect(wallets).toHaveLength(0);
+
+    let user = await stageData();
+    await walletsModel.create({
+      user_id: user.id,
+    });
+
+    wallets = await db('wallets');
+    expect(wallets).toHaveLength(1);
+
+    let leaderboard = await walletsModel.getWalletLeaderboard(user.org_id);
+    expect(leaderboard[0]).toHaveProperty('wallet', 0);
+    done();
+  });
 });

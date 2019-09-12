@@ -2,6 +2,55 @@ const transactions = require('../data/dbModels/transactions');
 const actions = require('../data/dbModels/actions');
 const wallets = require('../data/dbModels/wallets');
 
+const pageLimit = Number(process.env.LEADERBOARD_PAGE_LIMIT || '50');
+
+const clamp = (num, min, max) => {
+  return Math.min(Math.max(num, min), max);
+};
+
+async function getUserWallet(userId) {
+  let result = await wallets.readByUserId(userId);
+  if (!result) {
+    result = await wallets.create({ user_id: userId });
+    if (!result)
+      return {
+        statusCode: 404,
+        data: {
+          message: 'No wallet found for user',
+        },
+      };
+  }
+  return {
+    statusCode: 200,
+    data: {
+      data: result,
+    },
+  };
+}
+
+async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
+  // Make sure page is 1 or heigher
+  page = Math.max(Number(page), 1);
+  // Clamp size between 1 and size limit to prevent crashes
+  let size = clamp(Number(pageSize), 1, pageLimit);
+  const offset = (page - 1) * size;
+  const result = await wallets.getWalletLeaderboard(orgId, offset, size);
+  if (!result) {
+    return {
+      statusCode: 404,
+      data: {
+        message: 'No wallets found for organization',
+      },
+    };
+  }
+  return {
+    statusCode: 200,
+    data: {
+      data: result,
+    },
+  };
+}
+
 async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {
   try {
     let action;
@@ -49,4 +98,6 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
 
 module.exports = {
   ProcessTransaction,
+  getLeaderboardForOrganization,
+  getUserWallet,
 };

@@ -95,6 +95,7 @@ exports.completeInstall = async installData => {
       channel_name: installData.channelName,
       channel_id: installData.channelId,
       access_token: installData.accessToken,
+      bot_access_token: installData.botAccessToken,
     };
     dbModel.create(organizationDetails);
   } catch (err) {

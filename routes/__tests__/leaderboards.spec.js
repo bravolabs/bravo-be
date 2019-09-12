@@ -29,6 +29,7 @@ const stageData = async () => {
     channel_name: 'bots',
     channel_id: 'ejwjkqe',
     access_token: 'bfqhjwfbwjf',
+    bot_access_token: 'test_token',
   });
 
   const { id: user_1 } = await user.create({

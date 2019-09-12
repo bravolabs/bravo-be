@@ -21,6 +21,7 @@ async function getShoutouts(id) {
   };
 }
 
+  return user;
 async function getShoutoutReplies(id) {
   const result = await shoutouts.read(null, id);
   if (!result || !result.id) {

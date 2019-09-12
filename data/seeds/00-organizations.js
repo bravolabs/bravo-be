@@ -9,6 +9,7 @@ exports.seed = function(knex) {
         channel_name: 'general',
         channel_id: 'OQWSHEDJTE',
         access_token: 'seedingaccesstoken',
+        bot_access_token: 'bot_token',
       },
       {
         slack_org_id: 'OQWSHEDJTE',
@@ -16,6 +17,7 @@ exports.seed = function(knex) {
         channel_name: 'general',
         channel_id: 'OQWSHEDJTE',
         access_token: 'seedingaccesstoken',
+        bot_access_token: 'bot_token',
       },
       {
         slack_org_id: 'ZQPKSGDNJE',
@@ -23,6 +25,7 @@ exports.seed = function(knex) {
         channel_name: 'general',
         channel_id: 'OQWSHEDJTE',
         access_token: 'seedingaccesstoken',
+        bot_access_token: 'bot_token',
       },
       {
         slack_org_id: 'LOQASJWREJ',
@@ -30,6 +33,7 @@ exports.seed = function(knex) {
         channel_name: 'general',
         channel_id: 'OQWSHEDJTE',
         access_token: 'seedingaccesstoken',
+        bot_access_token: 'bot_token',
       },
       {
         slack_org_id: 'AHWQIPKGFD',
@@ -37,6 +41,7 @@ exports.seed = function(knex) {
         channel_name: 'general',
         channel_id: 'OQWSHEDJTE',
         access_token: 'seedingaccesstoken',
+        bot_access_token: 'bot_token',
       },
     ]);
   });

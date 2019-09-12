@@ -25,6 +25,7 @@ const stageData = async () => {
     channel_name: 'bots',
     channel_id: 'ejwjkqe',
     access_token: 'bfqhjwfbwjf',
+    bot_access_token: 'test_token',
   });
   return usersModel.create({
     org_id: org_id,

@@ -1,4 +1,5 @@
 const { slackModel } = require('../../data/slackModels/slack');
+const slackComponent = require('../../data/slackComponents');
 const dbModel = require('../../data/dbModels/organizations');
 const events = require('events');
 const eventEmitter = new events.EventEmitter();
@@ -11,16 +12,7 @@ function filterUsersToOnboard(users) {
 function sendOnboardingMessages(userList, token) {
   const message = {
     token,
-    attachments: JSON.stringify([
-      {
-        fallback: 'Bravo Onboarding Message',
-        callback: 'installation onboarding',
-        attachment_type: 'default',
-        text:
-          '*How it works?* \n Just type `/bravo` shoutout and I will guide you through the process \n \n  *Our mission:* \n Award your peers with acknowledgments that act like coins/points in Slack when they do awesome things - and never let the acknowledgment of their good work get lost in the shuffle again. \n \n With bravo you will be able to give shoutouts to your team and collegues really easily. Also you will be able to see all the feedback and shoutouts that you get in your dashboard.',
-        color: '#4265ED',
-      },
-    ]),
+    attachments: slackComponent.attachments.onboardingAttachments(),
   };
 
   userList.map(user => {
@@ -30,11 +22,40 @@ function sendOnboardingMessages(userList, token) {
   });
 }
 
+exports.onboardNewUser = async (user, orgId) => {
+  const { access_token } = await dbModel.read(orgId);
+  const message = {
+    channel: user,
+    token: access_token,
+    text: `Hi, <@${user}>! You have been invited to Bravo, lets get you onboarded 🙌`,
+    attachments: slackComponent.attachments.onboardingAttachments(),
+  };
+  slackModel.message.postOpenMessage(message);
+};
+
 exports.sendUserOnboardingMessage = async reqInfo => {
   try {
     const { access_token } = await dbModel.read(reqInfo.team_id);
     const message = {
       channel: reqInfo.channel_id,
+      user: reqInfo.user_id,
+      text: `*Hi, what would you like to do?*`,
+      token: access_token,
+      attachments: slackComponent.attachments.helpOnboardingAttachments(),
+    };
+
+    await slackModel.message.postMessage(message);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.sendUserHelpMessage = async reqInfo => {
+  try {
+    const { access_token } = await dbModel.read(reqInfo.team_id);
+    const message = {
+      channel: reqInfo.channel_id,
+      user: reqInfo.user_id,
       text: `Hi, <@${reqInfo.user_id}>! Seems you need help using bravo, lets get you onboarded 🙌`,
       token: access_token,
       attachments: JSON.stringify([
@@ -42,14 +63,13 @@ exports.sendUserOnboardingMessage = async reqInfo => {
           fallback: 'Bravo Onboarding Message',
           callback: 'installation onboarding',
           attachment_type: 'default',
-          text:
-            '*How it works?* \n Just type `/bravo shoutout` and I will guide you through the process.',
+          text: '*How it works?* \n Just type `/bravo` and I will guide you through the process.',
           color: '#4265ED',
         },
       ]),
     };
 
-    await slackModel.message.postOpenMessage(message);
+    await slackModel.message.postMessage(message);
   } catch (err) {
     console.log(err);
   }
@@ -75,6 +95,7 @@ exports.completeInstall = async installData => {
       channel_name: installData.channelName,
       channel_id: installData.channelId,
       access_token: installData.accessToken,
+      bot_access_token: installData.botAccessToken,
     };
     dbModel.create(organizationDetails);
   } catch (err) {

@@ -122,7 +122,7 @@ exports.submitDialog = async reqInfo => {
     let reactions = {
       token: org.bot_access_token,
       name: '',
-      channel: 'CMTJ4G1TK',
+      channel: org.channel_id,
       timestamp: msgData.message.ts,
     };
     reactionNames.map(async reaction => {

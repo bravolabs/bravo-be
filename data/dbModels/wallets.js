@@ -30,7 +30,7 @@ async function updateByUserId(userId, amount) {
       .update({ amount }, '*')
       .where({ user_id: userId });
     return result[0];
-  } catch (error) {
+  } catch (err) {
     console.log(err);
   }
 }

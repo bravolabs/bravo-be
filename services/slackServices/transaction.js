@@ -13,9 +13,11 @@ exports.giveReactionPoint = async reqInfo => {
       shoutout.giver_id,
       organization.id,
       shoutout.id,
-      'reaction'
+      'reaction',
+      reqInfo.add_reaction
     );
     console.log(result);
+    // send a message to the user tellig them what the total amount of coins they have is and that th received 1coin
   } catch (err) {
     console.log(err);
   }

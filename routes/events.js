@@ -18,6 +18,16 @@ router.post('/', async (req, res) => {
         user: req.body.event.user,
         org_id: req.body.team_id,
         ts: req.body.event.item.ts,
+        add_reaction: true,
+      };
+      await transactionService.giveReactionPoint(reqInfo);
+    } else if (req.body.event.type === 'reaction_removed' && !req.body.event.item_user) {
+      res.status(200).send('');
+      const reqInfo = {
+        user: req.body.event.user,
+        org_id: req.body.team_id,
+        ts: req.body.event.item.ts,
+        add_reaction: false,
       };
       await transactionService.giveReactionPoint(reqInfo);
     }

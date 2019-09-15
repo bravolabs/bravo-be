@@ -30,6 +30,16 @@ router.post('/', async (req, res) => {
         add_reaction: false,
       };
       await transactionService.giveReactionPoint(reqInfo);
+    } else if (
+      req.body.event.type === 'message' &&
+      req.body.event.thread_ts &&
+      !req.body.event.parent_user_id
+    ) {
+      res.status(200).send('');
+      console.log(req.body.event);
+      const reqInfo = {
+        user: req.body.event.user,
+      }
     }
   } catch (err) {
     console.log(err);

@@ -4,7 +4,7 @@ const auth = require('./utils/auth');
 const { validateId } = require('./utils/validator');
 
 const router = express.Router();
-// router.use('/', auth.authenticate);
+router.use('/', auth.authenticate);
 router.get('/:id/shoutouts', validateId, async (req, res, next) => {
   try {
     const { id } = req.params;

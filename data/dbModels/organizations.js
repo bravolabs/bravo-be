@@ -73,7 +73,7 @@ function getShoutouts(org_id) {
       db.ref('r.name').as('receiverName'),
       db.ref('r.avatar').as('receiverAvatar')
     )
-    .from('shoutouts')
+    .from(db.ref('shoutouts').as('s'))
     .join(db.ref('users').as('g'), 'giver_id', 'g.id')
     .join(db.ref('users').as('r'), 'receiver_id', 'r.id')
     .whereRaw(`g.org_id = ${org_id} AND r.org_id = ${org_id}`);

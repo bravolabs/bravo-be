@@ -23,7 +23,7 @@ async function getShoutouts(userId) {
 
 async function getUserInfo(userId) {
   const user = await users.readBySlackId(userId);
-  const org = await organizations.read(user.org_id);
+  const org = await organizations.read(null, user.org_id);
 
   if (!user || !user.slack_mem_id) {
     return {

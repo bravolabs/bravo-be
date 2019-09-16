@@ -142,7 +142,7 @@ describe('Read organizations', () => {
       access_token: '8299ddjdddd',
       bot_access_token: 'test_token',
     });
-    organizations = await orgs.read(null, 'AQYENEKWQS');
+    organizations = await orgs.read('AQYENEKWQS');
     expect(organizations.name).toBe('Lambda-School');
     done();
   });

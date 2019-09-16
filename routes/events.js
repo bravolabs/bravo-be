@@ -1,10 +1,11 @@
 const express = require('express');
 const installService = require('../services/slackServices/install');
 const transactionService = require('../services/slackServices/transaction');
-
 const router = express.Router();
+const User = require('../data/dbModels/users');
 
 router.post('/', async (req, res) => {
+  const isNotBot = await User.readBySlackId(req.body.event.user);
   try {
     if (req.body.type === 'url_verification') {
       res.status(200).send(req.body.challenge);
@@ -13,7 +14,7 @@ router.post('/', async (req, res) => {
       const { user, team } = req.body.event;
 
       await installService.onboardNewUser(user, team);
-    } else if (req.body.event.type === 'reaction_added' && !req.body.event.item_user) {
+    } else if (req.body.event.type === 'reaction_added' && isNotBot) {
       res.status(200).send('');
       const reqInfo = {
         user: req.body.event.user,
@@ -24,7 +25,7 @@ router.post('/', async (req, res) => {
       };
 
       await transactionService.givePoint(reqInfo);
-    } else if (req.body.event.type === 'reaction_removed' && !req.body.event.item_user) {
+    } else if (req.body.event.type === 'reaction_removed' && isNotBot) {
       res.status(200).send('');
       const reqInfo = {
         user: req.body.event.user,

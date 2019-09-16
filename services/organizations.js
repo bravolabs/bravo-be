@@ -2,7 +2,7 @@ const organizations = require('../data/dbModels/organizations');
 const usersModel = require('../data/dbModels/users');
 
 async function getShoutouts(id) {
-  const organization = await organizations.read(id);
+  const organization = await organizations.read(id, null);
   if (!organization || !organization.slack_org_id) {
     return {
       statusCode: 404,
@@ -12,7 +12,6 @@ async function getShoutouts(id) {
     };
   }
   const shoutouts = await organizations.getShoutouts(organization.id);
-
   return {
     statusCode: 200,
     data: {

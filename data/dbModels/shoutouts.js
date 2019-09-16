@@ -72,9 +72,20 @@ async function read(userId = null, id = null) {
     .first();
 }
 
+async function readByTimestamp(timestamp) {
+  try {
+    return await db('shoutouts')
+      .where({ message_ts: timestamp })
+      .first();
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 module.exports = {
   create,
   read,
   update,
   readAll,
+  readByTimestamp,
 };

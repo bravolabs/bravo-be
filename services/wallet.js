@@ -51,7 +51,9 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
   };
 }
 
-async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {
+async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId, gained) {
+  // we need to handle the edge case of someone giving a reaction and removing it
+  // and also how many times can one react
   try {
     let action;
     // Convert action name or id to action
@@ -73,7 +75,12 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
     if (!userWallet) throw new Error('Error getting user wallet');
 
     // Update user wallet with new amount
-    const newAmount = userWallet.amount + action.reward;
+    let newAmount;
+    if (gained) {
+      newAmount = userWallet.amount + action.reward;
+    } else {
+      newAmount = userWallet.amount - action.reward;
+    }
     const updatedWallet = await wallets.updateByUserId(userId, newAmount);
 
     const transaction = await transactions.create({

@@ -57,10 +57,19 @@ exports.errorALert = text => {
 
 exports.channelNotification = (data, type = null) => {
   let color;
+  let actions;
   if (type === 'view') {
     color = '#A9A9A9';
+    actions = [
+      {
+        type: 'button',
+        text: 'View',
+        url: `${data.clientUrl}/shoutout/${data.id}`,
+      },
+    ];
   } else {
     color = '#4265ED';
+    actions = [];
   }
   const attachment = JSON.stringify([
     {
@@ -69,13 +78,7 @@ exports.channelNotification = (data, type = null) => {
       title: 'Shoutout:',
       text: `${data.content}`,
       color: color,
-      actions: [
-        {
-          type: 'button',
-          text: 'View',
-          url: `${data.clientUrl}/shoutout/${data.id}`,
-        },
-      ],
+      actions: actions,
       footer: data.footer,
     },
   ]);

@@ -62,10 +62,16 @@ function remove(id) {
 function getShoutouts(org_id) {
   return db
     .select(
+      's.id',
       'message',
       'created_at',
+      'message_ts',
       db.ref('g.slack_mem_id').as('giverSlackId'),
-      db.ref('r.slack_mem_id').as('receiverSlackId')
+      db.ref('g.name').as('giverName'),
+      db.ref('g.avatar').as('giverAvatar'),
+      db.ref('r.slack_mem_id').as('receiverSlackId'),
+      db.ref('r.name').as('receiverName'),
+      db.ref('r.avatar').as('receiverAvatar')
     )
     .from('shoutouts')
     .join(db.ref('users').as('g'), 'giver_id', 'g.id')

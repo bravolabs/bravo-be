@@ -73,7 +73,7 @@ exports.channelNotification = (data, type = null) => {
         {
           type: 'button',
           text: 'View',
-          url: `${data.clientUrl}/shoutout/${data.id}`,
+          url: `${data.clientUrl}/shoutouts/${data.id}`,
         },
       ],
       footer: data.footer,

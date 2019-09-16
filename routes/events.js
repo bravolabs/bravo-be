@@ -11,6 +11,7 @@ router.post('/', async (req, res) => {
     } else if (req.body.event.type === 'member_joined_channel') {
       res.status(200).send('');
       const { user, team } = req.body.event;
+
       await installService.onboardNewUser(user, team);
     } else if (req.body.event.type === 'reaction_added' && !req.body.event.item_user) {
       res.status(200).send('');
@@ -18,28 +19,36 @@ router.post('/', async (req, res) => {
         user: req.body.event.user,
         org_id: req.body.team_id,
         ts: req.body.event.item.ts,
-        add_reaction: true,
+        action: 'reaction',
+        fund: true,
       };
-      await transactionService.giveReactionPoint(reqInfo);
+
+      await transactionService.givePoint(reqInfo);
     } else if (req.body.event.type === 'reaction_removed' && !req.body.event.item_user) {
       res.status(200).send('');
       const reqInfo = {
         user: req.body.event.user,
         org_id: req.body.team_id,
         ts: req.body.event.item.ts,
-        add_reaction: false,
+        action: 'reaction',
+        fund: false,
       };
-      await transactionService.giveReactionPoint(reqInfo);
+
+      await transactionService.givePoint(reqInfo);
     } else if (
       req.body.event.type === 'message' &&
       req.body.event.thread_ts &&
       !req.body.event.parent_user_id
     ) {
       res.status(200).send('');
-      console.log(req.body.event);
       const reqInfo = {
         user: req.body.event.user,
-      }
+        org_id: req.body.event.team,
+        ts: req.body.event.thread_ts,
+        action: 'comment',
+        fund: true,
+      };
+      await transactionService.givePoint(reqInfo);
     }
   } catch (err) {
     console.log(err);

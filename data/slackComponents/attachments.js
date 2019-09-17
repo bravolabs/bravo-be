@@ -69,7 +69,6 @@ exports.channelNotification = (data, type = null) => {
     ];
   } else {
     color = '#4265ED';
-    actions = [];
   }
   const attachment = JSON.stringify([
     {

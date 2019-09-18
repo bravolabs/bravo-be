@@ -14,6 +14,6 @@ exports.saveToDatabase = async dbInfo => {
   };
 
   const result = await ShoutOut.create(shoutoutData);
-  await ProcessTransaction(reciever.id, giver.id, reciever.org_id, result.id, 'shoutout');
+  await ProcessTransaction(reciever.id, giver.id, reciever.org_id, result.id, 'shoutout', true);
   return result;
 };

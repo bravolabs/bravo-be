@@ -1,7 +1,7 @@
 const organizations = require('../data/dbModels/organizations');
 const usersModel = require('../data/dbModels/users');
 
-async function getShoutouts(id) {
+async function getShoutouts(id, paginateInfo) {
   const organization = await organizations.read(null, id);
   if (!organization || !organization.slack_org_id) {
     return {
@@ -11,10 +11,14 @@ async function getShoutouts(id) {
       },
     };
   }
-  const shoutouts = await organizations.getShoutouts(organization.id);
+  const { limit, offset, previous, next } = paginateInfo;
+  const shoutouts = await organizations.getShoutouts(id, limit, offset);
+  const nextPage = limit === shoutouts.length && next;
   return {
     statusCode: 200,
     data: {
+      previousPage: previous,
+      nextPage,
       data: shoutouts,
     },
   };

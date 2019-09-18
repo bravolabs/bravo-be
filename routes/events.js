@@ -5,7 +5,7 @@ const router = express.Router();
 const User = require('../data/dbModels/users');
 
 router.post('/', async (req, res) => {
-  const isNotBot = (await User.readBySlackId(req.body.event.user)) || false;
+  const isNotBot = req.body.event ? await User.readBySlackId(req.body.event.user) : false;
   try {
     if (req.body.type === 'url_verification') {
       res.status(200).send(req.body.challenge);

@@ -77,6 +77,7 @@ function getShoutouts(org_id, limit = 50, offset = 0) {
     .join(db.ref('users').as('g'), 'giver_id', 'g.id')
     .join(db.ref('users').as('r'), 'receiver_id', 'r.id')
     .whereRaw(`g.org_id = ${org_id} AND r.org_id = ${org_id}`)
+    .orderBy('created_at', 'desc')
     .limit(limit)
     .offset(offset);
 }

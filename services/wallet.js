@@ -44,6 +44,8 @@ async function getLeaderboardForOrganization(orgId, paginateInfo) {
   return {
     statusCode: 200,
     data: {
+      previousPage: previous,
+      nextPage,
       data: result,
     },
   };

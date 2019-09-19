@@ -12,8 +12,9 @@ async function getShoutouts(id, paginateInfo) {
     };
   }
   const { limit, offset, previous, next } = paginateInfo;
-  const shoutouts = await organizations.getShoutouts(id, limit, offset);
-  const nextPage = (limit === shoutouts.length && next) || null;
+  const shoutouts = await organizations.getShoutouts(id, limit + 1, offset);
+  const nextPage = (limit < shoutouts.length && next) || null;
+  shoutouts.splice(limit, 1);
   return {
     statusCode: 200,
     data: {

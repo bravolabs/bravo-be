@@ -28,7 +28,7 @@ async function getUserWallet(userId) {
   };
 }
 
-async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
+async function getLeaderboardForOrganization(orgId, paginateInfo) {
   // Make sure page is 1 or heigher
   page = Math.max(Number(page), 1);
   // Clamp size between 1 and size limit to prevent crashes

@@ -1,6 +1,9 @@
+const { slackModel } = require('../data/slackModels/slack');
+const slackComponent = require('../data/slackComponents');
 const transactions = require('../data/dbModels/transactions');
 const actions = require('../data/dbModels/actions');
 const wallets = require('../data/dbModels/wallets');
+const { clientUrl } = require('../config');
 
 const pageLimit = Number(process.env.LEADERBOARD_PAGE_LIMIT || '50');
 
@@ -28,25 +31,45 @@ async function getUserWallet(userId) {
   };
 }
 
-async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
+async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit, reqInfo) {
   // Make sure page is 1 or heigher
   page = Math.max(Number(page), 1);
   // Clamp size between 1 and size limit to prevent crashes
   let size = clamp(Number(pageSize), 1, pageLimit);
   const offset = (page - 1) * size;
-  const result = await wallets.getWalletLeaderboard(orgId, offset, size);
-  if (!result) {
+  const walletArray = await wallets.getWalletLeaderboard(orgId, offset, size);
+  if (!walletArray) {
+    const noLeaderboardText = 'No wallets found for organization';
+    message = slackComponent.message.private(reqInfo);
+    message.attachments = slackComponent.attachments.confirmation(noLeaderboardText);
+    await slackModel.message.postMessage(message);
     return {
       statusCode: 404,
       data: {
-        message: 'No wallets found for organization',
+        message: noLeaderboardText,
       },
     };
   }
+  const leaderboardText = 'Here are the best performers in your workspace: ';
+  message = slackComponent.message.private(reqInfo);
+  message.attachments = slackComponent.attachments.confirmation(leaderboardText);
+  await slackModel.message.postMessage(message);
+  console.log(walletArray);
+  walletArray.map(async wallet => {
+    const data = {
+      content: `\n <@${wallet.slack_mem_id}> - ${wallet.wallet} bravos`,
+    };
+
+    const messageList = slackComponent.message.private(reqInfo);
+    messageList.attachments = slackComponent.attachments.channelNotification(data, 'leaderboard');
+
+    await slackModel.message.postMessage(messageList);
+  });
+
   return {
     statusCode: 200,
     data: {
-      data: result,
+      data: walletArray,
     },
   };
 }

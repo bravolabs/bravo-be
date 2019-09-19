@@ -43,6 +43,8 @@ async function getUsers(id, paginateInfo) {
   return {
     statusCode: 200,
     data: {
+      previousPage: previous,
+      nextPage,
       data: users,
     },
   };

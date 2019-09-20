@@ -29,13 +29,22 @@ exports.shoutOutResponse = () => {
   return attachment;
 };
 
-exports.confirmation = text => {
+exports.confirmation = data => {
+  let title;
+  let text;
+  if (data.leaderboardMessage) {
+    title = 'Leaderboard: ';
+    text = data.leaderboardMessage;
+  } else {
+    title = 'Bravo Confirmation: ';
+    text = data;
+  }
   const attachment = JSON.stringify([
     {
       callback_id: 'submitDialog',
       attachment_type: 'default',
-      title: 'Bravo Confirmation:',
-      text: `${text}`,
+      title: title,
+      text: text,
       color: '#A9A9A9',
     },
   ]);

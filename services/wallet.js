@@ -39,7 +39,7 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
   const offset = (page - 1) * size;
   const walletArray = await wallets.getWalletLeaderboard(orgId, offset, size);
   if (!walletArray) {
-    const noLeaderboardText = 'No wallets found for organization';
+    const noLeaderboardText = 'No wallets found for this organization';
     message = slackComponent.message.private(reqInfo);
     message.attachments = slackComponent.attachments.confirmation(noLeaderboardText);
     await slackModel.message.postMessage(message);

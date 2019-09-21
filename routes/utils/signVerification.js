@@ -24,7 +24,11 @@ let verifySignSecret = (req, res, next) => {
             .update(sigBaseString, 'utf8')
             .digest('hex');
 
-    
+    if (crypto.timingSafeEqual(Buffer.from(mySignature, 'utf8'), Buffer.from(slackSignature, 'utf8'))) {
+        next();
+    } else {
+        return res.status(400).send('Verification failed');
+    }
 }
 
 module.exports = {

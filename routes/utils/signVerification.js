@@ -19,6 +19,11 @@ let verifySignSecret = (req, res, next) => {
     }
 
     let sigBaseString = 'v0:' + timestamp + ':' + requestBody;
+    let mySignature = 'v0=' +
+        crypto.createHmac('sha256', slackSigningSecret)
+            .update(sigBaseString, 'utf8')
+            .digest('hex');
+
     
 }
 

@@ -8,6 +8,12 @@ let verifySignSecret = (req, res, next) => {
     let requestBody = qs.stringify(req.body, { format: 'RFC1738' });
     let timestamp = req.headers['X-Slack-Request-Timestamp'];
 
+    const time = Math.floor(new Date().getTime() / 1000);
+
+    if (Math.abs(time - timestamp) > 300) {
+        return res.status(400).send('Ignore this request');
+    }
+
     
 }
 

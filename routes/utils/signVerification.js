@@ -14,6 +14,10 @@ let verifySignSecret = (req, res, next) => {
         return res.status(400).send('Ignore this request');
     }
 
+    if (!slackSigningSecret) {
+        return res.status(400).send('Slack signing secret is empty.');
+    }
+
     
 }
 

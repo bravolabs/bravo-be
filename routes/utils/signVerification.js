@@ -18,6 +18,7 @@ let verifySignSecret = (req, res, next) => {
         return res.status(400).send('Slack signing secret is empty.');
     }
 
+    let sigBaseString = 'v0:' + timestamp + ':' + requestBody;
     
 }
 

@@ -25,7 +25,7 @@ async function getShoutouts(id, paginateInfo) {
   };
 }
 
-async function getUsers(id) {
+async function getUsers(id, paginateInfo) {
   const organization = await organizations.read(null, id);
   if (!organization || !organization.slack_org_id) {
     return {
@@ -35,11 +35,16 @@ async function getUsers(id) {
       },
     };
   }
-  const users = await usersModel.readUsersByOrganization(id);
+  const { limit, offset, previous, next } = paginateInfo;
+  const users = await usersModel.readUsersByOrganization(id, limit + 1, offset);
+  const nextPage = (limit < users.length && next) || null;
+  users.splice(limit, 1);
 
   return {
     statusCode: 200,
     data: {
+      previousPage: previous,
+      nextPage,
       data: users,
     },
   };

@@ -17,10 +17,11 @@ router.get('/:id/shoutouts', validateId, paginate, async (req, res, next) => {
   }
 });
 
-router.get('/:id/users', validateId, async (req, res, next) => {
+router.get('/:id/users', validateId, paginate, async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await service.getUsers(id);
+    const { limit, offset, previous, next } = req;
+    const result = await service.getUsers(id, { limit, offset, previous, next });
     res.status(result.statusCode).json(result.data);
   } catch (error) {
     next(error);

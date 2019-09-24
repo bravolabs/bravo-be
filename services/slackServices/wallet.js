@@ -43,14 +43,14 @@ exports.getLeaderboardForOrganization = async function(orgId, reqInfo = {}) {
     if (!topTen) {
       const noLeaderboardText = { leaderboardMessage: 'No wallets found for this organization' };
       message = slackComponent.message.private(reqInfo);
-      message.attachments = slackComponent.attachments.confirmation(noLeaderboardText);
+      message.attachments = slackComponent.attachments.leaderboardConfirmation(noLeaderboardText);
       await slackModel.message.postMessage(message);
     }
     const leaderboardText = {
       leaderboardMessage: `Here are the best performers in your workspace: `,
     };
     message = slackComponent.message.private(reqInfo);
-    message.attachments = slackComponent.attachments.confirmation(leaderboardText);
+    message.attachments = slackComponent.attachments.leaderboardConfirmation(leaderboardText);
     await slackModel.message.postMessage(message);
 
     topTen.map(async wallet => {

@@ -4,7 +4,6 @@ const slackComponent = require('../../data/slackComponents');
 const { getUserWallet } = require('../wallet');
 const { slackModel } = require('../../data/slackModels/slack');
 const wallets = require('../../data/dbModels/wallets');
-const users = require('../../data/dbModels/users');
 
 exports.getUserWalletBalance = async reqInfo => {
   try {
@@ -40,37 +39,27 @@ exports.getUserWalletBalance = async reqInfo => {
 
 exports.getLeaderboardForOrganization = async function(orgId, reqInfo = {}) {
   try {
-    const walletArray = await wallets.getWalletLeaderboard(orgId);
-    if (!walletArray) {
+    const topTen = await wallets.getWalletLeaderboard(orgId, 0, 10);
+    if (!topTen) {
       const noLeaderboardText = { leaderboardMessage: 'No wallets found for this organization' };
       message = slackComponent.message.private(reqInfo);
       message.attachments = slackComponent.attachments.confirmation(noLeaderboardText);
       await slackModel.message.postMessage(message);
     }
-    const user = await users.readBySlackId(reqInfo.user_id);
-    // Searches for the position of user's wallet in the leaderboard array
-    let myWallet;
-    walletArray.map(wallet => {
-      if (user.slack_mem_id === wallet.slack_mem_id) {
-        myWallet = wallet;
-      }
-    });
-    const position = walletArray.indexOf(myWallet) + 1;
     const leaderboardText = {
-      leaderboardMessage: `You are currently positioned as number ${position} on the leaderboard. Here are the best performers in your workspace: `,
+      leaderboardMessage: `Here are the best performers in your workspace: `,
     };
     message = slackComponent.message.private(reqInfo);
     message.attachments = slackComponent.attachments.confirmation(leaderboardText);
     await slackModel.message.postMessage(message);
 
-    const topTen = walletArray.slice(0, 10);
     topTen.map(async wallet => {
       const data = {
         content: `\n <@${wallet.slack_mem_id}> - ${wallet.wallet} :tada:`,
       };
 
       const messageList = slackComponent.message.private(reqInfo);
-      messageList.attachments = slackComponent.attachments.channelNotification(data, 'leaderboard');
+      messageList.attachments = slackComponent.attachments.leaderboardAttachments(data);
 
       await slackModel.message.postMessage(messageList);
     });

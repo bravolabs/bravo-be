@@ -3,8 +3,6 @@ const slackComponent = require('../data/slackComponents');
 const transactions = require('../data/dbModels/transactions');
 const actions = require('../data/dbModels/actions');
 const wallets = require('../data/dbModels/wallets');
-const users = require('../data/dbModels/users');
-const { clientUrl } = require('../config');
 
 const pageLimit = Number(process.env.LEADERBOARD_PAGE_LIMIT || '50');
 
@@ -32,7 +30,7 @@ async function getUserWallet(userId) {
   };
 }
 
-async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit, reqInfo = {}) {
+async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
   // Make sure page is 1 or heigher
   page = Math.max(Number(page), 1);
   // Clamp size between 1 and size limit to prevent crashes
@@ -40,10 +38,6 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
   const offset = (page - 1) * size;
   const walletArray = await wallets.getWalletLeaderboard(orgId, offset, size);
   if (!walletArray) {
-    const noLeaderboardText = { leaderboardMessage: 'No wallets found for this organization' };
-    message = slackComponent.message.private(reqInfo);
-    message.attachments = slackComponent.attachments.confirmation(noLeaderboardText);
-    await slackModel.message.postMessage(message);
     return {
       statusCode: 404,
       data: {
@@ -51,33 +45,6 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
       },
     };
   }
-  const user = await users.readBySlackId(reqInfo.user_id);
-  // Searches for the position of user's wallet in the leaderboard array
-  let myWallet;
-  walletArray.map(wallet => {
-    if (user.slack_mem_id === wallet.slack_mem_id) {
-      myWallet = wallet;
-    }
-  });
-  const position = walletArray.indexOf(myWallet) + 1;
-  const leaderboardText = {
-    leaderboardMessage: `You are currently positioned as number ${position} on the leaderboard. Here are the best performers in your workspace: `,
-  };
-  message = slackComponent.message.private(reqInfo);
-  message.attachments = slackComponent.attachments.confirmation(leaderboardText);
-  await slackModel.message.postMessage(message);
-
-  const topTen = walletArray.slice(0, 10);
-  topTen.map(async wallet => {
-    const data = {
-      content: `\n <@${wallet.slack_mem_id}> - ${wallet.wallet} :tada:`,
-    };
-
-    const messageList = slackComponent.message.private(reqInfo);
-    messageList.attachments = slackComponent.attachments.channelNotification(data, 'leaderboard');
-
-    await slackModel.message.postMessage(messageList);
-  });
 
   return {
     statusCode: 200,

@@ -57,7 +57,8 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
   message.attachments = slackComponent.attachments.confirmation(leaderboardText);
   await slackModel.message.postMessage(message);
 
-  walletArray.map(async wallet => {
+  const topTen = walletArray.slice(0, 10);
+  topTen.map(async wallet => {
     const data = {
       content: `\n <@${wallet.slack_mem_id}> - ${wallet.wallet} :tada:`,
     };

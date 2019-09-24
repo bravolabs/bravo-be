@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
           user_id,
           access_token: org.access_token,
         };
-        await leaderboard.getLeaderboardForOrganization(org.id, 1, 50, data);
+        leaderboard.getLeaderboardForOrganization(org.id, 1, 50, data);
         break;
       case 'help':
         await res.status(200).send('');

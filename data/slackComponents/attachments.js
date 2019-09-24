@@ -67,13 +67,8 @@ exports.errorALert = text => {
 exports.channelNotification = (data, type = null) => {
   let color;
   let actions;
-  let title;
-  let text;
-  let footer;
   if (type === 'view') {
     color = '#A9A9A9';
-    title = 'Shoutout:';
-    text = `${data.content}`;
     actions = [
       {
         type: 'button',
@@ -81,25 +76,30 @@ exports.channelNotification = (data, type = null) => {
         url: `${data.clientUrl}/shoutout/${data.id}`,
       },
     ];
-    footer = data.footer;
-  } else if (type === 'leaderboard') {
-    color = '#A9A9A9';
-    title = `${data.content}`;
   } else {
     color = '#4265ED';
-    title = 'Shoutout:';
-    text = `${data.content}`;
-    footer = data.footer;
   }
   const attachment = JSON.stringify([
     {
       callback_id: 'alert message',
       attachment_type: 'default',
-      title: title,
-      text: text,
+      title: 'Shoutout:',
+      text: `${data.content}`,
       color: color,
       actions: actions,
-      footer: footer,
+      footer: data.footer,
+    },
+  ]);
+  return attachment;
+};
+
+exports.leaderboardAttachments = data => {
+  const attachment = JSON.stringify([
+    {
+      callback_id: 'alert message',
+      attachment_type: 'default',
+      title: `${data.content}`,
+      color: '#A9A9A9',
     },
   ]);
   return attachment;

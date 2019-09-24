@@ -1,5 +1,3 @@
-const { slackModel } = require('../data/slackModels/slack');
-const slackComponent = require('../data/slackComponents');
 const transactions = require('../data/dbModels/transactions');
 const actions = require('../data/dbModels/actions');
 const wallets = require('../data/dbModels/wallets');
@@ -36,20 +34,23 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
   // Clamp size between 1 and size limit to prevent crashes
   let size = clamp(Number(pageSize), 1, pageLimit);
   const offset = (page - 1) * size;
-  const walletArray = await wallets.getWalletLeaderboard(orgId, offset, size);
-  if (!walletArray) {
+  const result = await wallets.getWalletLeaderboard(orgId, offset, limit + 1);
+  if (!result) {
     return {
       statusCode: 404,
       data: {
-        message: noLeaderboardText,
+        message: 'No wallets found for organization',
       },
     };
   }
-
+  const nextPage = (limit < result.length && next) || null;
+  result.splice(limit, 1);
   return {
     statusCode: 200,
     data: {
-      data: walletArray,
+      previousPage: previous,
+      nextPage,
+      data: result,
     },
   };
 }

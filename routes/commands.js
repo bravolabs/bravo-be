@@ -11,6 +11,7 @@ const router = express.Router();
 router.post('/', async (req, res) => {
   try {
     const keyword = req.body.text;
+
     const { channel_id, user_id, team_id } = req.body;
     switch (keyword) {
       case 'shoutout':

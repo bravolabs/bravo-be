@@ -5,7 +5,6 @@ const installService = require('../services/slackServices/install');
 const walletService = require('../services/slackServices/wallet');
 const User = require('../data/dbModels/users');
 const Organization = require('../data/dbModels/organizations');
-const leaderboard = require('../services/wallet');
 
 const router = express.Router();
 
@@ -42,7 +41,7 @@ router.post('/', async (req, res) => {
           user_id,
           access_token: org.access_token,
         };
-        leaderboard.getLeaderboardForOrganization(org.id, 1, 50, data);
+        walletService.getLeaderboardForOrganization(org.id, data);
         break;
       case 'help':
         await res.status(200).send('');

@@ -38,9 +38,12 @@ async function readBySlackId(slack_mem_id) {
   }
 }
 
-async function readUsersByOrganization(id) {
+async function readUsersByOrganization(id, limit = 50, offset = 0) {
   try {
-    const users = await db('users').where({ org_id: id });
+    const users = await db('users')
+      .where({ org_id: id })
+      .limit(limit)
+      .offset(offset);
     return users;
   } catch (err) {
     console.log(err);

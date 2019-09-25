@@ -28,13 +28,9 @@ async function getUserWallet(userId) {
   };
 }
 
-async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
-  // Make sure page is 1 or heigher
-  page = Math.max(Number(page), 1);
-  // Clamp size between 1 and size limit to prevent crashes
-  let size = clamp(Number(pageSize), 1, pageLimit);
-  const offset = (page - 1) * size;
-  const result = await wallets.getWalletLeaderboard(orgId, offset, size);
+async function getLeaderboardForOrganization(orgId, paginateInfo) {
+  const { limit, offset, previous, next } = paginateInfo;
+  const result = await wallets.getWalletLeaderboard(orgId, offset, limit + 1);
   if (!result) {
     return {
       statusCode: 404,
@@ -43,15 +39,21 @@ async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLim
       },
     };
   }
+  const nextPage = (limit < result.length && next) || null;
+  result.splice(limit, 1);
   return {
     statusCode: 200,
     data: {
+      previousPage: previous,
+      nextPage,
       data: result,
     },
   };
 }
 
-async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId) {
+async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionNameOrId, gained) {
+  // we need to handle the edge case of someone giving a reaction and removing it
+  // and also how many times can one react
   try {
     let action;
     // Convert action name or id to action
@@ -73,7 +75,12 @@ async function ProcessTransaction(userId, giverId, orgId, shoutoutId, actionName
     if (!userWallet) throw new Error('Error getting user wallet');
 
     // Update user wallet with new amount
-    const newAmount = userWallet.amount + action.reward;
+    let newAmount;
+    if (gained) {
+      newAmount = userWallet.amount + action.reward;
+    } else {
+      newAmount = userWallet.amount - action.reward;
+    }
     const updatedWallet = await wallets.updateByUserId(userId, newAmount);
 
     const transaction = await transactions.create({

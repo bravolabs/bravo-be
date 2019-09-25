@@ -59,18 +59,27 @@ function remove(id) {
     .returning('*');
 }
 
-function getShoutouts(org_id) {
+function getShoutouts(org_id, limit = 50, offset = 0) {
   return db
     .select(
+      's.id',
       'message',
       'created_at',
+      'message_ts',
       db.ref('g.slack_mem_id').as('giverSlackId'),
-      db.ref('r.slack_mem_id').as('receiverSlackId')
+      db.ref('g.name').as('giverName'),
+      db.ref('g.avatar').as('giverAvatar'),
+      db.ref('r.slack_mem_id').as('receiverSlackId'),
+      db.ref('r.name').as('receiverName'),
+      db.ref('r.avatar').as('receiverAvatar')
     )
-    .from('shoutouts')
+    .from(db.ref('shoutouts').as('s'))
     .join(db.ref('users').as('g'), 'giver_id', 'g.id')
     .join(db.ref('users').as('r'), 'receiver_id', 'r.id')
-    .whereRaw(`g.org_id = ${org_id} AND r.org_id = ${org_id}`);
+    .whereRaw(`g.org_id = ${org_id} AND r.org_id = ${org_id}`)
+    .orderBy('created_at', 'desc')
+    .limit(limit)
+    .offset(offset);
 }
 
 module.exports = {

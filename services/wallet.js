@@ -28,12 +28,8 @@ async function getUserWallet(userId) {
   };
 }
 
-async function getLeaderboardForOrganization(orgId, page = 1, pageSize = pageLimit) {
-  // Make sure page is 1 or heigher
-  page = Math.max(Number(page), 1);
-  // Clamp size between 1 and size limit to prevent crashes
-  let size = clamp(Number(pageSize), 1, pageLimit);
-  const offset = (page - 1) * size;
+async function getLeaderboardForOrganization(orgId, paginateInfo) {
+  const { limit, offset, previous, next } = paginateInfo;
   const result = await wallets.getWalletLeaderboard(orgId, offset, limit + 1);
   if (!result) {
     return {

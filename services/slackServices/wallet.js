@@ -27,7 +27,7 @@ exports.getUserWalletBalance = async reqInfo => {
         attachment_type: 'default',
         title: 'Wallet:',
         text: `You currently have ${wallet.data.data.amount} bravos in your wallet 🎈`,
-        color: '#4265ED',
+        color: '#A9A9A9',
       },
     ]);
     await slackModel.message.postMessage(message);

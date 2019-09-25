@@ -165,7 +165,7 @@ exports.getUserShoutOuts = async reqInfo => {
       access_token: org.access_token,
     };
 
-    // prevent user from giving themself a shoutout
+    // prevent user from giving themselves a shoutout
     if (userShoutouts.length === 0 || !user) {
       const noShoutoutText =
         "Yo! the selected user hasn't received or given a shoutout, you can start with `/bravo shoutout`";

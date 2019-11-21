@@ -13,6 +13,7 @@ const slack = {
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   baseUrl: process.env.SLACK_BASE_URL,
   designatedChannel: process.env.DESIGNATED_CHANNEL,
+  signingSecret: process.env.SLACK_SIGNING_SECRET
 };
 
 module.exports = {

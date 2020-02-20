@@ -42,6 +42,19 @@ exports.confirmation = text => {
   return attachment;
 };
 
+exports.leaderboardConfirmation = data => {
+  const attachment = JSON.stringify([
+    {
+      callback_id: 'submitDialog',
+      attachment_type: 'default',
+      title: 'Leaderboard: ',
+      text: data.leaderboardMessage,
+      color: '#A9A9A9',
+    },
+  ]);
+  return attachment;
+};
+
 exports.errorALert = text => {
   const attachment = JSON.stringify([
     {
@@ -79,6 +92,18 @@ exports.channelNotification = (data, type = null) => {
       color: color,
       actions: actions,
       footer: data.footer,
+    },
+  ]);
+  return attachment;
+};
+
+exports.leaderboardAttachments = data => {
+  const attachment = JSON.stringify([
+    {
+      callback_id: 'alert message',
+      attachment_type: 'default',
+      title: `${data.content}`,
+      color: '#A9A9A9',
     },
   ]);
   return attachment;
